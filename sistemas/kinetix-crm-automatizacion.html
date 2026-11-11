@@ -934,6 +934,10 @@
 
     function loadState() {
       try {
+        const isPaid = window.location.search.includes('entrega') || window.location.search.includes('licencia') || localStorage.getItem('KINETIX_CLOUD_LICENSE_CRM') === 'PAID_ACTIVE';
+        if (!isPaid && !sessionStorage.getItem('KINETIX_DEMO_ACTIVE_crm')) {
+          return JSON.parse(JSON.stringify(defaultState));
+        }
         const raw = localStorage.getItem(STORAGE_KEY);
         if (!raw) return JSON.parse(JSON.stringify(defaultState));
         const parsed = JSON.parse(raw);
@@ -1182,6 +1186,7 @@
     }
 
     function saveLead() {
+      if (window.KinetixDemoGuard && !window.KinetixDemoGuard.canPerformAction('Registrar Lead')) return;
       const name = document.getElementById('lead-name').value.trim();
       if (!name) return alert('Ingresa el nombre del prospecto.');
       state.leads.unshift({
@@ -1204,6 +1209,7 @@
 
     // COTIZACIONES
     function createQuote() {
+      if (window.KinetixDemoGuard && !window.KinetixDemoGuard.canPerformAction('Crear Cotización')) return;
       const lid = Number(document.getElementById('quote-lead-id').value);
       const lead = state.leads.find(l => l.id === lid) || { name: 'Cliente Corporativo', phone: '' };
       const q = {
@@ -1502,6 +1508,7 @@
     }
 
     function saveCRMSupplierRecord() {
+      if (window.KinetixDemoGuard && !window.KinetixDemoGuard.canPerformAction('Guardar Proveedor')) return;
       const name = document.getElementById('crm-sup-name').value.trim();
       const category = document.getElementById('crm-sup-category').value;
       const ruc = document.getElementById('crm-sup-ruc').value.trim() || 'S/R';
@@ -1558,6 +1565,7 @@
     }
 
     function saveCRMFinanceRecord() {
+      if (window.KinetixDemoGuard && !window.KinetixDemoGuard.canPerformAction('Registrar Movimiento')) return;
       const editId = Number((document.getElementById('crm-fin-edit-id') || {}).value);
       const type = document.getElementById('crm-fin-modal-type').value;
       const date = document.getElementById('crm-fin-date').value || crmTodayISO();

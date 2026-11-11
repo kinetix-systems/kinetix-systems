@@ -2067,6 +2067,10 @@
 
     function loadState() {
       try {
+        const isPaid = window.location.search.includes('entrega') || window.location.search.includes('licencia') || localStorage.getItem('KINETIX_CLOUD_LICENSE_POS') === 'PAID_ACTIVE';
+        if (!isPaid && !sessionStorage.getItem('KINETIX_DEMO_ACTIVE_pos')) {
+          return JSON.parse(JSON.stringify(defaultState));
+        }
         const raw = localStorage.getItem(STORAGE_KEY);
         if (!raw) return JSON.parse(JSON.stringify(defaultState));
         const parsed = JSON.parse(raw);
@@ -2380,6 +2384,7 @@
     }
 
     function saveSupplierRecord() {
+      if (window.KinetixDemoGuard && !window.KinetixDemoGuard.canPerformAction('Guardar Proveedor')) return;
       const editId = Number(document.getElementById('sup-edit-id').value);
       const name = document.getElementById('sup-name').value.trim();
       const category = document.getElementById('sup-category').value;
@@ -2566,6 +2571,7 @@
     }
 
     function saveExpense() {
+      if (window.KinetixDemoGuard && !window.KinetixDemoGuard.canPerformAction('Registrar Gasto')) return;
       const editId = (document.getElementById('exp-edit-id') || {}).value;
       const concept = document.getElementById('exp-concept').value.trim() || 'Gasto operativo';
       const amount = Number(document.getElementById('exp-amount').value) || 0;
@@ -2734,6 +2740,7 @@
     }
 
     function savePurchase() {
+      if (window.KinetixDemoGuard && !window.KinetixDemoGuard.canPerformAction('Registrar Compra')) return;
       const editId = (document.getElementById('pur-edit-id') || {}).value;
       const supplier = document.getElementById('pur-supplier').value.trim() || 'Proveedor General';
       const category = document.getElementById('pur-category') ? document.getElementById('pur-category').value : 'Proveedores';
@@ -2894,6 +2901,7 @@
     }
 
     function saveAccountRecord() {
+      if (window.KinetixDemoGuard && !window.KinetixDemoGuard.canPerformAction('Guardar Cuenta')) return;
       const type = document.getElementById('acc-type').value;
       const editId = (document.getElementById('acc-edit-id') || {}).value;
       const entity = document.getElementById('acc-entity').value.trim() || (type === 'CXC' ? 'Cliente Crédito' : 'Proveedor');
@@ -3308,6 +3316,7 @@
     }
 
     function processSale() {
+      if (window.KinetixDemoGuard && !window.KinetixDemoGuard.canPerformAction('Registrar Venta')) return;
       if (cart.length === 0) {
         alert('Agrega al menos un producto al carrito para facturar.');
         return;
@@ -3691,6 +3700,7 @@
     }
 
     function saveProduct() {
+      if (window.KinetixDemoGuard && !window.KinetixDemoGuard.canPerformAction('Guardar Producto')) return;
       const id = document.getElementById('prod-id').value;
       const noExpiry = document.getElementById('prod-no-expiry').checked;
       const expVal = (document.getElementById('prod-expiry').value || '').trim();

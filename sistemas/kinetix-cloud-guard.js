@@ -504,6 +504,164 @@
     }
   });
 
+
+  // ========================================================
+  // KINETIX DEMO SECURITY & EPHEMERAL GUARD v5.0
+  // Límite estricto de 5 acciones / artículos en modo prueba
+  // Restablecimiento automático a la información inicial al salir/entrar
+  // ========================================================
+
+  const DEMO_MAX_ACTIONS = 5;
+
+  function isPaidLicenseActive() {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      if (params.has('entrega') || params.has('licencia') || params.get('plan') === 'full') {
+        localStorage.setItem(STORAGE_LICENSE_KEY, 'PAID_ACTIVE');
+        return true;
+      }
+      const savedLic = localStorage.getItem(STORAGE_LICENSE_KEY);
+      if (savedLic && (savedLic === 'PAID_ACTIVE' || savedLic.startsWith('KX-') || savedLic === 'VITALICIA')) {
+        return true;
+      }
+    } catch (e) {}
+    return false;
+  }
+
+  const isDemo = !isPaidLicenseActive();
+
+  // 1. Restablecimiento automático a la información inicial al salir y volver a entrar
+  if (isDemo) {
+    try {
+      const sessionActive = sessionStorage.getItem('KINETIX_DEMO_ACTIVE_' + appKey);
+      if (!sessionActive) {
+        // Nueva visita o reingreso: restablecer a estado inicial predeterminado
+        const mainStorageKey = appKey === 'pos' ? 'KINETIX_POS_SUITE_V3' :
+                               appKey === 'med' ? 'KINETIX_MED_SUITE_V3' :
+                               appKey === 'crm' ? 'KINETIX_CRM_SUITE_V3' : 'kinetix_gym_erp_pro_v1';
+        localStorage.removeItem(mainStorageKey);
+        sessionStorage.removeItem('KINETIX_DEMO_ACTIONS_' + appKey);
+        sessionStorage.setItem('KINETIX_DEMO_ACTIVE_' + appKey, '1');
+      }
+    } catch (e) {}
+  }
+
+  function getDemoActionCount() {
+    try {
+      return parseInt(sessionStorage.getItem('KINETIX_DEMO_ACTIONS_' + appKey) || '0', 10);
+    } catch (e) { return 0; }
+  }
+
+  function canPerformDemoAction(actionName) {
+    if (!isDemo) return true; // Licencia comprada: operaciones ilimitadas
+    
+    let count = getDemoActionCount();
+    if (count >= DEMO_MAX_ACTIONS) {
+      showDemoLockoutModal(actionName);
+      return false;
+    }
+    
+    count++;
+    try {
+      sessionStorage.setItem('KINETIX_DEMO_ACTIONS_' + appKey, count.toString());
+    } catch (e) {}
+    updateDemoFloatingBadge(count);
+    return true;
+  }
+
+  function showDemoLockoutModal(actionName) {
+    let existing = document.getElementById('kinetix-demo-limit-modal');
+    if (existing) existing.remove();
+
+    const checkoutUrl = appKey === 'pos' 
+      ? 'https://pay.hotmart.com/I108446645M' 
+      : 'https://pay.hotmart.com/K108327655X';
+
+    const modal = document.createElement('div');
+    modal.id = 'kinetix-demo-limit-modal';
+    modal.style.cssText = 'position:fixed;inset:0;z-index:999999;background:rgba(0,0,0,0.92);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:16px;font-family:system-ui,-apple-system,sans-serif;';
+
+    modal.innerHTML = `
+      <div style="max-width:440px;width:100%;background:#0f172a;border:2px solid #10b981;border-radius:24px;padding:28px 24px;text-align:center;box-shadow:0 25px 50px -12px rgba(0,0,0,0.7);color:#ffffff;box-sizing:border-box;">
+        <div style="width:64px;height:64px;border-radius:18px;background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.4);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:32px;">
+          🔒
+        </div>
+        <div style="display:inline-block;padding:4px 12px;border-radius:999px;background:rgba(245,158,11,0.2);color:#fcd34d;font-size:11px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:10px;border:1px solid rgba(245,158,11,0.3);">
+          Límite de Prueba Alcanzado (Modo Demo)
+        </div>
+        <h3 style="font-size:20px;font-weight:800;color:#ffffff;margin:0 0 8px;line-height:1.25;">
+          Has alcanzado el límite de 5 operaciones permitidas
+        </h3>
+        <p style="font-size:12.5px;color:#cbd5e1;line-height:1.5;margin:0 0 16px;">
+          Este demo es únicamente para probar las funciones en el momento. Para registrar ventas, inventario, clientes y reportes <strong>ilimitados de por vida</strong> sin restricciones, activa tu Licencia Oficial.
+        </p>
+
+        <div style="background:rgba(15,23,42,0.8);border:1px solid #334155;border-radius:12px;padding:12px 14px;margin-bottom:18px;text-align:left;font-size:12px;">
+          <div style="color:#34d399;font-weight:600;margin-bottom:6px;">✓ Acceso vitalicio sin suscripciones ni mensualidades</div>
+          <div style="color:#34d399;font-weight:600;margin-bottom:6px;">✓ Base de datos permanente protegida en la nube</div>
+          <div style="color:#34d399;font-weight:600;">✓ 2 Dispositivos autorizados (PC Negocio + Móvil)</div>
+        </div>
+
+        <a href="${checkoutUrl}" target="_blank" style="display:block;width:100%;padding:14px;background:linear-gradient(135deg,#10b981,#14b8a6);color:#022c22;font-size:14px;font-weight:800;border-radius:14px;text-decoration:none;box-shadow:0 10px 15px -3px rgba(16,185,129,0.3);box-sizing:border-box;">
+          Comprar y Activar Licencia ($89 USD) &rarr;
+        </a>
+
+        <button id="kinetix-demo-close-lockout" style="margin-top:14px;background:transparent;border:none;color:#94a3b8;font-size:12px;cursor:pointer;text-decoration:underline;">
+          Cerrar y continuar explorando en modo lectura
+        </button>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+    document.getElementById('kinetix-demo-close-lockout').onclick = function () {
+      modal.remove();
+    };
+  }
+
+  function updateDemoFloatingBadge(count) {
+    if (!isDemo) return;
+    let badge = document.getElementById('kinetix-demo-floating-badge');
+    if (!badge) {
+      badge = document.createElement('div');
+      badge.id = 'kinetix-demo-floating-badge';
+      badge.style.cssText = 'position:fixed;bottom:16px;right:16px;z-index:99990;background:#0f172a;border:1px solid #10b981;border-radius:999px;padding:6px 14px;display:flex;align-items:center;gap:8px;box-shadow:0 10px 25px rgba(0,0,0,0.5);font-family:system-ui,-apple-system,sans-serif;font-size:12px;';
+      document.body.appendChild(badge);
+    }
+    const isFull = count >= DEMO_MAX_ACTIONS;
+    const checkoutUrl = appKey === 'pos' ? 'https://pay.hotmart.com/I108446645M' : 'https://pay.hotmart.com/K108327655X';
+    badge.innerHTML = `
+      <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${isFull ? '#ef4444' : '#10b981'};"></span>
+      <span style="color:#ffffff;font-weight:700;">Demo:</span>
+      <span style="color:${isFull ? '#f87171' : '#34d399'};font-weight:800;">${count}/${DEMO_MAX_ACTIONS} acciones</span>
+      <a href="${checkoutUrl}" target="_blank" style="margin-left:4px;padding:3px 10px;background:#10b981;color:#022c22;font-size:10.5px;font-weight:800;border-radius:999px;text-decoration:none;">
+        Comprar ($89)
+      </a>
+    `;
+  }
+
+  // Exponer interfaz global KinetixDemoGuard
+  window.KinetixDemoGuard = {
+    isDemo: isDemo,
+    maxActions: DEMO_MAX_ACTIONS,
+    canPerformAction: canPerformDemoAction,
+    getActionCount: getDemoActionCount,
+    showLockoutModal: showDemoLockoutModal,
+    resetDemoData: function () {
+      const mainStorageKey = appKey === 'pos' ? 'KINETIX_POS_SUITE_V3' :
+                             appKey === 'med' ? 'KINETIX_MED_SUITE_V3' :
+                             appKey === 'crm' ? 'KINETIX_CRM_SUITE_V3' : 'kinetix_gym_erp_pro_v1';
+      localStorage.removeItem(mainStorageKey);
+      sessionStorage.removeItem('KINETIX_DEMO_ACTIONS_' + appKey);
+      sessionStorage.removeItem('KINETIX_DEMO_ACTIVE_' + appKey);
+    }
+  };
+
+  if (isDemo) {
+    setTimeout(function () {
+      updateDemoFloatingBadge(getDemoActionCount());
+    }, 600);
+  }
+
   function initGuard() {
     hookAuthFunctions();
     injectCloudSecurityBadge();

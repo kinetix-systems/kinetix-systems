@@ -1055,6 +1055,10 @@
 
     function loadState() {
       try {
+        const isPaid = window.location.search.includes('entrega') || window.location.search.includes('licencia') || localStorage.getItem('KINETIX_CLOUD_LICENSE_MED') === 'PAID_ACTIVE';
+        if (!isPaid && !sessionStorage.getItem('KINETIX_DEMO_ACTIVE_med')) {
+          return JSON.parse(JSON.stringify(defaultState));
+        }
         const raw = localStorage.getItem(STORAGE_KEY);
         if (!raw) return JSON.parse(JSON.stringify(defaultState));
         const parsed = JSON.parse(raw);
@@ -1317,6 +1321,7 @@
     }
 
     function saveMedSupplierRecord() {
+      if (window.KinetixDemoGuard && !window.KinetixDemoGuard.canPerformAction('Guardar Proveedor')) return;
       const name = document.getElementById('med-sup-name').value.trim();
       const category = document.getElementById('med-sup-category').value;
       const ruc = document.getElementById('med-sup-ruc').value.trim() || 'REG-SAN';
@@ -1483,6 +1488,7 @@
     }
 
     function saveMedFinanceRecord() {
+      if (window.KinetixDemoGuard && !window.KinetixDemoGuard.canPerformAction('Registrar Movimiento')) return;
       const editId = (document.getElementById('med-fin-edit-id') || {}).value;
       const type = document.getElementById('med-fin-type').value;
       const entity = document.getElementById('med-fin-entity').value.trim() || (type === 'INGRESO' || type === 'CXC' ? 'Paciente General' : 'Proveedor Clínico');
@@ -1734,6 +1740,7 @@
 
 
     function saveAppointment() {
+      if (window.KinetixDemoGuard && !window.KinetixDemoGuard.canPerformAction('Agendar Cita')) return;
       const patId = Number(document.getElementById('app-patient-id').value);
       state.appointments.unshift({
         id: Date.now(),
@@ -1806,6 +1813,7 @@
     }
 
     function savePatient() {
+      if (window.KinetixDemoGuard && !window.KinetixDemoGuard.canPerformAction('Registrar Paciente')) return;
       const name = document.getElementById('new-pat-name').value.trim();
       if (!name) return alert('Ingresa el nombre del paciente o cliente.');
       state.patients.unshift({
@@ -1844,6 +1852,7 @@
     }
 
     function saveConsultation(printAfter) {
+      if (window.KinetixDemoGuard && !window.KinetixDemoGuard.canPerformAction('Guardar Consulta / Receta')) return;
       const patId = Number(document.getElementById('consult-patient-id').value);
       const pat = state.patients.find(p => p.id === patId);
       if (!pat) return;
