@@ -5,6 +5,54 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kinetix Systems | Sistemas Cloud Web & PWA POS, Gimnasios, Clínicas y CRM ($89 USD Lanzamiento)</title>
   <meta name="description" content="Sistemas empresariales Web / PWA en la Nube alojados en servidores de Kinetix: Facturación POS e Inventarios, Gimnasios ERP, Expedientes Clínicos y Citas, y CRM con Cotizador PDF. Acceso seguro en PC + Móvil (2 dispositivos autorizados), actualizaciones automáticas y 4 usuarios.">
+  <meta name="keywords" content="sistema punto de venta, software pos, control de inventarios, sistema para gimnasio, software clinica expedientes citas, crm cotizador pdf, kinetix systems">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <link rel="canonical" href="https://kinetix-systems.github.io/kinetix-systems/">
+  <!-- Open Graph / Redes Sociales -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://kinetix-systems.github.io/kinetix-systems/">
+  <meta property="og:site_name" content="Kinetix Systems">
+  <meta property="og:locale" content="es_LA">
+  <meta property="og:title" content="Kinetix Systems | Sistemas Cloud Web & PWA POS, Gimnasios, Clínicas y CRM">
+  <meta property="og:description" content="Sistemas empresariales en la nube listos para usar: POS e Inventarios, Gimnasios ERP, Clínicas y CRM con Cotizador PDF. Licencia vitalicia $89 USD.">
+  <!-- Google Search Console: pega aquí tu código cuando lo verifiques -->
+  <!-- <meta name="google-site-verification" content="TU_CODIGO_DE_VERIFICACION" /> -->
+  <!-- Google Analytics 4 (GA4): pega tu ID G-XXXXXXXXXX aquí para medir todo el tráfico -->
+  <script>
+    window.KINETIX_GA4_ID = ''; // Ejemplo: 'G-ABC123XYZ9'
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    if (window.KINETIX_GA4_ID) {
+      var gs = document.createElement('script');
+      gs.async = true;
+      gs.src = 'https://www.googletagmanager.com/gtag/js?id=' + window.KINETIX_GA4_ID;
+      document.head.appendChild(gs);
+      gtag('js', new Date());
+      gtag('config', window.KINETIX_GA4_ID);
+    }
+    window.kinetixTrack = function(eventName, params) {
+      if (window.KINETIX_GA4_ID && typeof gtag === 'function') {
+        gtag('event', eventName, params || {});
+      }
+    };
+  </script>
+  <!-- Datos Estructurados SEO (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Kinetix Systems Cloud Suite",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web, Windows, macOS, Android, iOS",
+    "url": "https://kinetix-systems.github.io/kinetix-systems/",
+    "offers": {
+      "@type": "Offer",
+      "price": "89.00",
+      "priceCurrency": "USD"
+    },
+    "description": "Suite de sistemas empresariales Cloud & PWA: Punto de Venta POS e Inventarios, Gimnasios ERP, Expedientes Clínicos y Citas, y CRM con Cotizador PDF."
+  }
+  </script>
   <link rel="manifest" href="manifest.json">
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -905,6 +953,7 @@
       const p = PRODUCTS[key];
       if (!p) return;
       selectedProductKey = key;
+      if (window.kinetixTrack) window.kinetixTrack('demo_opened', { system: key, product_name: p.name });
       document.getElementById('demo-modal-title').textContent = p.name;
       const isLight = document.documentElement.classList.contains('light');
       let url = p.demoUrl;
@@ -944,6 +993,7 @@
       const p = PRODUCTS[key];
       if (!p) return;
       selectedProductKey = key;
+      if (window.kinetixTrack) window.kinetixTrack('begin_checkout', { system: key, product_name: p.name, value: 89, currency: 'USD' });
       document.getElementById('chk-title').textContent = p.name;
       document.getElementById('chk-desc').textContent = p.shortDesc;
       document.getElementById('chk-hotmart-btn').href = HOTMART_LINKS[key] || HOTMART_LINKS.pos;
