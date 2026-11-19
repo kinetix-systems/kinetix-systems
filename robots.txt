@@ -1,7 +1,4 @@
 User-agent: *
 Allow: /
 
-# Evitar indexación de enlaces privados de entrega
-Disallow: /*?entrega=
-
 Sitemap: https://kinetix-systems.github.io/kinetix-systems/sitemap.xml

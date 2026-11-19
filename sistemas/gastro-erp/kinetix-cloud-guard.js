@@ -1,19 +1,512 @@
 /**
- * KINETIX CLOUD PWA & MULTI-DEVICE SECURITY GUARD v4.5
+ * KINETIX CLOUD PWA, MULTI-DEVICE SECURITY GUARD & GLOBAL I18N ENGINE v5.0
  * Modelo Web / PWA en la Nube - Alojado en Servidores de Kinetix Systems
- * - Cero archivos instalables descargables (.zip / código fuente protegido)
+ * - Multi-Idioma Global Nativo (Español ES, English EN, Português PT, Français FR)
+ * - Detección automática por región/zona horaria (USA -> EN, Brasil/Portugal -> PT, Francia -> FR, LATAM/España -> ES)
  * - Límite inteligente de dispositivos acorde a la cantidad de usuarios del sistema:
  *   · Gastro ERP + POS + KDS: 5 Usuarios = Máx. 5 Dispositivos Simultáneos
  *   · POS / Gimnasios / Clínicas / CRM: 4 Usuarios = Máx. 4 Dispositivos Simultáneos
- * - Cierre de sesión automático al exceder el límite de dispositivos con alerta oficial:
- *   "Se ha detectado un inicio de sesión en otro dispositivo. Se cerró la sesión anterior por seguridad."
+ * - Límite de 5 acciones en Modo Demo en Vivo con restablecimiento efímero
+ * - 100% Abierto a buscadores y crawlers internacionales (Cero bloqueo de bots)
  */
 (function () {
   'use strict';
 
-  const SECURITY_ALERT_MESSAGE = 'Se ha detectado un inicio de sesión en otro dispositivo. Se cerró la sesión anterior por seguridad.';
+  // ============================================================================
+  // 1. DETECCIÓN REGIONAL AUTOMÁTICA & MOTOR MULTI-IDIOMA (ES / EN / PT / FR)
+  // ============================================================================
+  const SUPPORTED_LANGS = ['es', 'en', 'pt', 'fr'];
+  const LANG_STORAGE_KEY = 'KINETIX_GLOBAL_LANG';
 
-  // Identificar cuál de los 5 sistemas está corriendo
+  function detectVisitorLanguage() {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const urlLang = (params.get('lang') || '').toLowerCase().slice(0, 2);
+      if (SUPPORTED_LANGS.includes(urlLang)) {
+        localStorage.setItem(LANG_STORAGE_KEY, urlLang);
+        return urlLang;
+      }
+
+      const saved = (localStorage.getItem(LANG_STORAGE_KEY) || '').toLowerCase().slice(0, 2);
+      if (SUPPORTED_LANGS.includes(saved)) {
+        return saved;
+      }
+
+      const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || '').toLowerCase();
+      const navLangs = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || 'es'])
+        .map(l => String(l || '').toLowerCase());
+      const primaryNav = (navLangs[0] || 'es').slice(0, 2);
+
+      // 1) Brasil y Portugal -> Português (pt)
+      const ptZones = [
+        'america/sao_paulo', 'america/fortaleza', 'america/manaus', 'america/recife',
+        'america/belem', 'america/bahia', 'america/cuiaba', 'america/campo_grande',
+        'america/porto_velho', 'america/boa_vista', 'america/maceio', 'america/araguaina',
+        'america/noronha', 'america/rio_branco', 'america/santarem',
+        'europe/lisbon', 'atlantic/madeira', 'atlantic/azores'
+      ];
+      if (ptZones.includes(tz) || primaryNav === 'pt') {
+        return 'pt';
+      }
+
+      // 2) Francia, Quebec y Territorios Francófonos -> Français (fr)
+      const frZones = [
+        'europe/paris', 'america/montreal', 'indian/reunion', 'africa/abidjan',
+        'africa/dakar', 'america/guadeloupe', 'america/martinique', 'america/cayenne'
+      ];
+      if (frZones.includes(tz) || primaryNav === 'fr') {
+        return 'fr';
+      }
+
+      // 3) Latinoamérica y España -> Español (es)
+      const esZones = [
+        'america/managua', 'america/costa_rica', 'america/mexico_city', 'america/cancun',
+        'america/tijuana', 'america/merida', 'america/monterrey', 'america/chihuahua',
+        'america/mazatlan', 'america/hermosillo', 'america/guatemala', 'america/el_salvador',
+        'america/tegucigalpa', 'america/panama', 'america/santo_domingo', 'america/puerto_rico',
+        'america/havana', 'america/bogota', 'america/lima', 'america/guayaquil',
+        'america/caracas', 'america/la_paz', 'america/santiago', 'america/asuncion',
+        'america/montevideo', 'america/argentina', 'europe/madrid', 'atlantic/canary'
+      ];
+      if (esZones.some(z => tz.startsWith(z))) {
+        return 'es';
+      }
+
+      // 4) Estados Unidos, Canadá, Reino Unido, Australia o navegador en Inglés -> English (en)
+      const enZones = [
+        'america/new_york', 'america/chicago', 'america/denver', 'america/los_angeles',
+        'america/phoenix', 'america/anchorage', 'pacific/honolulu', 'america/detroit',
+        'america/indiana', 'america/kentucky', 'america/boise', 'america/toronto',
+        'america/vancouver', 'america/edmonton', 'america/winnipeg', 'america/halifax',
+        'europe/london', 'europe/dublin', 'australia/', 'pacific/auckland'
+      ];
+      if (enZones.some(z => tz.startsWith(z)) || primaryNav === 'en') {
+        return 'en';
+      }
+
+      if (SUPPORTED_LANGS.includes(primaryNav)) {
+        return primaryNav;
+      }
+    } catch (e) {}
+    return 'es';
+  }
+
+  let currentLang = detectVisitorLanguage();
+
+  // Textos propios del Guardián Cloud y Demo en 4 idiomas
+  const GUARD_UI_TEXTS = {
+    es: {
+      securityAlert: 'Se ha detectado un inicio de sesión en otro dispositivo. Se cerró la sesión anterior por seguridad.',
+      cloudPill: (c, m) => `Cloud PWA · ${c}/${m} Equipos`,
+      cloudPillTitle: (m) => `Protección Kinetix Cloud PWA: Límite de ${m} Dispositivos Autorizados (1 por Usuario)`,
+      demoWord: 'Demo:',
+      actionsWord: 'acciones',
+      buyBtnShort: 'Comprar ($89)',
+      demoLimitBadge: 'Límite de Prueba Alcanzado (Modo Demo)',
+      demoLimitTitle: 'Has alcanzado el límite de 5 operaciones permitidas',
+      demoLimitDesc: 'Este demo es únicamente para probar las funciones en el momento. Para registrar ventas, inventario, clientes y reportes <strong>ilimitados de por vida</strong> sin restricciones, activa tu Licencia Oficial.',
+      demoBullet1: '✓ Acceso vitalicio sin suscripciones ni mensualidades',
+      demoBullet2: '✓ Base de datos permanente protegida en la nube',
+      demoBullet3: (m) => `✓ Hasta ${m} Dispositivos simultáneos (1 por Usuario)`,
+      demoBuyCta: 'Comprar y Activar Licencia ($89 USD) →',
+      demoCloseReadonly: 'Cerrar y continuar explorando en modo lectura',
+      deviceModalSub: 'Servidores Kinetix Cloud · PWA Activa',
+      licenseAssigned: 'Licencia Asignada:',
+      architectureLbl: 'Arquitectura:',
+      architectureVal: 'Web / PWA en la Nube (Cero Instaladores Locales)',
+      updatesLbl: 'Actualizaciones:',
+      updatesVal: '✓ Automáticas en Tiempo Real',
+      langLbl: 'Idioma Activo:',
+      authDevicesTitle: (c, m) => `Dispositivos Autorizados (${c}/${m})`,
+      onePerUser: (m) => `1 Equipo por cada Usuario (${m} Usuarios)`,
+      activeTag: 'ACTIVO',
+      availableTag: 'DISPONIBLE',
+      deviceWord: 'Equipo',
+      availSlotDesc: 'Cupo disponible para abrir tu sistema en otra PC, tablet o móvil de tu equipo.',
+      antiPiracyTitle: 'Regla Anti-Piratería Activa:',
+      antiPiracyDesc: (m) => `Si se intenta abrir esta cuenta en un <strong>dispositivo #${m + 1} externo o no autorizado</strong>, el sistema cerrará inmediatamente la sesión anterior mostrando:`,
+      testAlertBtn: (m) => `🔒 Probar Alerta de Seguridad al Exceder ${m} Equipos`,
+      lockoutBadge: (m) => `Protección Cloud Anti-Uso Simultáneo (Máx. ${m} Equipos)`,
+      lockoutLimitVal: (m) => `${m} Dispositivos (${m} Usuarios)`,
+      lockoutTakenBy: 'Equipo que tomó la sesión:',
+      lockoutFooter: (m) => `Para proteger tus datos empresariales en los servidores de <strong>Kinetix Systems</strong>, tu licencia permite mantener hasta <strong>${m} dispositivos activos simultáneos</strong> (1 por cada usuario autorizado).`,
+      lockoutAckBtn: 'Entendido · Volver a Iniciar Sesión Aquí',
+      settingsLangCardTitle: '🌐 Idioma del Sistema / System Language (Multi-Idioma Global)',
+      settingsLangCardDesc: 'Cambia el idioma completo de la interfaz en tiempo real (Español, English, Português, Français).'
+    },
+    en: {
+      securityAlert: 'A login was detected on another device. The previous session was closed for security.',
+      cloudPill: (c, m) => `Cloud PWA · ${c}/${m} Devices`,
+      cloudPillTitle: (m) => `Kinetix Cloud PWA Protection: Limit of ${m} Authorized Devices (1 per User)`,
+      demoWord: 'Demo:',
+      actionsWord: 'actions',
+      buyBtnShort: 'Buy Now ($89)',
+      demoLimitBadge: 'Trial Limit Reached (Live Demo Mode)',
+      demoLimitTitle: 'You have reached the limit of 5 allowed trial actions',
+      demoLimitDesc: 'This live demo is for testing features immediately. To record <strong>unlimited lifetime</strong> sales, inventory, clients, and reports without restrictions, activate your Official License.',
+      demoBullet1: '✓ Lifetime access with zero monthly fees or subscriptions',
+      demoBullet2: '✓ Permanent business database protected in the cloud',
+      demoBullet3: (m) => `✓ Up to ${m} Simultaneous Devices (1 per User)`,
+      demoBuyCta: 'Buy & Activate Cloud License ($89 USD) →',
+      demoCloseReadonly: 'Close and continue exploring in read-only mode',
+      deviceModalSub: 'Kinetix Cloud Servers · Active PWA',
+      licenseAssigned: 'Assigned License:',
+      architectureLbl: 'Architecture:',
+      architectureVal: 'Cloud Web / PWA (Zero Local Installers)',
+      updatesLbl: 'Updates:',
+      updatesVal: '✓ Automatic in Real Time',
+      langLbl: 'Active Language:',
+      authDevicesTitle: (c, m) => `Authorized Devices (${c}/${m})`,
+      onePerUser: (m) => `1 Device per User (${m} Users)`,
+      activeTag: 'ACTIVE',
+      availableTag: 'AVAILABLE',
+      deviceWord: 'Device',
+      availSlotDesc: 'Available slot to open your system on another PC, tablet, or phone for your team.',
+      antiPiracyTitle: 'Active Anti-Piracy Rule:',
+      antiPiracyDesc: (m) => `If someone tries to open this account on an <strong>unauthorized device #${m + 1}</strong>, the system will immediately close the oldest session displaying:`,
+      testAlertBtn: (m) => `🔒 Test Security Alert When Exceeding ${m} Devices`,
+      lockoutBadge: (m) => `Anti-Concurrent Use Cloud Protection (Max ${m} Devices)`,
+      lockoutLimitVal: (m) => `${m} Devices (${m} Users)`,
+      lockoutTakenBy: 'Device that took the session:',
+      lockoutFooter: (m) => `To protect your business data on <strong>Kinetix Systems</strong> servers, your license allows up to <strong>${m} simultaneous active devices</strong> (1 per authorized user).`,
+      lockoutAckBtn: 'Understood · Log In Here Again',
+      settingsLangCardTitle: '🌐 System Language / Idioma del Sistema (Global Multi-Language)',
+      settingsLangCardDesc: 'Switch the entire interface language in real time (Español, English, Português, Français).'
+    },
+    pt: {
+      securityAlert: 'Foi detectado um login em outro dispositivo. A sessão anterior foi encerrada por segurança.',
+      cloudPill: (c, m) => `Cloud PWA · ${c}/${m} Dispositivos`,
+      cloudPillTitle: (m) => `Proteção Kinetix Cloud PWA: Limite de ${m} Dispositivos Autorizados (1 por Usuário)`,
+      demoWord: 'Demo:',
+      actionsWord: 'ações',
+      buyBtnShort: 'Comprar ($89)',
+      demoLimitBadge: 'Limite de Teste Atingido (Modo Demo)',
+      demoLimitTitle: 'Você atingiu o limite de 5 operações permitidas no teste',
+      demoLimitDesc: 'Esta demonstração serve apenas para testar os recursos no momento. Para registrar vendas, estoque, clientes e relatórios <strong>ilimitados vitalícios</strong> sem restrições, ative sua Licença Oficial.',
+      demoBullet1: '✓ Acesso vitalício sem assinaturas ou mensalidades',
+      demoBullet2: '✓ Banco de dados permanente protegido na nuvem',
+      demoBullet3: (m) => `✓ Até ${m} Dispositivos simultâneos (1 por Usuário)`,
+      demoBuyCta: 'Comprar e Ativar Licença ($89 USD) →',
+      demoCloseReadonly: 'Fechar e continuar explorando em modo leitura',
+      deviceModalSub: 'Servidores Kinetix Cloud · PWA Ativo',
+      licenseAssigned: 'Licença Atribuída:',
+      architectureLbl: 'Arquitetura:',
+      architectureVal: 'Web / PWA na Nuvem (Zero Instaladores Locais)',
+      updatesLbl: 'Atualizações:',
+      updatesVal: '✓ Automáticas em Tempo Real',
+      langLbl: 'Idioma Ativo:',
+      authDevicesTitle: (c, m) => `Dispositivos Autorizados (${c}/${m})`,
+      onePerUser: (m) => `1 Dispositivo por Usuário (${m} Usuários)`,
+      activeTag: 'ATIVO',
+      availableTag: 'DISPONÍVEL',
+      deviceWord: 'Dispositivo',
+      availSlotDesc: 'Vaga disponível para abrir seu sistema em outro PC, tablet ou celular da sua equipe.',
+      antiPiracyTitle: 'Regra Antipirataria Ativa:',
+      antiPiracyDesc: (m) => `Se alguém tentar abrir esta conta em um <strong>dispositivo #${m + 1} externo ou não autorizado</strong>, o sistema encerrará imediatamente a sessão anterior exibindo:`,
+      testAlertBtn: (m) => `🔒 Testar Alerta de Segurança ao Exceder ${m} Dispositivos`,
+      lockoutBadge: (m) => `Proteção Cloud Contra Uso Simultâneo (Máx. ${m} Dispositivos)`,
+      lockoutLimitVal: (m) => `${m} Dispositivos (${m} Usuários)`,
+      lockoutTakenBy: 'Dispositivo que assumiu a sessão:',
+      lockoutFooter: (m) => `Para proteger seus dados empresariais nos servidores da <strong>Kinetix Systems</strong>, sua licença permite manter até <strong>${m} dispositivos ativos simultâneos</strong> (1 por usuário autorizado).`,
+      lockoutAckBtn: 'Entendido · Fazer Login Aqui Novamente',
+      settingsLangCardTitle: '🌐 Idioma do Sistema / System Language (Multi-Idioma Global)',
+      settingsLangCardDesc: 'Altere o idioma completo da interface em tempo real (Español, English, Português, Français).'
+    },
+    fr: {
+      securityAlert: 'Une connexion a été détectée sur un autre appareil. La session précédente a été fermée par sécurité.',
+      cloudPill: (c, m) => `Cloud PWA · ${c}/${m} Appareils`,
+      cloudPillTitle: (m) => `Protection Kinetix Cloud PWA : Limite de ${m} Appareils Autorisés (1 par Utilisateur)`,
+      demoWord: 'Démo :',
+      actionsWord: 'actions',
+      buyBtnShort: 'Acheter (89 $)',
+      demoLimitBadge: 'Limite d’Essai Atteinte (Mode Démo)',
+      demoLimitTitle: 'Vous avez atteint la limite de 5 opérations autorisées',
+      demoLimitDesc: 'Cette démo permet de tester les fonctionnalités en direct. Pour enregistrer des ventes, stocks, clients et rapports <strong>illimités à vie</strong> sans restriction, activez votre Licence Officielle.',
+      demoBullet1: '✓ Accès à vie sans abonnement ni frais mensuels',
+      demoBullet2: '✓ Base de données permanente protégée dans le cloud',
+      demoBullet3: (m) => `✓ Jusqu’à ${m} Appareils simultanés (1 par Utilisateur)`,
+      demoBuyCta: 'Acheter et Activer la Licence (89 $ USD) →',
+      demoCloseReadonly: 'Fermer et continuer en mode lecture seule',
+      deviceModalSub: 'Serveurs Kinetix Cloud · PWA Active',
+      licenseAssigned: 'Licence Attribuée :',
+      architectureLbl: 'Architecture :',
+      architectureVal: 'Web / PWA dans le Cloud (Zéro Installateur Local)',
+      updatesLbl: 'Mises à jour :',
+      updatesVal: '✓ Automatiques en Temps Réel',
+      langLbl: 'Langue Active :',
+      authDevicesTitle: (c, m) => `Appareils Autorisés (${c}/${m})`,
+      onePerUser: (m) => `1 Appareil par Utilisateur (${m} Utilisateurs)`,
+      activeTag: 'ACTIF',
+      availableTag: 'DISPONIBLE',
+      deviceWord: 'Appareil',
+      availSlotDesc: 'Emplacement disponible pour ouvrir votre système sur un autre PC, tablette ou mobile.',
+      antiPiracyTitle: 'Règle Anti-Piratage Active :',
+      antiPiracyDesc: (m) => `Si quelqu’un tente d’ouvrir ce compte sur un <strong>appareil #${m + 1} non autorisé</strong>, le système fermera immédiatement la session précédente en affichant :`,
+      testAlertBtn: (m) => `🔒 Tester l’Alerte de Sécurité au-delà de ${m} Appareils`,
+      lockoutBadge: (m) => `Protection Cloud Anti-Usage Simultané (Max. ${m} Appareils)`,
+      lockoutLimitVal: (m) => `${m} Appareils (${m} Utilisateurs)`,
+      lockoutTakenBy: 'Appareil ayant pris la session :',
+      lockoutFooter: (m) => `Pour protéger vos données sur les serveurs <strong>Kinetix Systems</strong>, votre licence autorise jusqu’à <strong>${m} appareils actifs simultanés</strong> (1 par utilisateur autorisé).`,
+      lockoutAckBtn: 'Compris · Se Reconnecter Ici',
+      settingsLangCardTitle: '🌐 Langue du Système / System Language (Multilingue Global)',
+      settingsLangCardDesc: 'Changez la langue complète de l’interface en temps réel (Español, English, Português, Français).'
+    }
+  };
+
+  // Diccionario de frases e interfaz para todos los sistemas Kinetix (Gastro, POS, Clínicas, CRM, Gym)
+  // Cada entrada es [TextoEspañol, English, Português, Français]
+  const UI_PHRASE_TABLE = [
+    // Barra Superior Demo & Botones Globales
+    ['DEMO EN VIVO FUNCIONAL', 'LIVE FUNCTIONAL DEMO', 'DEMO AO VIVO FUNCIONAL', 'DÉMO EN DIRECT FONCTIONNELLE'],
+    ['Sistema de Gestión Integral para Restaurantes & Cafeterías — Kinetix Gastro ERP + POS + KDS Pro', 'All-in-One Restaurant & Cafe Management System — Kinetix Gastro ERP + POS + KDS Pro', 'Sistema de Gestão Integral para Restaurantes e Cafeterias — Kinetix Gastro ERP + POS + KDS Pro', 'Système de Gestion Intégral pour Restaurants & Cafés — Kinetix Gastro ERP + POS + KDS Pro'],
+    ['Sistema de Facturación, POS y Control de Inventarios Cloud v4.0', 'Cloud Invoicing, POS & Inventory Control System v4.0', 'Sistema de Faturamento, PDV e Controle de Estoque Cloud v4.0', 'Système de Facturation, PDV et Contrôle des Stocks Cloud v4.0'],
+    ['Sistema de Expedientes Clínicos, Consultas, Citas y Recordatorios Cloud v4.0', 'Cloud Medical Records, Consultations, Appointments & Reminders System v4.0', 'Sistema de Prontuários Clínicos, Consultas, Agendamentos e Lembretes Cloud v4.0', 'Système de Dossiers Médicaux, Consultations, Rendez-vous et Rappels Cloud v4.0'],
+    ['Sistema CRM, Cotizador PDF y Automatización de Clientes Cloud v4.0', 'Cloud CRM, PDF Quoter & Client Automation System v4.0', 'Sistema CRM, Orçamentos PDF e Automação de Clientes Cloud v4.0', 'Système CRM, Devis PDF et Automatisation Clients Cloud v4.0'],
+    ['PIN de prueba Admin Principal:', 'Main Admin Trial PIN:', 'PIN de teste Admin Principal:', 'PIN d’essai Admin Principal :'],
+    ['Comprar Este Sistema ($89 USD)', 'Buy This System ($89 USD)', 'Comprar Este Sistema ($89 USD)', 'Acheter Ce Système (89 $ USD)'],
+    ['✕ Cerrar Demo', '✕ Close Demo', '✕ Fechar Demo', '✕ Fermer Démo'],
+    ['Cerrar Demo', 'Close Demo', 'Fechar Demo', 'Fermer Démo'],
+    ['Cerrar Sesión / Salir', 'Log Out / Exit', 'Sair / Encerrar Sessão', 'Déconnexion / Quitter'],
+    ['Salir', 'Log Out', 'Sair', 'Quitter'],
+    ['Modo Claro', 'Light Mode', 'Modo Claro', 'Mode Clair'],
+    ['Modo Oscuro', 'Dark Mode', 'Modo Escuro', 'Mode Sombre'],
+    ['Claro', 'Light', 'Claro', 'Clair'],
+    ['Oscuro', 'Dark', 'Escuro', 'Sombre'],
+
+    // Navegación Gastro ERP + POS + KDS
+    ['Dashboard Ejecutivo en Tiempo Real', 'Real-Time Executive Dashboard', 'Dashboard Executivo em Tempo Real', 'Tableau de Bord Exécutif en Temps Réel'],
+    ['Mesas, Toma de Pedidos & Menú QR', 'Tables, Order Taking & QR Menu', 'Mesas, Pedidos e Cardápio QR', 'Tables, Prise de Commande & Menu QR'],
+    ['POS & Facturación / Corte de Caja', 'POS & Billing / Cash Register Close', 'PDV e Faturamento / Fechamento de Caixa', 'PDV & Facturation / Clôture de Caisse'],
+    ['Monitor de Cocina & Barra (KDS)', 'Kitchen & Bar Display Monitor (KDS)', 'Monitor de Cozinha e Bar (KDS)', 'Moniteur Cuisine & Bar (KDS)'],
+    ['Inventario, Recetas (Escandallos) & Stock', 'Inventory, Recipes (Costing) & Stock', 'Estoque, Fichas Técnicas (Receitas) e Insumos', 'Inventaire, Recettes & Stock'],
+    ['Finanzas (Diario Digital, CxC & CxP)', 'Finance (Daily Ledger, AR & AP)', 'Finanças (Diário Digital, Contas a Receber e Pagar)', 'Finances (Journal, Créances & Dettes)'],
+    ['Proveedores Gastronómicos', 'Food & Beverage Suppliers', 'Fornecedores Gastronômicos', 'Fournisseurs Gastronomiques'],
+    ['Control de 5 Usuarios & Roles (RBAC)', '5 Users & Roles Control (RBAC)', 'Controle de 5 Usuários e Perfis (RBAC)', 'Contrôle de 5 Utilisateurs & Rôles (RBAC)'],
+    ['Personalizar Marca & Configuración', 'Customize Brand & Configuration', 'Personalizar Marca e Configuração', 'Personnaliser Marque & Configuration'],
+    ['Manual de Uso & Procesos (PDF)', 'User Manual & Processes (PDF)', 'Manual de Uso e Processos (PDF)', 'Manuel d’Utilisation & Processus (PDF)'],
+    ['📱 Portal Menú Digital & QR', '📱 Digital QR Menu Portal', '📱 Portal Cardápio Digital e QR', '📱 Portail Menu Numérique & QR'],
+    ['Menú QR', 'QR Menu', 'Cardápio QR', 'Menu QR'],
+    ['Manual PDF', 'PDF Manual', 'Manual PDF', 'Manuel PDF'],
+    ['Mesas/Menú', 'Tables/Menu', 'Mesas/Cardápio', 'Tables/Menu'],
+    ['Caja POS', 'POS Cashier', 'Caixa PDV', 'Caisse PDV'],
+    ['Cocina KDS', 'Kitchen KDS', 'Cozinha KDS', 'Cuisine KDS'],
+    ['Recetas/Stock', 'Recipes/Stock', 'Receitas/Estoque', 'Recettes/Stock'],
+    ['Finanzas', 'Finance', 'Finanças', 'Finances'],
+    ['Proveedores', 'Suppliers', 'Fornecedores', 'Fournisseurs'],
+    ['5 Usuarios', '5 Users', '5 Usuários', '5 Utilisateurs'],
+    ['Marca/Config', 'Brand/Config', 'Marca/Config', 'Marque/Config'],
+    ['En Vivo', 'Live', 'Ao Vivo', 'En Direct'],
+    ['Salón', 'Dining', 'Salão', 'Salle'],
+
+    // Navegación POS & Inventarios / Clínicas / CRM
+    ['Diario & Balance del Día', 'Daily Ledger & Balance', 'Diário e Balanço do Dia', 'Journal & Bilan du Jour'],
+    ['Punto de Venta (POS)', 'Point of Sale (POS)', 'Ponto de Venda (PDV)', 'Point de Vente (PDV)'],
+    ['Inventario & Stock', 'Inventory & Stock', 'Estoque e Produtos', 'Inventaire & Stock'],
+    ['Facturas & Corte Caja', 'Invoices & Cash Close', 'Faturas e Fechamento de Caixa', 'Factures & Clôture Caisse'],
+    ['Gastos, Compras, CxC & CxP', 'Expenses, Purchases, AR & AP', 'Despesas, Compras, Contas a Receber e Pagar', 'Dépenses, Achats, Créances & Dettes'],
+    ['4 Usuarios & Roles', '4 Users & Roles', '4 Usuários e Perfis', '4 Utilisateurs & Rôles'],
+    ['Personalizar Marca', 'Customize Brand', 'Personalizar Marca', 'Personnaliser Marque'],
+    ['Licencia Activa:', 'Active License:', 'Licença Ativa:', 'Licence Active :'],
+    ['4/4 Usuarios', '4/4 Users', '4/4 Usuários', '4/4 Utilisateurs'],
+    ['OPERADOR ACTIVO:', 'ACTIVE OPERATOR:', 'OPERADOR ATIVO:', 'OPÉRATEUR ACTIF :'],
+    ['Dashboard Clínico', 'Clinical Dashboard', 'Dashboard Clínico', 'Tableau de Bord Clinique'],
+    ['Agenda de Citas & WhatsApp', 'Appointments & WhatsApp Reminders', 'Agenda de Consultas e WhatsApp', 'Agenda Rendez-vous & WhatsApp'],
+    ['Pacientes & Expedientes', 'Patients & Medical Records', 'Pacientes e Prontuários', 'Patients & Dossiers Médicaux'],
+    ['Consultas & Recetario PDF', 'Consultations & PDF Prescriptions', 'Consultas e Receituário PDF', 'Consultations & Ordonnances PDF'],
+    ['Embudo Kanban de Ventas', 'Kanban Sales Pipeline', 'Funil Kanban de Vendas', 'Pipeline Kanban des Ventes'],
+    ['Clientes & Prospectos', 'Clients & Leads', 'Clientes e Leads', 'Clients & Prospects'],
+    ['Cotizador Formal PDF', 'Formal PDF Quoter', 'Orçamentos Formais em PDF', 'Générateur de Devis PDF'],
+    ['Seguimiento WhatsApp', 'WhatsApp Follow-up', 'Acompanhamento WhatsApp', 'Suivi WhatsApp'],
+
+    // Login & Acceso Rápido
+    ['Portal Corporativo de Acceso para Personal Autorizado', 'Corporate Access Portal for Authorized Staff', 'Portal Corporativo de Acesso para Pessoal Autorizado', 'Portail d’Accès Corporatif pour le Personnel Autorisé'],
+    ['Abrir Portal del Menú Digital & QR (Vista Comensal)', 'Open Digital & QR Menu Portal (Guest View)', 'Abrir Portal do Cardápio Digital e QR (Visão Cliente)', 'Ouvrir le Portail Menu Numérique & QR (Vue Client)'],
+    ['Acceso Rápido Demo (Autocompletar y Entrar en 1 Clic)', 'Quick Demo Access (Autocomplete & Enter in 1 Click)', 'Acesso Rápido Demo (Autocompletar e Entrar em 1 Clique)', 'Accès Rapide Démo (Saisie Auto & Entrer en 1 Clic)'],
+    ['Ingresar al Sistema', 'Sign In to System', 'Entrar no Sistema', 'Se Connecter au Système'],
+    ['Entrar al Sistema Cloud', 'Sign In to Cloud System', 'Entrar no Sistema Cloud', 'Accéder au Système Cloud'],
+    ['📘 Descargar Manual Oficial Kinetix Gastro ERP (PDF)', '📘 Download Official Kinetix Gastro ERP Manual (PDF)', '📘 Baixar Manual Oficial Kinetix Gastro ERP (PDF)', '📘 Télécharger le Manuel Officiel Kinetix Gastro ERP (PDF)'],
+    ['Usuario / Correo Corporativo', 'Username / Corporate Email', 'Usuário / E-mail Corporativo', 'Utilisateur / E-mail Corporatif'],
+    ['PIN de Seguridad / Contraseña', 'Security PIN / Password', 'PIN de Segurança / Senha', 'PIN de Sécurité / Mot de Passe'],
+
+    // Acciones Comunes, POS, Cocina, Inventario, Finanzas y Configuración
+    ['Guardar Configuración', 'Save Configuration', 'Salvar Configuração', 'Enregistrer la Configuration'],
+    ['💾 Guardar Configuración', '💾 Save Configuration', '💾 Salvar Configuração', '💾 Enregistrer la Configuration'],
+    ['💾 Guardar Cambios Ahora', '💾 Save Changes Now', '💾 Salvar Alterações Agora', '💾 Enregistrer les Modifications'],
+    ['Cargar Logo desde PC', 'Upload Logo from PC', 'Carregar Logo do PC', 'Téléverser le Logo depuis le PC'],
+    ['Quitar Logo', 'Remove Logo', 'Remover Logo', 'Supprimer le Logo'],
+    ['Efectivo', 'Cash', 'Dinheiro', 'Espèces'],
+    ['Tarjeta', 'Card', 'Cartão', 'Carte'],
+    ['Transferencia', 'Bank Transfer', 'Transferência', 'Virement'],
+    ['Mixto', 'Split Payment', 'Pagamento Misto', 'Paiement Mixte'],
+    ['Cargar a CxC', 'Charge to AR (Credit)', 'Lançar em Conta (Fiado)', 'Facturer à Crédit'],
+    ['Cobrar y Emitir Ticket Térmico (58mm / 80mm)', 'Charge & Issue Thermal Receipt (58mm / 80mm)', 'Cobrar e Emitir Cupom Térmico (58mm / 80mm)', 'Encaisser & Émettre Ticket Thermique (58mm / 80mm)'],
+    ['Imprimir Ticket (80mm)', 'Print Receipt (80mm)', 'Imprimir Cupom (80mm)', 'Imprimer Ticket (80mm)'],
+    ['Imprimir Ticket (58mm)', 'Print Receipt (58mm)', 'Imprimir Cupom (58mm)', 'Imprimer Ticket (58mm)'],
+    ['Enviar por WhatsApp (1 Clic)', 'Send via WhatsApp (1 Click)', 'Enviar por WhatsApp (1 Clique)', 'Envoyer par WhatsApp (1 Clic)'],
+    ['✅ Marcar Orden Lista / Entregada', '✅ Mark Order Ready / Delivered', '✅ Marcar Pedido Pronto / Entregue', '✅ Marquer Commande Prête / Livrée'],
+    ['Iniciar Preparación', 'Start Preparation', 'Iniciar Preparo', 'Démarrer la Préparation'],
+    ['Editar Orden', 'Edit Order', 'Editar Pedido', 'Modifier la Commande'],
+    ['Personalización del Sistema y Datos del Restaurante / Cafetería', 'System Customization & Restaurant / Cafe Profile', 'Personalização do Sistema e Dados do Restaurante / Cafeteria', 'Personnalisation du Système & Profil du Restaurant / Café'],
+    ['Identidad de Marca, Logo y Parámetros del Negocio', 'Brand Identity, Logo & Business Parameters', 'Identidade da Marca, Logo e Parâmetros do Negócio', 'Identité de Marque, Logo & Paramètres de l’Entreprise'],
+    ['Personalizar Logo, Nombre y Especialidad', 'Customize Logo, Name & Specialty', 'Personalizar Logo, Nome e Especialidade', 'Personnaliser Logo, Nom & Spécialité'],
+    ['Personalizar Logo, Empresa y Datos de Cotización', 'Customize Logo, Company & Quotation Details', 'Personalizar Logo, Empresa e Dados de Orçamento', 'Personnaliser Logo, Entreprise & Détails des Devis']
+  ];
+
+  // Construir mapas rápidos de traducción a partir de la tabla en español
+  const EXACT_TRANSLATION_MAP = { en: new Map(), pt: new Map(), fr: new Map() };
+  UI_PHRASE_TABLE.forEach(row => {
+    const [esText, enText, ptText, frText] = row;
+    EXACT_TRANSLATION_MAP.en.set(esText, enText);
+    EXACT_TRANSLATION_MAP.pt.set(esText, ptText);
+    EXACT_TRANSLATION_MAP.fr.set(esText, frText);
+  });
+
+  function translateTextString(origEsText, targetLang) {
+    if (!origEsText || targetLang === 'es') return origEsText;
+    const trimmed = origEsText.trim();
+    if (!trimmed) return origEsText;
+
+    const map = EXACT_TRANSLATION_MAP[targetLang];
+    if (!map) return origEsText;
+
+    if (map.has(trimmed)) {
+      return origEsText.replace(trimmed, map.get(trimmed));
+    }
+
+    // Reemplazo parcial para cadenas compuestas
+    let out = origEsText;
+    for (let i = 0; i < UI_PHRASE_TABLE.length; i++) {
+      const esPhrase = UI_PHRASE_TABLE[i][0];
+      if (esPhrase.length > 5 && out.includes(esPhrase)) {
+        const idx = targetLang === 'en' ? 1 : targetLang === 'pt' ? 2 : 3;
+        out = out.split(esPhrase).join(UI_PHRASE_TABLE[i][idx]);
+      }
+    }
+    return out;
+  }
+
+  function translateDOMTree(root) {
+    if (!root) return;
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
+    let node;
+    while ((node = walker.nextNode())) {
+      const parent = node.parentElement;
+      if (!parent) continue;
+      const tag = parent.tagName;
+      if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'CODE' || tag === 'TEXTAREA') continue;
+
+      if (typeof node.__kinetixOrigEs === 'undefined') {
+        const val = node.nodeValue || '';
+        if (val.trim().length > 0) {
+          node.__kinetixOrigEs = val;
+        }
+      }
+      if (node.__kinetixOrigEs) {
+        const nextVal = currentLang === 'es'
+          ? node.__kinetixOrigEs
+          : translateTextString(node.__kinetixOrigEs, currentLang);
+        if (node.nodeValue !== nextVal) {
+          node.nodeValue = nextVal;
+        }
+      }
+    }
+
+    // Sincronizar todos los selectores de idioma que existan en la página o en Configuración
+    document.querySelectorAll('[data-kinetix-lang-select]').forEach(sel => {
+      if (sel.value !== currentLang) {
+        sel.value = currentLang;
+      }
+    });
+  }
+
+  function setGlobalLanguage(newLang) {
+    const clean = String(newLang || '').toLowerCase().slice(0, 2);
+    if (!SUPPORTED_LANGS.includes(clean)) return;
+    currentLang = clean;
+    try {
+      localStorage.setItem(LANG_STORAGE_KEY, clean);
+      document.documentElement.lang = clean;
+    } catch (e) {}
+
+    translateDOMTree(document.body);
+    updateBadgeUI();
+    if (isDemo) {
+      updateDemoFloatingBadge(getDemoActionCount());
+    }
+    injectSettingsLanguageSelector();
+
+    try {
+      window.dispatchEvent(new CustomEvent('kinetix:langchange', { detail: { lang: clean } }));
+    } catch (e) {}
+  }
+
+  // Escuchar cambios de idioma enviados por postMessage desde el portal padre
+  window.addEventListener('message', function (e) {
+    if (e.data && e.data.type === 'KINETIX_SET_LANG' && e.data.lang) {
+      setGlobalLanguage(e.data.lang);
+    }
+  });
+
+  // Inyectar selector de idioma dentro de la pestaña de Configuración (#tab-settings) en sistemas HTML (POS, Clínica, CRM)
+  function injectSettingsLanguageSelector() {
+    const settingsTab = document.getElementById('tab-settings');
+    if (!settingsTab) return;
+    const t = GUARD_UI_TEXTS[currentLang] || GUARD_UI_TEXTS.es;
+
+    let existingCard = document.getElementById('kinetix-settings-i18n-card');
+    if (existingCard) {
+      const titleEl = existingCard.querySelector('[data-i18n-card-title]');
+      const descEl = existingCard.querySelector('[data-i18n-card-desc]');
+      const selEl = existingCard.querySelector('select');
+      if (titleEl) titleEl.textContent = t.settingsLangCardTitle;
+      if (descEl) descEl.textContent = t.settingsLangCardDesc;
+      if (selEl && selEl.value !== currentLang) selEl.value = currentLang;
+      return;
+    }
+
+    const container = settingsTab.querySelector('.glass') || settingsTab;
+    const card = document.createElement('div');
+    card.id = 'kinetix-settings-i18n-card';
+    card.className = 'p-4 sm:p-5 rounded-2xl bg-slate-900/90 border border-emerald-500/40 flex flex-col sm:flex-row sm:items-center justify-between gap-4';
+    card.innerHTML = `
+      <div class="space-y-1">
+        <span data-i18n-card-title class="text-xs sm:text-sm font-extrabold text-emerald-400 block">${t.settingsLangCardTitle}</span>
+        <p data-i18n-card-desc class="text-[11px] text-slate-300">${t.settingsLangCardDesc}</p>
+      </div>
+      <div class="shrink-0">
+        <select data-kinetix-lang-select class="bg-slate-950 border border-emerald-500/50 rounded-xl px-3.5 py-2.5 text-xs font-extrabold text-white cursor-pointer focus:outline-none">
+          <option value="es">🇪🇸 Español (Latinoamérica & España)</option>
+          <option value="en">🇺🇸 English (USA, UK, Canada & Global)</option>
+          <option value="pt">🇧🇷 Português (Brasil & Portugal)</option>
+          <option value="fr">🇫🇷 Français (France, Canada & Europe)</option>
+        </select>
+      </div>
+    `;
+    const sel = card.querySelector('select');
+    sel.value = currentLang;
+    sel.addEventListener('change', function () {
+      setGlobalLanguage(this.value);
+    });
+
+    // Insertar justo después del encabezado de configuración
+    const headerDiv = container.firstElementChild;
+    if (headerDiv && headerDiv.nextSibling) {
+      container.insertBefore(card, headerDiv.nextSibling);
+    } else {
+      container.appendChild(card);
+    }
+  }
+
+  window.KinetixI18n = {
+    getLang: function () { return currentLang; },
+    setLang: setGlobalLanguage,
+    detectLang: detectVisitorLanguage,
+    translateDOM: function () { translateDOMTree(document.body); }
+  };
+
+  // ============================================================================
+  // 2. IDENTIFICACIÓN DEL SISTEMA Y LÍMITE DE DISPOSITIVOS ACORDE A USUARIOS
+  // ============================================================================
   const pathName = window.location.pathname.toLowerCase();
   let appKey = 'pos';
   let appTitle = 'Kinetix POS & Inventario Cloud';
@@ -60,13 +553,12 @@
   const STORAGE_LICENSE_KEY = 'KINETIX_CLOUD_LICENSE_' + appKey.toUpperCase();
   const STORAGE_DEVICE_ID_KEY = 'KINETIX_DEVICE_FINGERPRINT_ID';
 
-  // Detectar tipo de dispositivo actual (PC vs Móvil)
   function detectDeviceInfo() {
     const ua = navigator.userAgent || '';
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
     let os = 'Windows PC';
     if (/iPhone|iPad|iPod/i.test(ua)) os = 'iPhone / iOS';
-    else if (/Android/i.test(ua)) os = 'Android Móvil';
+    else if (/Android/i.test(ua)) os = 'Android Mobile';
     else if (/Mac/i.test(ua)) os = 'MacOS';
     else if (/Linux/i.test(ua)) os = 'Linux PC';
 
@@ -76,14 +568,13 @@
     else if (/Safari/i.test(ua) && !/Chrome/i.test(ua)) browser = 'Safari';
 
     return {
-      type: isMobile ? 'Móvil Personal' : 'PC del Negocio',
+      type: isMobile ? 'Mobile / Tablet' : 'Desktop PC',
       icon: isMobile ? '📱' : '💻',
       label: `${os} (${browser})`,
       isMobile: isMobile
     };
   }
 
-  // Obtener o generar huella única del dispositivo
   function getOrCreateDeviceId() {
     let devId = localStorage.getItem(STORAGE_DEVICE_ID_KEY);
     if (!devId) {
@@ -95,7 +586,6 @@
     return devId;
   }
 
-  // Token único por pestaña/instancia abierta para control estricto de sesiones simultáneas
   function getOrCreateInstanceToken() {
     let token = sessionStorage.getItem('KINETIX_INSTANCE_SESSION_TOKEN');
     if (!token) {
@@ -105,7 +595,6 @@
     return token;
   }
 
-  // Obtener o activar Licencia Cloud desde URL (?licencia=...) o localStorage
   function getOrCreateLicense() {
     const params = new URLSearchParams(window.location.search);
     const urlLic = params.get('licencia');
@@ -126,7 +615,6 @@
   const currentDeviceInfo = detectDeviceInfo();
   const currentLicense = getOrCreateLicense();
 
-  // Canal de comunicación en tiempo real entre pestañas/sesiones
   let guardChannel = null;
   try {
     if (typeof BroadcastChannel !== 'undefined') {
@@ -151,15 +639,11 @@
     } catch (e) {}
   }
 
-  // Registrar el inicio de sesión del dispositivo actual y verificar límite acorde a los usuarios de la licencia
   function registerDeviceSessionOnLogin() {
     let sessions = getActiveSessions();
     const now = Date.now();
-
-    // Limpiar sesiones inactivas de más de 24 horas
     sessions = sessions.filter(s => (now - (s.lastSeen || 0)) < 24 * 60 * 60 * 1000);
 
-    // Verificar si esta misma instancia ya está registrada
     const existingIdx = sessions.findIndex(s => s.instanceToken === currentInstanceToken);
     if (existingIdx !== -1) {
       sessions[existingIdx].lastSeen = now;
@@ -168,8 +652,6 @@
       return;
     }
 
-    // Si ya se alcanzó el máximo de dispositivos/usuarios activos y entra uno nuevo:
-    // Cerrar automáticamente la sesión anterior más antigua
     const revokedTokens = [];
     while (sessions.length >= MAX_AUTHORIZED_DEVICES) {
       const oldest = sessions.shift();
@@ -193,11 +675,12 @@
     updateBadgeUI();
 
     if (revokedTokens.length > 0) {
+      const t = GUARD_UI_TEXTS[currentLang] || GUARD_UI_TEXTS.es;
       const payload = {
         type: 'SESSION_REVOKED',
         revokedTokens: revokedTokens,
         newDevice: newSession,
-        reason: SECURITY_ALERT_MESSAGE,
+        reason: t.securityAlert,
         timestamp: now
       };
       try {
@@ -209,9 +692,7 @@
     }
   }
 
-  // Ejecutar cierre forzoso de sesión en el dispositivo desplazado y mostrar alerta oficial
   function enforceAutomaticSessionLogout(newDeviceData) {
-    // Si el sistema tiene función logout(), invocarla inmediatamente
     try {
       if (typeof window.logout === 'function') {
         window.logout();
@@ -228,14 +709,14 @@
     showSecurityLockoutModal(newDeviceData);
   }
 
-  // Modal de Alerta de Seguridad por Exceder el Límite de Dispositivos de la Licencia
   function showSecurityLockoutModal(newDeviceData) {
     let existing = document.getElementById('kinetix-security-lockout-modal');
     if (existing) existing.remove();
 
+    const t = GUARD_UI_TEXTS[currentLang] || GUARD_UI_TEXTS.es;
     const devInfoText = newDeviceData && newDeviceData.deviceLabel
-      ? `${newDeviceData.deviceIcon || '💻'} ${newDeviceData.deviceType || 'Nuevo Dispositivo'} — ${newDeviceData.deviceLabel}`
-      : `Dispositivo Externo #${MAX_AUTHORIZED_DEVICES + 1} Detectado`;
+      ? `${newDeviceData.deviceIcon || '💻'} ${newDeviceData.deviceType || 'Device'} — ${newDeviceData.deviceLabel}`
+      : `#${MAX_AUTHORIZED_DEVICES + 1}`;
 
     const modal = document.createElement('div');
     modal.id = 'kinetix-security-lockout-modal';
@@ -250,33 +731,33 @@
 
         <div class="space-y-2">
           <span class="px-3 py-1 rounded-full bg-red-500/20 border border-red-500/40 text-red-300 font-mono text-[11px] font-bold uppercase tracking-wider">
-            Protección Cloud Anti-Uso Simultáneo (Máx. ${MAX_AUTHORIZED_DEVICES} Equipos)
+            ${t.lockoutBadge(MAX_AUTHORIZED_DEVICES)}
           </span>
           <h3 class="text-xl font-black text-white leading-snug pt-1">
-            ${SECURITY_ALERT_MESSAGE}
+            ${t.securityAlert}
           </h3>
         </div>
 
         <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 text-left text-xs space-y-2">
           <div class="flex items-center justify-between text-slate-400">
-            <span>Licencia Cloud:</span>
+            <span>${t.licenseAssigned}</span>
             <strong class="font-mono text-emerald-400">${currentLicense}</strong>
           </div>
           <div class="flex items-center justify-between text-slate-400">
-            <span>Límite Autorizado:</span>
-            <strong class="text-white">${MAX_AUTHORIZED_DEVICES} Dispositivos (${MAX_AUTHORIZED_DEVICES} Usuarios)</strong>
+            <span>Max:</span>
+            <strong class="text-white">${t.lockoutLimitVal(MAX_AUTHORIZED_DEVICES)}</strong>
           </div>
           <div class="pt-1.5 border-t border-slate-800 text-[11px] text-amber-300">
-            <strong>Equipo que tomó la sesión:</strong> ${devInfoText}
+            <strong>${t.lockoutTakenBy}</strong> ${devInfoText}
           </div>
         </div>
 
         <p class="text-xs text-slate-400 leading-relaxed">
-          Para proteger tus datos empresariales en los servidores de <strong>Kinetix Systems</strong>, tu licencia permite mantener hasta <strong>${MAX_AUTHORIZED_DEVICES} dispositivos activos simultáneos</strong> (1 por cada usuario autorizado).
+          ${t.lockoutFooter(MAX_AUTHORIZED_DEVICES)}
         </p>
 
         <button id="kinetix-lockout-ack-btn" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-red-500 to-amber-500 hover:opacity-95 text-slate-950 font-black text-sm transition cursor-pointer shadow-lg">
-          Entendido · Volver a Iniciar Sesión Aquí
+          ${t.lockoutAckBtn}
         </button>
       </div>
     `;
@@ -287,7 +768,6 @@
     };
   }
 
-  // Escuchar eventos de revocación desde otras pestañas/dispositivos
   if (guardChannel) {
     guardChannel.onmessage = function (ev) {
       const data = ev.data;
@@ -314,7 +794,6 @@
     }
   });
 
-  // Interceptar handleLogin y logout de forma transparente sin tocar el código original
   function hookAuthFunctions() {
     if (typeof window.handleLogin === 'function' && !window.handleLogin._kinetixHooked) {
       const origLogin = window.handleLogin;
@@ -341,42 +820,16 @@
     }
   }
 
-  // Capturar evento nativo de instalación PWA en Chrome/Edge/Android
-  let deferredPwaPrompt = null;
-  window.addEventListener('beforeinstallprompt', function (e) {
-    e.preventDefault();
-    deferredPwaPrompt = e;
-    updateBadgeUI();
-  });
-
-  window.triggerKinetixPwaInstall = async function () {
-    if (deferredPwaPrompt) {
-      deferredPwaPrompt.prompt();
-      await deferredPwaPrompt.userChoice;
-      deferredPwaPrompt = null;
-      return;
-    }
-    alert(
-      '📲 INSTALAR APLICACIÓN WEB EN LA NUBE (PWA):\n\n' +
-      '• En Android (Chrome): Toca los 3 puntos arriba a la derecha y selecciona "Instalar aplicación" o "Agregar a la pantalla principal".\n' +
-      '• En iPhone / iPad (Safari): Toca el botón Compartir (cuadro con flecha) y selecciona "Agregar a inicio".\n' +
-      '• En PC (Chrome / Edge): Haz clic en el icono de pantalla/instalar en el lado derecho de la barra de direcciones.\n\n' +
-      '🔒 Tu sistema corre 100% seguro desde los servidores de Kinetix con actualizaciones automáticas.'
-    );
-  };
-
-  // Simular intento de acceso excediendo el límite de dispositivos autorizados para pruebas de seguridad
   window.simulateThirdDeviceIntrusion = function () {
     const closePanel = document.getElementById('kinetix-cloud-device-modal');
     if (closePanel) closePanel.remove();
     enforceAutomaticSessionLogout({
       deviceIcon: '📱',
-      deviceType: `Dispositivo #${MAX_AUTHORIZED_DEVICES + 1} No Autorizado`,
-      deviceLabel: `Intento de Acceso Simultáneo Excedido (${MAX_AUTHORIZED_DEVICES + 1}/${MAX_AUTHORIZED_DEVICES})`
+      deviceType: `Device #${MAX_AUTHORIZED_DEVICES + 1}`,
+      deviceLabel: `(${MAX_AUTHORIZED_DEVICES + 1}/${MAX_AUTHORIZED_DEVICES})`
     });
   };
 
-  // Modal informativo de gestión de los dispositivos autorizados acorde al número de usuarios
   window.openKinetixDeviceGuardModal = function () {
     let existing = document.getElementById('kinetix-cloud-device-modal');
     if (existing) {
@@ -384,6 +837,7 @@
       return;
     }
 
+    const t = GUARD_UI_TEXTS[currentLang] || GUARD_UI_TEXTS.es;
     let sessions = getActiveSessions();
     if (sessions.length === 0) {
       sessions = [{
@@ -392,7 +846,7 @@
         deviceType: currentDeviceInfo.type,
         deviceIcon: currentDeviceInfo.icon,
         deviceLabel: currentDeviceInfo.label,
-        loginTime: 'Activo ahora'
+        loginTime: 'Active'
       }];
     }
 
@@ -405,7 +859,7 @@
             <div class="flex items-center gap-3">
               <span class="text-xl">${s.deviceIcon || '💻'}</span>
               <div>
-                <p class="text-xs font-bold text-white">${s.deviceType} · Equipo #${i + 1} <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono ml-1">ACTIVO</span></p>
+                <p class="text-xs font-bold text-white">${s.deviceType} · ${t.deviceWord} #${i + 1} <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono ml-1">${t.activeTag}</span></p>
                 <p class="text-[11px] text-slate-400">${s.deviceLabel} · ID: ${s.deviceId}</p>
               </div>
             </div>
@@ -418,11 +872,11 @@
             <div class="flex items-center gap-3">
               <span class="text-xl opacity-70">🖥️</span>
               <div>
-                <p class="text-xs font-bold text-slate-300">Dispositivo #${i + 1} (Usuario / Estación #${i + 1})</p>
-                <p class="text-[11px] text-slate-400">Cupo disponible para abrir tu sistema en otra PC, tablet o móvil de tu equipo.</p>
+                <p class="text-xs font-bold text-slate-300">${t.deviceWord} #${i + 1}</p>
+                <p class="text-[11px] text-slate-400">${t.availSlotDesc}</p>
               </div>
             </div>
-            <span class="text-[10px] font-mono px-2 py-1 rounded bg-slate-800 text-slate-300 font-bold">DISPONIBLE</span>
+            <span class="text-[10px] font-mono px-2 py-1 rounded bg-slate-800 text-slate-300 font-bold">${t.availableTag}</span>
           </div>
         `;
       }
@@ -440,30 +894,39 @@
             🛡️
           </div>
           <div>
-            <span class="text-[10px] font-mono uppercase tracking-widest text-emerald-400 font-bold block">Servidores Kinetix Cloud · PWA Activa</span>
+            <span class="text-[10px] font-mono uppercase tracking-widest text-emerald-400 font-bold block">${t.deviceModalSub}</span>
             <h3 class="text-lg font-black text-white">${appTitle}</h3>
           </div>
         </div>
 
         <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 space-y-2 text-xs">
           <div class="flex items-center justify-between">
-            <span class="text-slate-400">Licencia Asignada:</span>
+            <span class="text-slate-400">${t.licenseAssigned}</span>
             <span class="font-mono font-bold text-emerald-400">${currentLicense}</span>
           </div>
           <div class="flex items-center justify-between">
-            <span class="text-slate-400">Arquitectura:</span>
-            <span class="text-white font-semibold">Web / PWA en la Nube (Cero Instaladores Locales)</span>
+            <span class="text-slate-400">${t.architectureLbl}</span>
+            <span class="text-white font-semibold">${t.architectureVal}</span>
           </div>
           <div class="flex items-center justify-between">
-            <span class="text-slate-400">Actualizaciones:</span>
-            <span class="text-cyan-400 font-semibold">✓ Automáticas en Tiempo Real</span>
+            <span class="text-slate-400">${t.updatesLbl}</span>
+            <span class="text-cyan-400 font-semibold">${t.updatesVal}</span>
+          </div>
+          <div class="flex items-center justify-between pt-1 border-t border-slate-800">
+            <span class="text-slate-400">${t.langLbl}</span>
+            <select id="kinetix-guard-modal-lang" class="bg-slate-950 border border-emerald-500/40 rounded-lg px-2.5 py-1 text-xs font-bold text-emerald-300 cursor-pointer">
+              <option value="es" ${currentLang === 'es' ? 'selected' : ''}>🇪🇸 Español</option>
+              <option value="en" ${currentLang === 'en' ? 'selected' : ''}>🇺🇸 English</option>
+              <option value="pt" ${currentLang === 'pt' ? 'selected' : ''}>🇧🇷 Português</option>
+              <option value="fr" ${currentLang === 'fr' ? 'selected' : ''}>🇫🇷 Français</option>
+            </select>
           </div>
         </div>
 
         <div class="space-y-2">
           <div class="flex items-center justify-between text-xs">
-            <span class="font-bold text-white uppercase tracking-wider">Dispositivos Autorizados (${sessions.length}/${MAX_AUTHORIZED_DEVICES})</span>
-            <span class="text-[11px] text-emerald-400 font-semibold">1 Equipo por cada Usuario (${MAX_AUTHORIZED_DEVICES} Usuarios)</span>
+            <span class="font-bold text-white uppercase tracking-wider">${t.authDevicesTitle(sessions.length, MAX_AUTHORIZED_DEVICES)}</span>
+            <span class="text-[11px] text-emerald-400 font-semibold">${t.onePerUser(MAX_AUTHORIZED_DEVICES)}</span>
           </div>
           <div class="space-y-2 max-h-60 overflow-y-auto pr-1">
             ${slotsHtml}
@@ -471,31 +934,49 @@
         </div>
 
         <div class="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-[11px] text-amber-200 leading-relaxed">
-          🔒 <strong>Regla Anti-Piratería Activa:</strong> Si se intenta abrir esta cuenta en un <strong>dispositivo #${MAX_AUTHORIZED_DEVICES + 1} externo o no autorizado</strong>, el sistema cerrará inmediatamente la sesión anterior mostrando:<br>
-          <em class="text-white font-semibold">"${SECURITY_ALERT_MESSAGE}"</em>
+          🔒 <strong>${t.antiPiracyTitle}</strong> ${t.antiPiracyDesc(MAX_AUTHORIZED_DEVICES)}<br>
+          <em class="text-white font-semibold">"${t.securityAlert}"</em>
         </div>
 
         <div class="grid grid-cols-1 gap-2.5 pt-1">
           <button onclick="simulateThirdDeviceIntrusion()" class="py-3 px-4 rounded-xl bg-slate-900 hover:bg-red-950/60 text-amber-300 hover:text-red-300 border border-amber-500/40 text-xs font-bold transition cursor-pointer flex items-center justify-center gap-1.5">
-            <span>🔒 Probar Alerta de Seguridad al Exceder ${MAX_AUTHORIZED_DEVICES} Equipos</span>
+            <span>${t.testAlertBtn(MAX_AUTHORIZED_DEVICES)}</span>
           </button>
         </div>
       </div>
     `;
     document.body.appendChild(modal);
+
+    const langSelect = document.getElementById('kinetix-guard-modal-lang');
+    if (langSelect) {
+      langSelect.addEventListener('change', function () {
+        setGlobalLanguage(this.value);
+        modal.remove();
+        window.openKinetixDeviceGuardModal();
+      });
+    }
   };
 
   function updateBadgeUI() {
     const badgeText = document.getElementById('kinetix-cloud-guard-badge-text');
-    if (!badgeText) return;
+    const pill = document.getElementById('kinetix-cloud-guard-pill');
+    const langSelect = document.getElementById('kinetix-cloud-guard-lang-pill');
+    const t = GUARD_UI_TEXTS[currentLang] || GUARD_UI_TEXTS.es;
     const count = Math.min(Math.max(getActiveSessions().length, 1), MAX_AUTHORIZED_DEVICES);
-    badgeText.textContent = `Cloud PWA · ${count}/${MAX_AUTHORIZED_DEVICES} Equipos`;
+    if (badgeText) {
+      badgeText.textContent = t.cloudPill(count, MAX_AUTHORIZED_DEVICES);
+    }
+    if (pill) {
+      pill.title = t.cloudPillTitle(MAX_AUTHORIZED_DEVICES);
+    }
+    if (langSelect && langSelect.value !== currentLang) {
+      langSelect.value = currentLang;
+    }
   }
 
   function injectCloudSecurityBadge() {
-    if (document.getElementById('kinetix-cloud-guard-pill')) return;
+    if (document.getElementById('kinetix-cloud-guard-bar')) return;
 
-    // Agregar enlace al manifest PWA si no existe
     if (!document.querySelector('link[rel="manifest"]')) {
       const link = document.createElement('link');
       link.rel = 'manifest';
@@ -503,46 +984,49 @@
       document.head.appendChild(link);
     }
 
+    const t = GUARD_UI_TEXTS[currentLang] || GUARD_UI_TEXTS.es;
+    const bar = document.createElement('div');
+    bar.id = 'kinetix-cloud-guard-bar';
+    bar.className = 'fixed bottom-3 left-3 z-40 flex items-center gap-1.5';
+
     const pill = document.createElement('button');
     pill.id = 'kinetix-cloud-guard-pill';
     pill.type = 'button';
     pill.onclick = window.openKinetixDeviceGuardModal;
-    pill.title = `Protección Kinetix Cloud PWA: Límite de ${MAX_AUTHORIZED_DEVICES} Dispositivos Autorizados (1 por Usuario)`;
-    pill.className = 'fixed bottom-3 left-3 z-40 px-3 py-1.5 rounded-full bg-slate-950/90 hover:bg-slate-900 border border-emerald-500/40 text-[11px] font-semibold text-slate-200 flex items-center gap-2 shadow-lg backdrop-blur-md transition cursor-pointer';
+    pill.title = t.cloudPillTitle(MAX_AUTHORIZED_DEVICES);
+    pill.className = 'px-3 py-1.5 rounded-full bg-slate-950/90 hover:bg-slate-900 border border-emerald-500/40 text-[11px] font-semibold text-slate-200 flex items-center gap-2 shadow-lg backdrop-blur-md transition cursor-pointer';
     pill.innerHTML = `
       <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-      <span id="kinetix-cloud-guard-badge-text">Cloud PWA · 1/${MAX_AUTHORIZED_DEVICES} Equipos</span>
+      <span id="kinetix-cloud-guard-badge-text">${t.cloudPill(1, MAX_AUTHORIZED_DEVICES)}</span>
     `;
-    document.body.appendChild(pill);
+
+    // Selector rápido de idioma junto a la píldora Cloud PWA
+    const langSel = document.createElement('select');
+    langSel.id = 'kinetix-cloud-guard-lang-pill';
+    langSel.setAttribute('data-kinetix-lang-select', '1');
+    langSel.title = 'Language / Idioma / Langue';
+    langSel.className = 'px-2.5 py-1.5 rounded-full bg-slate-950/90 hover:bg-slate-900 border border-emerald-500/40 text-[11px] font-extrabold text-emerald-300 shadow-lg backdrop-blur-md transition cursor-pointer focus:outline-none';
+    langSel.innerHTML = `
+      <option value="es">🇪🇸 ES</option>
+      <option value="en">🇺🇸 EN</option>
+      <option value="pt">🇧🇷 PT</option>
+      <option value="fr">🇫🇷 FR</option>
+    `;
+    langSel.value = currentLang;
+    langSel.addEventListener('change', function () {
+      setGlobalLanguage(this.value);
+    });
+
+    bar.appendChild(pill);
+    bar.appendChild(langSel);
+    document.body.appendChild(bar);
     updateBadgeUI();
   }
 
-  // Bloquear guardado o extracción de código fuente (Ctrl+S / Ctrl+U / F12) para impedir copia local o reventa
-  window.addEventListener('keydown', function (e) {
-    if (
-      e.key === 'F12' ||
-      ((e.ctrlKey || e.metaKey) && (e.key === 's' || e.key === 'S' || e.key === 'u' || e.key === 'U')) ||
-      ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c'))
-    ) {
-      e.preventDefault();
-      return false;
-    }
-  });
-
-  window.addEventListener('contextmenu', function (e) {
-    if (isDemo) {
-      e.preventDefault();
-      return false;
-    }
-  });
-
-
   // ========================================================
-  // KINETIX DEMO SECURITY & EPHEMERAL GUARD v5.0
-  // Límite estricto de 5 acciones / artículos en modo prueba
-  // Restablecimiento automático a la información inicial al salir/entrar
+  // 3. KINETIX DEMO SECURITY & EPHEMERAL GUARD v5.0
+  // Límite estricto de 5 acciones en modo prueba
   // ========================================================
-
   const DEMO_MAX_ACTIONS = 5;
 
   function isPaidLicenseActive() {
@@ -562,7 +1046,6 @@
 
   const isDemo = !isPaidLicenseActive();
 
-  // 1. Restablecimiento automático a la información inicial al salir y volver a entrar
   if (isDemo) {
     try {
       const sessionActive = sessionStorage.getItem('KINETIX_DEMO_ACTIVE_' + appKey);
@@ -593,14 +1076,12 @@
   }
 
   function canPerformDemoAction(actionName) {
-    if (!isDemo) return true; // Licencia comprada: operaciones ilimitadas
-    
+    if (!isDemo) return true;
     let count = getDemoActionCount();
     if (count >= DEMO_MAX_ACTIONS) {
       showDemoLockoutModal(actionName);
       return false;
     }
-    
     count++;
     try {
       sessionStorage.setItem('KINETIX_DEMO_ACTIONS_' + appKey, count.toString());
@@ -609,10 +1090,11 @@
     return true;
   }
 
-  function showDemoLockoutModal(actionName) {
+  function showDemoLockoutModal() {
     let existing = document.getElementById('kinetix-demo-limit-modal');
     if (existing) existing.remove();
 
+    const t = GUARD_UI_TEXTS[currentLang] || GUARD_UI_TEXTS.es;
     const checkoutUrl = OFFICIAL_CHECKOUT_URLS[appKey] || OFFICIAL_CHECKOUT_URLS.pos;
 
     const modal = document.createElement('div');
@@ -625,27 +1107,27 @@
           🔒
         </div>
         <div style="display:inline-block;padding:4px 12px;border-radius:999px;background:rgba(245,158,11,0.2);color:#fcd34d;font-size:11px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:10px;border:1px solid rgba(245,158,11,0.3);">
-          Límite de Prueba Alcanzado (Modo Demo)
+          ${t.demoLimitBadge}
         </div>
         <h3 style="font-size:20px;font-weight:800;color:#ffffff;margin:0 0 8px;line-height:1.25;">
-          Has alcanzado el límite de 5 operaciones permitidas
+          ${t.demoLimitTitle}
         </h3>
         <p style="font-size:12.5px;color:#cbd5e1;line-height:1.5;margin:0 0 16px;">
-          Este demo es únicamente para probar las funciones en el momento. Para registrar ventas, inventario, clientes y reportes <strong>ilimitados de por vida</strong> sin restricciones, activa tu Licencia Oficial.
+          ${t.demoLimitDesc}
         </p>
 
         <div style="background:rgba(15,23,42,0.8);border:1px solid #334155;border-radius:12px;padding:12px 14px;margin-bottom:18px;text-align:left;font-size:12px;">
-          <div style="color:#34d399;font-weight:600;margin-bottom:6px;">✓ Acceso vitalicio sin suscripciones ni mensualidades</div>
-          <div style="color:#34d399;font-weight:600;margin-bottom:6px;">✓ Base de datos permanente protegida en la nube</div>
-          <div style="color:#34d399;font-weight:600;">✓ Hasta ${MAX_AUTHORIZED_DEVICES} Dispositivos simultáneos (1 por Usuario)</div>
+          <div style="color:#34d399;font-weight:600;margin-bottom:6px;">${t.demoBullet1}</div>
+          <div style="color:#34d399;font-weight:600;margin-bottom:6px;">${t.demoBullet2}</div>
+          <div style="color:#34d399;font-weight:600;">${t.demoBullet3(MAX_AUTHORIZED_DEVICES)}</div>
         </div>
 
         <a href="${checkoutUrl}" onclick="return window.triggerKinetixDemoBuy(event)" target="_blank" style="display:block;width:100%;padding:14px;background:linear-gradient(135deg,#10b981,#14b8a6);color:#022c22;font-size:14px;font-weight:800;border-radius:14px;text-decoration:none;box-shadow:0 10px 15px -3px rgba(16,185,129,0.3);box-sizing:border-box;">
-          Comprar y Activar Licencia ($89 USD) &rarr;
+          ${t.demoBuyCta}
         </a>
 
         <button id="kinetix-demo-close-lockout" style="margin-top:14px;background:transparent;border:none;color:#94a3b8;font-size:12px;cursor:pointer;text-decoration:underline;">
-          Cerrar y continuar explorando en modo lectura
+          ${t.demoCloseReadonly}
         </button>
       </div>
     `;
@@ -665,19 +1147,19 @@
       badge.style.cssText = 'position:fixed;bottom:16px;right:16px;z-index:99990;background:#0f172a;border:1px solid #10b981;border-radius:999px;padding:6px 14px;display:flex;align-items:center;gap:8px;box-shadow:0 10px 25px rgba(0,0,0,0.5);font-family:system-ui,-apple-system,sans-serif;font-size:12px;';
       document.body.appendChild(badge);
     }
+    const t = GUARD_UI_TEXTS[currentLang] || GUARD_UI_TEXTS.es;
     const isFull = count >= DEMO_MAX_ACTIONS;
     const checkoutUrl = OFFICIAL_CHECKOUT_URLS[appKey] || OFFICIAL_CHECKOUT_URLS.pos;
     badge.innerHTML = `
       <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${isFull ? '#ef4444' : '#10b981'};"></span>
-      <span style="color:#ffffff;font-weight:700;">Demo:</span>
-      <span style="color:${isFull ? '#f87171' : '#34d399'};font-weight:800;">${count}/${DEMO_MAX_ACTIONS} acciones</span>
+      <span style="color:#ffffff;font-weight:700;">${t.demoWord}</span>
+      <span style="color:${isFull ? '#f87171' : '#34d399'};font-weight:800;">${count}/${DEMO_MAX_ACTIONS} ${t.actionsWord}</span>
       <a href="${checkoutUrl}" onclick="return window.triggerKinetixDemoBuy(event)" target="_blank" style="margin-left:4px;padding:3px 10px;background:#10b981;color:#022c22;font-size:10.5px;font-weight:800;border-radius:999px;text-decoration:none;">
-        Comprar ($89)
+        ${t.buyBtnShort}
       </a>
     `;
   }
 
-  // Exponer interfaz global KinetixDemoGuard
   window.KinetixDemoGuard = {
     isDemo: isDemo,
     maxActions: DEMO_MAX_ACTIONS,
@@ -698,11 +1180,33 @@
     }, 600);
   }
 
+  let domTranslationScheduled = false;
+  function scheduleDOMTranslation() {
+    if (domTranslationScheduled) return;
+    domTranslationScheduled = true;
+    requestAnimationFrame(function () {
+      domTranslationScheduled = false;
+      translateDOMTree(document.body);
+      injectSettingsLanguageSelector();
+    });
+  }
+
   function initGuard() {
     hookAuthFunctions();
     injectCloudSecurityBadge();
+    injectSettingsLanguageSelector();
+    translateDOMTree(document.body);
 
-    // Si se pasa ?test_tercer_dispositivo=1 en la URL, mostrar demostración de bloqueo
+    // Observar cambios dinámicos en el DOM (React / pestañas / modales) para traducir en tiempo real
+    try {
+      const observer = new MutationObserver(function () {
+        if (currentLang !== 'es') {
+          scheduleDOMTranslation();
+        }
+      });
+      observer.observe(document.body, { childList: true, subtree: true });
+    } catch (e) {}
+
     const params = new URLSearchParams(window.location.search);
     if (params.get('test_tercer_dispositivo') === '1') {
       setTimeout(function () {

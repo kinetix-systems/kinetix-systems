@@ -8,6 +8,11 @@
   <meta name="keywords" content="sistema punto de venta, software pos, control de inventarios, sistema para gimnasio, software clinica expedientes citas, crm cotizador pdf, kinetix systems">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <link rel="canonical" href="https://kinetix-systems.github.io/kinetix-systems/">
+  <link rel="alternate" hreflang="es" href="https://kinetix-systems.github.io/kinetix-systems/?lang=es">
+  <link rel="alternate" hreflang="en" href="https://kinetix-systems.github.io/kinetix-systems/?lang=en">
+  <link rel="alternate" hreflang="pt" href="https://kinetix-systems.github.io/kinetix-systems/?lang=pt">
+  <link rel="alternate" hreflang="fr" href="https://kinetix-systems.github.io/kinetix-systems/?lang=fr">
+  <link rel="alternate" hreflang="x-default" href="https://kinetix-systems.github.io/kinetix-systems/">
   <!-- Open Graph / Redes Sociales -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://kinetix-systems.github.io/kinetix-systems/">
@@ -157,13 +162,21 @@
         <a href="#faq" class="hover:text-emerald-400 transition">Preguntas Frecuentes</a>
       </nav>
 
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- Selector Global de Idioma (ES / EN / PT / FR) con Detección Regional Automática -->
+        <select id="portal-lang-select" onchange="setPortalLanguage(this.value)" aria-label="Seleccionar idioma / Select language" class="px-2.5 sm:px-3 py-2 rounded-xl bg-slate-900 border border-emerald-500/40 hover:border-emerald-400 text-emerald-300 text-xs font-extrabold cursor-pointer transition focus:outline-none">
+          <option value="es">🇪🇸 ES · Español</option>
+          <option value="en">🇺🇸 EN · English</option>
+          <option value="pt">🇧🇷 PT · Português</option>
+          <option value="fr">🇫🇷 FR · Français</option>
+        </select>
+
         <!-- Toggle Modo Oscuro / Claro -->
-        <button onclick="toggleGlobalTheme()" id="global-theme-btn" class="px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-700 hover:border-emerald-400 text-slate-200 hover:text-emerald-400 transition flex items-center gap-2 text-xs font-semibold cursor-pointer" title="Cambiar Tema (Modo Claro / Modo Oscuro)">
+        <button onclick="toggleGlobalTheme()" id="global-theme-btn" class="px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 hover:border-emerald-400 text-slate-200 hover:text-emerald-400 transition flex items-center gap-1.5 text-xs font-semibold cursor-pointer" title="Cambiar Tema (Modo Claro / Modo Oscuro)">
           <span id="theme-btn-symbol">☀️</span>
           <span id="theme-btn-label" class="hidden sm:inline">Modo Claro</span>
         </button>
-        <a href="#catalogo-sistemas" class="inline-flex items-center justify-center px-5 py-2.5 text-xs sm:text-sm font-extrabold text-slate-950 bg-emerald-400 rounded-xl hover:bg-emerald-300 transition shadow-lg shadow-emerald-500/20">
+        <a href="#catalogo-sistemas" class="hidden sm:inline-flex items-center justify-center px-4 py-2.5 text-xs sm:text-sm font-extrabold text-slate-950 bg-emerald-400 rounded-xl hover:bg-emerald-300 transition shadow-lg shadow-emerald-500/20">
           Explorar Sistemas
         </a>
       </div>
@@ -199,8 +212,8 @@
           </button>
         </div>
 
-        <!-- Highlights Bar -->
-        <div class="pt-8 border-t border-slate-800/80 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto text-left">
+        <!-- Highlights Bar (Incluye Plus Multi-Idioma Global ES/EN/PT/FR) -->
+        <div class="pt-8 border-t border-slate-800/80 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 max-w-5xl mx-auto text-left">
           <div class="p-4 rounded-2xl bg-slate-900/60 border border-emerald-500/30">
             <div class="flex items-center gap-2">
               <p class="text-xl md:text-2xl font-black text-emerald-400">$89 USD</p>
@@ -209,8 +222,8 @@
             <p class="text-xs text-emerald-300 font-semibold mt-0.5">Oferta Lanzamiento (30 Días)</p>
           </div>
           <div class="p-4 rounded-2xl bg-slate-900/60 border border-slate-800/80">
-            <p class="text-xl md:text-2xl font-black text-white">4 Usuarios</p>
-            <p class="text-xs text-slate-400 mt-0.5">1 Principal + 3 usuarios por roles</p>
+            <p class="text-xl md:text-2xl font-black text-white">4 a 5 Usuarios</p>
+            <p class="text-xs text-slate-400 mt-0.5">Control de accesos por roles</p>
           </div>
           <div class="p-4 rounded-2xl bg-slate-900/60 border border-slate-800/80">
             <p class="text-xl md:text-2xl font-black text-cyan-400">100% Tu Marca</p>
@@ -219,6 +232,10 @@
           <div class="p-4 rounded-2xl bg-slate-900/60 border border-slate-800/80">
             <p class="text-xl md:text-2xl font-black text-white">PC + Móvil (PWA)</p>
             <p class="text-xs text-slate-400 mt-0.5">1 Equipo por Cada Usuario Activo</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-900/60 border border-amber-500/40 col-span-2 sm:col-span-1">
+            <p class="text-xl md:text-2xl font-black text-amber-400">4 Idiomas</p>
+            <p class="text-xs text-amber-200 font-semibold mt-0.5">ES · EN · PT · FR Nativo</p>
           </div>
         </div>
       </div>
@@ -776,40 +793,52 @@
           </h2>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div class="glass-card p-8 rounded-3xl space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="glass-card p-7 rounded-3xl space-y-4">
             <div class="w-12 h-12 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shadow-inner">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4 4 4 0 014-4c.66 0 1.28.16 1.83.44l7.17-7.17a3 3 0 014.24 4.24l-7.17 7.17c.28.55.44 1.17.44 1.83a4 4 0 01-4 4H7z"/>
               </svg>
             </div>
-            <h3 class="text-xl font-bold text-white">1. Personalización Interna (Tu Logo y Marca)</h3>
-            <p class="text-slate-300 text-sm leading-relaxed">
+            <h3 class="text-lg font-bold text-white">1. Personalización Interna (Tu Logo y Marca)</h3>
+            <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
               Desde la pestaña <strong>"Personalizar Marca"</strong> dentro del mismo sistema puedes subir tu <strong>propio Logo</strong>, cambiar el nombre de tu empresa o clínica, RUC/NIT, moneda local e impuestos. Todas las facturas, recetas y cotizaciones saldrán con tu imagen corporativa.
             </p>
           </div>
 
-          <div class="glass-card p-8 rounded-3xl space-y-4">
+          <div class="glass-card p-7 rounded-3xl space-y-4">
             <div class="w-12 h-12 rounded-2xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shadow-inner">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
               </svg>
             </div>
-            <h3 class="text-xl font-bold text-white">2. Control para 4 Usuarios por Roles</h3>
-            <p class="text-slate-300 text-sm leading-relaxed">
-              Cada licencia incluye <strong>4 usuarios activos</strong>: el <strong>Usuario Principal (Administrador Master)</strong> tiene control total y puede configurar el nombre, PIN y permisos de los otros <strong>3 usuarios adicionales</strong> (Cajeros, Doctores, Recepción, Almacén o Vendedores).
+            <h3 class="text-lg font-bold text-white">2. Control para 4 o 5 Usuarios por Roles</h3>
+            <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+              Cada licencia incluye <strong>4 usuarios activos</strong> (y <strong>5 usuarios en Gastro ERP + KDS</strong>): el <strong>Usuario Principal (Administrador Master)</strong> tiene control total y configura el nombre, PIN y permisos del resto de su equipo.
             </p>
           </div>
 
-          <div class="glass-card p-8 rounded-3xl space-y-4">
+          <div class="glass-card p-7 rounded-3xl space-y-4">
             <div class="w-12 h-12 rounded-2xl bg-indigo-500/15 border border-indigo-500/30 flex items-center justify-center text-indigo-400 shadow-inner">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
               </svg>
             </div>
-            <h3 class="text-xl font-bold text-white">3. Modelo Web / PWA en la Nube (PC + Tablet + Móvil)</h3>
-            <p class="text-slate-300 text-sm leading-relaxed">
-              Una vez realizado tu pago de <strong>$89 USD</strong>, se activa de inmediato tu licencia alojada en los servidores de Kinetix con acceso para <strong>dispositivos simultáneos acorde al número de usuarios del sistema</strong> (<strong>4 equipos</strong> en POS/Clínicas/Gimnasios/CRM y <strong>5 equipos</strong> en Restaurantes KDS), con cierre de sesión automático si se excede el límite y actualizaciones centrales incluidas.
+            <h3 class="text-lg font-bold text-white">3. Modelo Web / PWA en la Nube (PC + Tablet + Móvil)</h3>
+            <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+              Una vez realizado tu pago de <strong>$89 USD</strong>, se activa de inmediato tu licencia alojada en los servidores de Kinetix con acceso para <strong>dispositivos simultáneos acorde al número de usuarios del sistema</strong> (<strong>4 equipos</strong> en POS/Clínicas/Gimnasios/CRM y <strong>5 equipos</strong> en Restaurantes KDS), con actualizaciones centrales incluidas.
+            </p>
+          </div>
+
+          <div class="glass-card p-7 rounded-3xl space-y-4 border-2 border-amber-500/35">
+            <div class="w-12 h-12 rounded-2xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400 shadow-inner">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+            <h3 class="text-lg font-bold text-white">4. Multi-Idioma Global Nativo (ES · EN · PT · FR)</h3>
+            <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+              <strong>Plus Exclusivo Kinetix:</strong> Todos nuestros sistemas están disponibles en <strong>Español, Inglés, Portugués y Francés</strong>. Detectan automáticamente el idioma de tu región (EE.UU., Brasil, Europa o Latinoamérica) e incluyen selector de idioma y moneda dentro de la configuración del sistema.
             </p>
           </div>
         </div>
@@ -898,6 +927,17 @@
               ¡Totalmente! Cada sistema ya te permite personalizar de forma autónoma tu logo, nombre comercial, moneda local e impuestos. Si tu negocio requiere flujos especiales, nuevos módulos exclusivos o integraciones a la medida de tu empresa, puedes solicitarlo directamente a nuestro equipo de desarrollo y tendrá un costo adicional presupuestado según el alcance del proyecto.
             </div>
           </div>
+
+          <!-- FAQ 6: MULTI-IDIOMA GLOBAL (ES / EN / PT / FR) -->
+          <div class="glass-card rounded-2xl p-6 cursor-pointer" onclick="toggleFaq(this)">
+            <div class="flex items-center justify-between">
+              <h3 class="text-base font-bold text-white">¿En qué idiomas y países funcionan los sistemas de Kinetix Systems?</h3>
+              <span class="text-emerald-400 font-bold text-xl icon">+</span>
+            </div>
+            <div class="faq-content hidden mt-3 pt-3 border-t border-slate-800 text-xs sm:text-sm text-slate-300 leading-relaxed">
+              Todos los sistemas del Marketplace de Kinetix operan a nivel mundial y cuentan con <strong>soporte Multi-Idioma Nativo en 4 idiomas: Español (ES), Inglés (EN), Portugués (PT) y Francés (FR)</strong>, además de todas las monedas y zonas horarias de América y Europa. El portal detecta automáticamente el idioma de tu región (por ejemplo, Inglés en EE.UU., Portugués en Brasil, Francés en Francia/Canadá y Español en Latinoamérica y España) y dentro de la pestaña de Configuración de cada sistema puedes cambiar el idioma cuando quieras en 1 clic.
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -943,6 +983,12 @@
         <span class="text-xs text-slate-400 hidden md:inline">PIN de prueba Admin Principal: <strong class="text-emerald-400 font-mono">1234</strong></span>
       </div>
       <div class="flex items-center gap-2">
+        <select id="demo-viewer-lang-select" onchange="setPortalLanguage(this.value)" aria-label="Idioma Demo" class="px-2.5 py-1.5 rounded-xl bg-slate-900 border border-emerald-500/40 text-emerald-300 text-xs font-extrabold cursor-pointer">
+          <option value="es">🇪🇸 ES</option>
+          <option value="en">🇺🇸 EN</option>
+          <option value="pt">🇧🇷 PT</option>
+          <option value="fr">🇫🇷 FR</option>
+        </select>
         <button id="demo-buy-btn" class="px-4 py-1.5 rounded-xl bg-emerald-400 text-slate-950 font-black text-xs hover:bg-emerald-300 transition cursor-pointer">
           Comprar Este Sistema ($89 USD)
         </button>
@@ -1145,18 +1191,21 @@
     }
 
     let selectedProductKey = 'pos';
+    let currentPortalLang = 'es';
 
-    // Visor de Demo en Vivo
+    // Visor de Demo en Vivo (Pasa automáticamente el idioma activo ?lang=es|en|pt|fr al sistema)
     function openLiveDemo(key) {
       const p = PRODUCTS[key];
       if (!p) return;
       selectedProductKey = key;
-      if (window.kinetixTrack) window.kinetixTrack('demo_opened', { system: key, product_name: p.name });
+      if (window.kinetixTrack) window.kinetixTrack('demo_opened', { system: key, product_name: p.name, lang: currentPortalLang });
       document.getElementById('demo-modal-title').textContent = p.name;
       const isLight = document.documentElement.classList.contains('light');
       let url = p.demoUrl;
       if (!url.startsWith('http')) {
-        url = url + '?theme=' + (isLight ? 'light' : 'dark');
+        url = url + '?theme=' + (isLight ? 'light' : 'dark') + '&lang=' + currentPortalLang;
+      } else {
+        url = url + (url.includes('?') ? '&' : '?') + 'lang=' + currentPortalLang;
       }
       document.getElementById('demo-iframe').src = url;
       document.getElementById('demo-buy-btn').onclick = () => {
@@ -1166,6 +1215,7 @@
       const modal = document.getElementById('demo-viewer-modal');
       modal.classList.remove('hidden');
       modal.classList.add('flex');
+      translatePortalDOM();
     }
 
     function closeLiveDemo() {
@@ -1276,7 +1326,9 @@
         const p = PRODUCTS[k];
         const uCount = p.maxUsers || 4;
         const licenseCode = `KNX-CLOUD-${uCount}U-` + Math.random().toString(36).substring(2, 7).toUpperCase();
-        const cloudUrl = p.demoUrl.includes('?') ? `${p.demoUrl}&licencia=${licenseCode}` : `${p.demoUrl}?licencia=${licenseCode}`;
+        const cloudUrl = p.demoUrl.includes('?')
+          ? `${p.demoUrl}&licencia=${licenseCode}&lang=${currentPortalLang}`
+          : `${p.demoUrl}?licencia=${licenseCode}&lang=${currentPortalLang}`;
         return `
           <div class="p-4 rounded-2xl bg-slate-900 border border-emerald-500/40 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div class="space-y-1">
@@ -1304,9 +1356,263 @@
       modal.classList.remove('flex');
     }
 
-    // Inicializar tema y detectar redirección automática desde PayPal (?entrega=pos | ?entrega=med | ?entrega=crm)
+    // =========================================================================
+    // MOTOR MULTI-IDIOMA GLOBAL DEL PORTAL KINETIX (ES / EN / PT / FR)
+    // Detección automática por región (USA -> EN, Brasil -> PT, Francia -> FR, LATAM/España -> ES)
+    // =========================================================================
+    const PORTAL_SUPPORTED_LANGS = ['es', 'en', 'pt', 'fr'];
+
+    function detectPortalLanguage() {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const urlLang = (params.get('lang') || '').toLowerCase().slice(0, 2);
+        if (PORTAL_SUPPORTED_LANGS.includes(urlLang)) {
+          localStorage.setItem('KINETIX_GLOBAL_LANG', urlLang);
+          return urlLang;
+        }
+        const saved = (localStorage.getItem('KINETIX_GLOBAL_LANG') || '').toLowerCase().slice(0, 2);
+        if (PORTAL_SUPPORTED_LANGS.includes(saved)) {
+          return saved;
+        }
+        const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || '').toLowerCase();
+        const navLangs = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || 'es'])
+          .map(l => String(l || '').toLowerCase());
+        const primaryNav = (navLangs[0] || 'es').slice(0, 2);
+
+        const ptZones = [
+          'america/sao_paulo', 'america/fortaleza', 'america/manaus', 'america/recife',
+          'america/belem', 'america/bahia', 'america/cuiaba', 'america/campo_grande',
+          'america/porto_velho', 'america/boa_vista', 'america/maceio', 'america/araguaina',
+          'america/noronha', 'america/rio_branco', 'america/santarem',
+          'europe/lisbon', 'atlantic/madeira', 'atlantic/azores'
+        ];
+        if (ptZones.includes(tz) || primaryNav === 'pt') return 'pt';
+
+        const frZones = [
+          'europe/paris', 'america/montreal', 'indian/reunion', 'africa/abidjan',
+          'africa/dakar', 'america/guadeloupe', 'america/martinique', 'america/cayenne'
+        ];
+        if (frZones.includes(tz) || primaryNav === 'fr') return 'fr';
+
+        const esZones = [
+          'america/managua', 'america/costa_rica', 'america/mexico_city', 'america/cancun',
+          'america/tijuana', 'america/merida', 'america/monterrey', 'america/chihuahua',
+          'america/mazatlan', 'america/hermosillo', 'america/guatemala', 'america/el_salvador',
+          'america/tegucigalpa', 'america/panama', 'america/santo_domingo', 'america/puerto_rico',
+          'america/havana', 'america/bogota', 'america/lima', 'america/guayaquil',
+          'america/caracas', 'america/la_paz', 'america/santiago', 'america/asuncion',
+          'america/montevideo', 'america/argentina', 'europe/madrid', 'atlantic/canary'
+        ];
+        if (esZones.some(z => tz.startsWith(z))) return 'es';
+
+        const enZones = [
+          'america/new_york', 'america/chicago', 'america/denver', 'america/los_angeles',
+          'america/phoenix', 'america/anchorage', 'pacific/honolulu', 'america/detroit',
+          'america/indiana', 'america/kentucky', 'america/boise', 'america/toronto',
+          'america/vancouver', 'america/edmonton', 'america/winnipeg', 'america/halifax',
+          'europe/london', 'europe/dublin', 'australia/', 'pacific/auckland'
+        ];
+        if (enZones.some(z => tz.startsWith(z)) || primaryNav === 'en') return 'en';
+
+        if (PORTAL_SUPPORTED_LANGS.includes(primaryNav)) return primaryNav;
+      } catch (e) {}
+      return 'es';
+    }
+
+    const PORTAL_PHRASE_TABLE = [
+      // Top bar & Nav
+      ['Oferta de Lanzamiento (30 Días):', 'Launch Offer (30 Days):', 'Oferta de Lançamento (30 Dias):', 'Offre de Lancement (30 Jours) :'],
+      ['Licencia White-Label para 4 Usuarios por solo', 'White-Label License for 4/5 Users for only', 'Licença White-Label para 4/5 Usuários por apenas', 'Licence White-Label pour 4/5 Utilisateurs pour seulement'],
+      ['Ver los 5 Sistemas del Marketplace →', 'View All 5 Marketplace Systems →', 'Ver os 5 Sistemas do Marketplace →', 'Voir les 5 Systèmes du Marketplace →'],
+      ['Catálogo de Sistemas ($89)', 'Systems Catalog ($89)', 'Catálogo de Sistemas ($89)', 'Catalogue des Systèmes (89 $)'],
+      ['Marca Propia & 4 Usuarios', 'Custom Brand & Users', 'Marca Própria e Usuários', 'Marque Propre & Utilisateurs'],
+      ['Por Qué Kinetix', 'Why Kinetix', 'Por Que Kinetix', 'Pourquoi Kinetix'],
+      ['Preguntas Frecuentes', 'FAQ', 'Perguntas Frequentes', 'Questions Fréquentes'],
+      ['Modo Claro', 'Light Mode', 'Modo Claro', 'Mode Clair'],
+      ['Modo Oscuro', 'Dark Mode', 'Modo Escuro', 'Mode Sombre'],
+      ['Explorar Sistemas', 'Explore Systems', 'Explorar Sistemas', 'Explorer les Systèmes'],
+
+      // Hero & Highlights
+      ['Aplicación Web en la Nube (PWA) en PC + Móvil · Sin Mensualidades', 'Cloud Web App (PWA) for PC + Mobile · Zero Monthly Fees', 'Aplicativo Web na Nuvem (PWA) no PC + Celular · Sem Mensalidades', 'Application Web Cloud (PWA) sur PC + Mobile · Zéro Frais Mensuels'],
+      ['Sistemas Cloud & PWA Listos Para Usar,', 'Ready-to-Use Cloud & PWA Business Systems,', 'Sistemas Cloud e PWA Prontos Para Usar,', 'Systèmes Cloud & PWA Prêts à l’Emploi,'],
+      ['Personalizar con Tu Logo y Escalar Hoy Mismo.', 'Customize with Your Logo & Scale Today.', 'Personalize com Sua Marca e Escale Hoje Mesmo.', 'Personnalisez avec Votre Logo & Évoluez Aujourd’hui.'],
+      ['Probar Demos y Activar Acceso Cloud ($89 USD)', 'Try Live Demos & Activate Cloud Access ($89 USD)', 'Testar Demos e Ativar Acesso Cloud ($89 USD)', 'Tester les Démos & Activer l’Accès Cloud (89 $ USD)'],
+      ['Ver Demo en Vivo Ahora', 'Watch Live Demo Now', 'Ver Demo ao Vivo Agora', 'Voir la Démo en Direct'],
+      ['Oferta Lanzamiento (30 Días)', 'Launch Offer (30 Days)', 'Oferta de Lançamento (30 Dias)', 'Offre de Lancement (30 Jours)'],
+      ['4 a 5 Usuarios', '4 to 5 Users', '4 a 5 Usuários', '4 à 5 Utilisateurs'],
+      ['Control de accesos por roles', 'Role-based access control', 'Controle de acesso por perfis', 'Contrôle d’accès par rôles'],
+      ['100% Tu Marca', '100% Your Brand', '100% Sua Marca', '100 % Votre Marque'],
+      ['Sube tu logo y nombre desde adentro', 'Upload your logo & company name inside', 'Envie seu logo e nome comercial no painel', 'Téléversez votre logo et nom en interne'],
+      ['PC + Móvil (PWA)', 'PC + Mobile (PWA)', 'PC + Celular (PWA)', 'PC + Mobile (PWA)'],
+      ['1 Equipo por Cada Usuario Activo', '1 Simultaneous Device per User', '1 Dispositivo por Usuário Ativo', '1 Appareil par Utilisateur Actif'],
+      ['4 Idiomas', '4 Languages', '4 Idiomas', '4 Langues'],
+      ['ES · EN · PT · FR Nativo', 'Native ES · EN · PT · FR', 'ES · EN · PT · FR Nativo', 'ES · EN · PT · FR Natif'],
+
+      // Marketplace Header & Filters
+      ['Kinetix Marketplace Cloud & PWA · Activación Automática al Instante', 'Kinetix Cloud & PWA Marketplace · Instant Automated Activation', 'Kinetix Marketplace Cloud & PWA · Ativação Automática Instantânea', 'Kinetix Marketplace Cloud & PWA · Activation Automatique Instantanée'],
+      ['Elige Tu Sistema, Pruébalo en Vivo y Activa Tu Acceso Cloud + PWA al Instante', 'Choose Your System, Test It Live & Activate Your Cloud + PWA Access Instantly', 'Escolha Seu Sistema, Teste ao Vivo e Ative Seu Acesso Cloud + PWA na Hora', 'Choisissez Votre Système, Testez-le en Direct & Activez Votre Accès Cloud + PWA'],
+      ['Todos (5 Sistemas)', 'All (5 Systems)', 'Todos (5 Sistemas)', 'Tous (5 Systèmes)'],
+      ['🍽️ Restaurantes & KDS', '🍽️ Restaurants & KDS', '🍽️ Restaurantes e KDS', '🍽️ Restaurants & KDS'],
+      ['🛒 Comercios & POS', '🛒 Retail & POS', '🛒 Comércios e PDV', '🛒 Commerces & PDV'],
+      ['🏋️ Gimnasios & Fitness', '🏋️ Gyms & Fitness', '🏋️ Academias e Fitness', '🏋️ Salles de Sport & Fitness'],
+      ['🩺 Clínicas & Salud', '🩺 Clinics & Health', '🩺 Clínicas e Saúde', '🩺 Cliniques & Santé'],
+      ['📈 CRM & Empresas', '📈 CRM & Business', '📈 CRM e Empresas', '📈 CRM & Entreprises'],
+
+      // Cards Shared Elements & CTAs
+      ['Ver Demo en Vivo', 'Try Live Demo', 'Ver Demo ao Vivo', 'Voir Démo en Direct'],
+      ['▶ Probar Demo en Vivo', '▶ Try Live Interactive Demo', '▶ Testar Demo ao Vivo', '▶ Tester la Démo en Direct'],
+      ['⚡ Comprar y Activar Cloud + PWA ($89 USD)', '⚡ Buy & Activate Cloud + PWA ($89 USD)', '⚡ Comprar e Ativar Cloud + PWA ($89 USD)', '⚡ Acheter & Activer Cloud + PWA (89 $ USD)'],
+      ['Licencia Cloud Vitalicia + PWA', 'Lifetime Cloud + PWA License', 'Licença Cloud Vitalícia + PWA', 'Licence Cloud à Vie + PWA'],
+      ['LANZAMIENTO', 'LAUNCH OFFER', 'LANÇAMENTO', 'LANCEMENT'],
+      ['PC + Móvil · 5 Usuarios RBAC', 'PC + Mobile · 5 RBAC Users (5 Devices)', 'PC + Celular · 5 Usuários RBAC', 'PC + Mobile · 5 Utilisateurs RBAC'],
+      ['PC Negocio + Móvil · 4 Usuarios', 'Business PC + Mobile · 4 Users (4 Devices)', 'PC + Celular · 4 Usuários', 'PC + Mobile · 4 Utilisateurs'],
+      ['PC Negocio + Móvil · 4 Perfiles', 'Business PC + Mobile · 4 Profiles (4 Devices)', 'PC + Celular · 4 Perfis', 'PC + Mobile · 4 Profils'],
+      ['PC Clínica + Móvil · 4 Usuarios', 'Clinic PC + Mobile · 4 Users (4 Devices)', 'PC Clínica + Celular · 4 Usuários', 'PC Clinique + Mobile · 4 Utilisateurs'],
+
+      // Card 1: Gastro
+      ['NUEVO · GASTRONOMÍA, POS & KDS', 'NEW · RESTAURANTS, POS & KDS', 'NOVO · GASTRONOMIA, PDV & KDS', 'NOUVEAU · RESTAURATION, PDV & KDS'],
+      ['Restaurantes · Cafeterías · Bares · Pizzerías · Asados · Panaderías · Comiderías · Food Trucks · Heladerías', 'Restaurants · Coffee Shops · Bars · Pizzerias ·Steakhouses · Bakeries · Diners · Food Trucks · Ice Cream Shops', 'Restaurantes · Cafeterias · Bares · Pizzarias · Churrascarias · Padarias · Lanchonetes · Food Trucks · Sorveterias', 'Restaurants · Cafés · Bars · Pizzerias · Grillades · Boulangeries · Brasseries · Food Trucks · Glaciers'],
+      ['Sistema para Restaurantes, Cafeterías, Bares, Pizzerías y Negocios Gastronómicos (POS + Cocina KDS + Menú QR)', 'All-in-One System for Restaurants, Cafes, Bars, Pizzerias & Food Businesses (POS + Kitchen KDS + QR Menu)', 'Sistema para Restaurantes, Cafeterias, Bares, Pizzarias e Gastronomia (PDV + Cozinha KDS + Cardápio QR)', 'Système pour Restaurants, Cafés, Bars, Pizzerias & Métiers de Bouche (PDV + Cuisine KDS + Menu QR)'],
+
+      // Card 2: POS
+      ['MÁS VENDIDO COMERCIOS', 'BEST SELLER RETAIL', 'MAIS VENDIDO COMÉRCIOS', 'BEST-SELLER COMMERCES'],
+      ['Tiendas · Minimarkets · Farmacias · Ferreterías · Boutiques · Repuestos · Licorerías · Librerías · Barberías', 'Retail Stores · Minimarkets · Pharmacies · Hardware Stores · Boutiques · Auto Parts · Liquor Stores · Barbershops', 'Lojas · Mercadinhos · Farmácias · Ferragens · Boutiques · Autopeças · Adegas · Papelarias · Barbearias', 'Boutiques · Supérettes · Pharmacies · Quincailleries · Pièces Auto · Cavistes · Librairies · Barbiers'],
+      ['Sistema de Facturación, Punto de Venta (POS) y Control de Inventarios para Todo Tipo de Comercios y Tiendas', 'Invoicing, Point of Sale (POS) & Inventory Control System for All Types of Retail Stores & Businesses', 'Sistema de Faturamento, Ponto de Venda (PDV) e Controle de Estoque para Todo Tipo de Comércio e Lojas', 'Système de Facturation, Point de Vente (PDV) et Gestion des Stocks pour Tous Types de Commerces'],
+
+      // Card 3: Gym
+      ['GIMNASIOS & DEPORTES', 'GYMS & FITNESS CENTERS', 'ACADEMIAS E ESPORTES', 'SALLES DE SPORT & FITNESS'],
+      ['Gimnasios · Centros Fitness · Crossfit Boxes · Artes Marciales · Academias Deportivas · Yoga & Pilates', 'Gyms · Fitness Centers · CrossFit Boxes · Martial Arts · Sports Academies · Yoga & Pilates Studios', 'Academias · Centros Fitness · Boxes de CrossFit · Artes Marciais · Escolas Esportivas · Yoga e Pilates', 'Salles de Sport · Centres Fitness · Box CrossFit · Arts Martiaux · Académies Sportives · Yoga & Pilates'],
+      ['Sistema de Control de Membresías, Accesos QR, Tienda POS y Finanzas para Gimnasios y Centros Deportivos', 'Membership Management, QR Access Control, Front-Desk POS & Finance System for Gyms and Sports Centers', 'Sistema de Controle de Mensalidades, Acesso QR, Loja PDV e Finanças para Academias e Centros Esportivos', 'Système de Gestion des Abonnements, Accès QR, Boutique PDV et Finances pour Salles de Sport'],
+
+      // Card 4: Clinics
+      ['SALUD, CLÍNICAS & CITAS', 'HEALTHCARE, CLINICS & BOOKING', 'SAÚDE, CLÍNICAS E AGENDAMENTO', 'SANTÉ, CLINIQUES & RENDEZ-VOUS'],
+      ['Clínicas Médicas · Consultorios · Odontología · Pediatría · Ginecología · Laboratorios · Ópticas · Veterinarias · Spas', 'Medical Clinics · Doctors · Dental Practices · Pediatrics · Gynecology · Labs · Optical · Vet Clinics · Spas', 'Clínicas Médicas · Consultórios · Odontologia · Pediatria · Ginecologia · Laboratórios · Óticas · Veterinárias · Spas', 'Cliniques Médicales · Cabinets · Dentistes · Pédiatrie · Gynécologie · Laboratoires · Opticiens · Vétérinaires · Spas'],
+      ['Sistema de Expedientes Clínicos, Consultas, Recetas PDF, Agenda de Citas y Recordatorios para Salud y Servicios', 'Electronic Medical Records (EMR), Consultations, PDF Prescriptions, Appointment Scheduling & WhatsApp Reminders', 'Sistema de Prontuários Clínicos, Consultas, Receitas PDF, Agenda de Consultas e Lembretes para Saúde e Serviços', 'Système de Dossiers Médicaux, Consultations, Ordonnances PDF, Agenda de Rendez-vous et Rappels WhatsApp'],
+
+      // Card 5: CRM
+      ['EMPRESAS, COTIZACIONES & CRM', 'B2B/B2C SALES, QUOTES & CRM', 'EMPRESAS, ORÇAMENTOS E CRM', 'ENTREPRISES, DEVIS & CRM'],
+      ['Empresas B2B/B2C · Inmobiliarias · Constructoras · Agencias · Talleres · Distribuidoras · Servicios Técnicos', 'B2B/B2C Companies · Real Estate · Construction · Agencies · Workshops · Distributors · Technical Services', 'Empresas B2B/B2C · Imobiliárias · Construtoras · Agências · Oficinas · Distribuidoras · Serviços Técnicos', 'Entreprises B2B/B2C · Immobilier · Construction · Agences · Ateliers · Distributeurs · Services Techniques'],
+      ['Sistema CRM de Seguimiento de Clientes, Embudo de Ventas Kanban y Generador de Cotizaciones Formales en PDF', 'Client Tracking CRM, Visual Kanban Sales Pipeline & Formal PDF Quotation Generator for Businesses', 'Sistema CRM de Acompanhamento de Clientes, Funil de Vendas Kanban e Gerador de Orçamentos Formais em PDF', 'Système CRM de Suivi Clients, Pipeline des Ventes Kanban et Générateur de Devis Formels en PDF'],
+
+      // Card 6: Custom
+      ['MARKETPLACE EN EXPANSIÓN', 'EXPANDING MARKETPLACE', 'MARKETPLACE EM EXPANSÃO', 'MARKETPLACE EN EXPANSION'],
+      ['¿Buscas Otro Giro de Negocio o un Sistema a Tu Medida?', 'Looking for Another Industry or a Custom-Built System?', 'Procura Outro Ramo de Negócio ou um Sistema Sob Medida?', 'Vous Cherchez un Autre Secteur ou un Système Sur Mesure ?'],
+      ['💬 Solicitar o Reservar Sistema por WhatsApp', '💬 Request or Reserve a System via WhatsApp', '💬 Solicitar ou Reservar Sistema pelo WhatsApp', '💬 Demander ou Réserver un Système sur WhatsApp'],
+
+      // Features Section
+      ['Arquitectura Empresarial Autogestionable', 'Self-Managed Enterprise Architecture', 'Arquitetura Empresarial Autogerenciável', 'Architecture d’Entreprise Autogérée'],
+      ['Diseñado Para Que Lo Personalices en 1 Minuto', 'Designed So You Can Customize It in 1 Minute', 'Projetado Para Você Personalizar em 1 Minuto', 'Conçu Pour Être Personnalisé en 1 Minute'],
+      ['1. Personalización Interna (Tu Logo y Marca)', '1. Built-In White-Label (Your Logo & Brand)', '1. Personalização Interna (Seu Logo e Marca)', '1. Personnalisation Interne (Votre Logo & Marque)'],
+      ['2. Control para 4 o 5 Usuarios por Roles', '2. Role-Based Control for 4 or 5 Users', '2. Controle para 4 ou 5 Usuários por Perfis', '2. Contrôle pour 4 ou 5 Utilisateurs par Rôles'],
+      ['3. Modelo Web / PWA en la Nube (PC + Tablet + Móvil)', '3. Cloud Web / PWA Model (PC + Tablet + Mobile)', '3. Modelo Web / PWA na Nuvem (PC + Tablet + Celular)', '3. Modèle Web / PWA dans le Cloud (PC + Tablette + Mobile)'],
+      ['4. Multi-Idioma Global Nativo (ES · EN · PT · FR)', '4. Native Global Multi-Language (ES · EN · PT · FR)', '4. Multi-Idioma Global Nativo (ES · EN · PT · FR)', '4. Multilingue Global Natif (ES · EN · PT · FR)'],
+
+      // Modals & Demo Bar
+      ['DEMO EN VIVO FUNCIONAL', 'LIVE FUNCTIONAL DEMO', 'DEMO AO VIVO FUNCIONAL', 'DÉMO EN DIRECT FONCTIONNELLE'],
+      ['PIN de prueba Admin Principal:', 'Main Admin Trial PIN:', 'PIN de teste Admin Principal:', 'PIN d’essai Admin Principal :'],
+      ['Comprar Este Sistema ($89 USD)', 'Buy This System ($89 USD)', 'Comprar Este Sistema ($89 USD)', 'Acheter Ce Système (89 $ USD)'],
+      ['✕ Cerrar Demo', '✕ Close Demo', '✕ Fechar Demo', '✕ Fermer Démo'],
+      ['Activación Automatizada Cloud & PWA Inmediata', 'Instant Automated Cloud & PWA Activation', 'Ativação Automatizada Cloud e PWA Imediata', 'Activation Automatisée Cloud & PWA Immédiate'],
+      ['💳 Pagar $89 USD con PayPal Internacional (Tarjetas / Saldo) →', '💳 Pay $89 USD with International PayPal (Cards / Balance) →', '💳 Pagar $89 USD com PayPal Internacional (Cartões / Saldo) →', '💳 Payer 89 $ USD avec PayPal International (Cartes / Solde) →'],
+      ['Pagar $89 USD con Hotmart (Tarjetas, Cuotas, Efectivo) →', 'Pay $89 USD with Hotmart (Local Cards, Installments, Cash) →', 'Pagar $89 USD com Hotmart (Cartões, Parcelamento, PIX/Boleto) →', 'Payer 89 $ USD avec Hotmart (Cartes, Versements) →'],
+      ['🚀 Abrir Mi Sistema Cloud Activo', '🚀 Open My Active Cloud System', '🚀 Abrir Meu Sistema Cloud Ativo', '🚀 Ouvrir Mon Système Cloud Actif']
+    ];
+
+    const SEARCH_PLACEHOLDERS = {
+      es: '🔍 Buscar sistema, giro o función...',
+      en: '🔍 Search system, business type, or feature...',
+      pt: '🔍 Buscar sistema, ramo de negócio ou função...',
+      fr: '🔍 Rechercher un système, secteur ou fonction...'
+    };
+
+    const PORTAL_TRANSLATION_MAP = { en: new Map(), pt: new Map(), fr: new Map() };
+    PORTAL_PHRASE_TABLE.forEach(row => {
+      const [esT, enT, ptT, frT] = row;
+      PORTAL_TRANSLATION_MAP.en.set(esT, enT);
+      PORTAL_TRANSLATION_MAP.pt.set(esT, ptT);
+      PORTAL_TRANSLATION_MAP.fr.set(esT, frT);
+    });
+
+    function translatePortalString(origEs, lang) {
+      if (!origEs || lang === 'es') return origEs;
+      const trimmed = origEs.trim();
+      if (!trimmed) return origEs;
+      const map = PORTAL_TRANSLATION_MAP[lang];
+      if (!map) return origEs;
+      if (map.has(trimmed)) {
+        return origEs.replace(trimmed, map.get(trimmed));
+      }
+      let out = origEs;
+      for (let i = 0; i < PORTAL_PHRASE_TABLE.length; i++) {
+        const esPhrase = PORTAL_PHRASE_TABLE[i][0];
+        if (esPhrase.length > 5 && out.includes(esPhrase)) {
+          const idx = lang === 'en' ? 1 : lang === 'pt' ? 2 : 3;
+          out = out.split(esPhrase).join(PORTAL_PHRASE_TABLE[i][idx]);
+        }
+      }
+      return out;
+    }
+
+    function translatePortalDOM() {
+      const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
+      let node;
+      while ((node = walker.nextNode())) {
+        const parent = node.parentElement;
+        if (!parent) continue;
+        const tag = parent.tagName;
+        if (tag === 'SCRIPT' || tag === 'STYLE') continue;
+        if (typeof node.__kinetixOrigEs === 'undefined') {
+          const val = node.nodeValue || '';
+          if (val.trim().length > 0) {
+            node.__kinetixOrigEs = val;
+          }
+        }
+        if (node.__kinetixOrigEs) {
+          const nextVal = currentPortalLang === 'es'
+            ? node.__kinetixOrigEs
+            : translatePortalString(node.__kinetixOrigEs, currentPortalLang);
+          if (node.nodeValue !== nextVal) {
+            node.nodeValue = nextVal;
+          }
+        }
+      }
+
+      const searchInput = document.getElementById('marketplace-search-input');
+      if (searchInput) {
+        searchInput.placeholder = SEARCH_PLACEHOLDERS[currentPortalLang] || SEARCH_PLACEHOLDERS.es;
+      }
+
+      const topSel = document.getElementById('portal-lang-select');
+      if (topSel && topSel.value !== currentPortalLang) topSel.value = currentPortalLang;
+      const demoSel = document.getElementById('demo-viewer-lang-select');
+      if (demoSel && demoSel.value !== currentPortalLang) demoSel.value = currentPortalLang;
+    }
+
+    function setPortalLanguage(lang) {
+      const clean = String(lang || '').toLowerCase().slice(0, 2);
+      if (!PORTAL_SUPPORTED_LANGS.includes(clean)) return;
+      currentPortalLang = clean;
+      try {
+        localStorage.setItem('KINETIX_GLOBAL_LANG', clean);
+        document.documentElement.lang = clean;
+      } catch (e) {}
+
+      translatePortalDOM();
+
+      // Si hay un demo abierto en el iframe, sincronizarle el nuevo idioma al instante
+      try {
+        const iframe = document.getElementById('demo-iframe');
+        if (iframe && iframe.contentWindow) {
+          iframe.contentWindow.postMessage({ type: 'KINETIX_SET_LANG', lang: clean }, '*');
+        }
+      } catch (e) {}
+    }
+
+    // Inicializar tema, idioma regional automático y detectar redirección desde PayPal (?entrega=...)
     window.addEventListener('DOMContentLoaded', () => {
       initGlobalTheme();
+      const detectedLang = detectPortalLanguage();
+      setPortalLanguage(detectedLang);
       const params = new URLSearchParams(window.location.search);
       const entrega = params.get('entrega');
       if (entrega && PRODUCTS[entrega]) {
