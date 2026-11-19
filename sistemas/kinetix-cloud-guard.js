@@ -12,11 +12,14 @@
   const MAX_AUTHORIZED_DEVICES = 2;
   const SECURITY_ALERT_MESSAGE = 'Se ha detectado un inicio de sesión en otro dispositivo. Se cerró la sesión anterior por seguridad.';
 
-  // Identificar cuál de los 4 sistemas está corriendo
+  // Identificar cuál de los 5 sistemas está corriendo
   const pathName = window.location.pathname.toLowerCase();
   let appKey = 'pos';
   let appTitle = 'Kinetix POS & Inventario Cloud';
-  if (pathName.includes('clinica')) {
+  if (pathName.includes('gastro') || pathName.includes('restaurante')) {
+    appKey = 'gastro';
+    appTitle = 'Kinetix Gastro ERP + POS + KDS Pro Cloud';
+  } else if (pathName.includes('clinica')) {
     appKey = 'med';
     appTitle = 'Kinetix Clínica & Citas Cloud';
   } else if (pathName.includes('crm')) {
@@ -26,6 +29,22 @@
     appKey = 'gym';
     appTitle = 'Kinetix Gym ERP Pro Cloud';
   }
+
+  const OFFICIAL_CHECKOUT_URLS = {
+    gastro: 'https://www.paypal.com/ncp/payment/U6STW4GVVER82',
+    pos: 'https://www.paypal.com/ncp/payment/6N33BA6V5CXM4',
+    gym: 'https://www.paypal.com/ncp/payment/F9BEG5X5AJWR8',
+    med: 'https://www.paypal.com/ncp/payment/D7L3CB8AWY75Y',
+    crm: 'https://www.paypal.com/ncp/payment/5LX3ZS2TR4A22'
+  };
+
+  const MAIN_STORAGE_KEYS = {
+    gastro: 'kinetix_gastro_erp_pro_v5_state',
+    pos: 'KINETIX_POS_SUITE_V3',
+    gym: 'kinetix_gym_erp_pro_v1',
+    med: 'KINETIX_MED_SUITE_V3',
+    crm: 'KINETIX_CRM_SUITE_V3'
+  };
 
   const STORAGE_SESSIONS_KEY = 'KINETIX_CLOUD_SESSIONS_' + appKey.toUpperCase();
   const STORAGE_LICENSE_KEY = 'KINETIX_CLOUD_LICENSE_' + appKey.toUpperCase();
@@ -451,12 +470,9 @@
           <em class="text-white font-semibold">"${SECURITY_ALERT_MESSAGE}"</em>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
-          <button onclick="triggerKinetixPwaInstall()" class="py-3 px-4 rounded-xl bg-emerald-400 hover:bg-emerald-300 text-slate-950 font-black text-xs transition cursor-pointer flex items-center justify-center gap-1.5">
-            <span>📲 Instalar App PWA (PC/Móvil)</span>
-          </button>
+        <div class="grid grid-cols-1 gap-2.5 pt-1">
           <button onclick="simulateThirdDeviceIntrusion()" class="py-3 px-4 rounded-xl bg-slate-900 hover:bg-red-950/60 text-amber-300 hover:text-red-300 border border-amber-500/40 text-xs font-bold transition cursor-pointer flex items-center justify-center gap-1.5">
-            <span>🔒 Probar Alerta 3er Dispositivo</span>
+            <span>🔒 Probar Alerta de Seguridad ante 3er Dispositivo</span>
           </button>
         </div>
       </div>
@@ -496,9 +512,20 @@
     updateBadgeUI();
   }
 
-  // Bloquear guardado de código fuente (Ctrl+S / Ctrl+U) para impedir copia local del archivo
+  // Bloquear guardado o extracción de código fuente (Ctrl+S / Ctrl+U / F12) para impedir copia local o reventa
   window.addEventListener('keydown', function (e) {
-    if ((e.ctrlKey || e.metaKey) && (e.key === 's' || e.key === 'S' || e.key === 'u' || e.key === 'U')) {
+    if (
+      e.key === 'F12' ||
+      ((e.ctrlKey || e.metaKey) && (e.key === 's' || e.key === 'S' || e.key === 'u' || e.key === 'U')) ||
+      ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c'))
+    ) {
+      e.preventDefault();
+      return false;
+    }
+  });
+
+  window.addEventListener('contextmenu', function (e) {
+    if (isDemo) {
       e.preventDefault();
       return false;
     }
@@ -535,16 +562,24 @@
     try {
       const sessionActive = sessionStorage.getItem('KINETIX_DEMO_ACTIVE_' + appKey);
       if (!sessionActive) {
-        // Nueva visita o reingreso: restablecer a estado inicial predeterminado
-        const mainStorageKey = appKey === 'pos' ? 'KINETIX_POS_SUITE_V3' :
-                               appKey === 'med' ? 'KINETIX_MED_SUITE_V3' :
-                               appKey === 'crm' ? 'KINETIX_CRM_SUITE_V3' : 'kinetix_gym_erp_pro_v1';
+        const mainStorageKey = MAIN_STORAGE_KEYS[appKey] || 'KINETIX_POS_SUITE_V3';
         localStorage.removeItem(mainStorageKey);
         sessionStorage.removeItem('KINETIX_DEMO_ACTIONS_' + appKey);
         sessionStorage.setItem('KINETIX_DEMO_ACTIVE_' + appKey, '1');
       }
     } catch (e) {}
   }
+
+  window.triggerKinetixDemoBuy = function (e) {
+    try {
+      if (window.parent && window.parent !== window) {
+        if (e) e.preventDefault();
+        window.parent.postMessage({ type: 'KINETIX_OPEN_CHECKOUT', appKey: appKey }, '*');
+        return false;
+      }
+    } catch (err) {}
+    return true;
+  };
 
   function getDemoActionCount() {
     try {
@@ -573,9 +608,7 @@
     let existing = document.getElementById('kinetix-demo-limit-modal');
     if (existing) existing.remove();
 
-    const checkoutUrl = appKey === 'pos' 
-      ? 'https://pay.hotmart.com/I108446645M' 
-      : 'https://pay.hotmart.com/K108327655X';
+    const checkoutUrl = OFFICIAL_CHECKOUT_URLS[appKey] || OFFICIAL_CHECKOUT_URLS.pos;
 
     const modal = document.createElement('div');
     modal.id = 'kinetix-demo-limit-modal';
@@ -602,7 +635,7 @@
           <div style="color:#34d399;font-weight:600;">✓ 2 Dispositivos autorizados (PC Negocio + Móvil)</div>
         </div>
 
-        <a href="${checkoutUrl}" target="_blank" style="display:block;width:100%;padding:14px;background:linear-gradient(135deg,#10b981,#14b8a6);color:#022c22;font-size:14px;font-weight:800;border-radius:14px;text-decoration:none;box-shadow:0 10px 15px -3px rgba(16,185,129,0.3);box-sizing:border-box;">
+        <a href="${checkoutUrl}" onclick="return window.triggerKinetixDemoBuy(event)" target="_blank" style="display:block;width:100%;padding:14px;background:linear-gradient(135deg,#10b981,#14b8a6);color:#022c22;font-size:14px;font-weight:800;border-radius:14px;text-decoration:none;box-shadow:0 10px 15px -3px rgba(16,185,129,0.3);box-sizing:border-box;">
           Comprar y Activar Licencia ($89 USD) &rarr;
         </a>
 
@@ -628,12 +661,12 @@
       document.body.appendChild(badge);
     }
     const isFull = count >= DEMO_MAX_ACTIONS;
-    const checkoutUrl = appKey === 'pos' ? 'https://pay.hotmart.com/I108446645M' : 'https://pay.hotmart.com/K108327655X';
+    const checkoutUrl = OFFICIAL_CHECKOUT_URLS[appKey] || OFFICIAL_CHECKOUT_URLS.pos;
     badge.innerHTML = `
       <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${isFull ? '#ef4444' : '#10b981'};"></span>
       <span style="color:#ffffff;font-weight:700;">Demo:</span>
       <span style="color:${isFull ? '#f87171' : '#34d399'};font-weight:800;">${count}/${DEMO_MAX_ACTIONS} acciones</span>
-      <a href="${checkoutUrl}" target="_blank" style="margin-left:4px;padding:3px 10px;background:#10b981;color:#022c22;font-size:10.5px;font-weight:800;border-radius:999px;text-decoration:none;">
+      <a href="${checkoutUrl}" onclick="return window.triggerKinetixDemoBuy(event)" target="_blank" style="margin-left:4px;padding:3px 10px;background:#10b981;color:#022c22;font-size:10.5px;font-weight:800;border-radius:999px;text-decoration:none;">
         Comprar ($89)
       </a>
     `;
@@ -647,9 +680,7 @@
     getActionCount: getDemoActionCount,
     showLockoutModal: showDemoLockoutModal,
     resetDemoData: function () {
-      const mainStorageKey = appKey === 'pos' ? 'KINETIX_POS_SUITE_V3' :
-                             appKey === 'med' ? 'KINETIX_MED_SUITE_V3' :
-                             appKey === 'crm' ? 'KINETIX_CRM_SUITE_V3' : 'kinetix_gym_erp_pro_v1';
+      const mainStorageKey = MAIN_STORAGE_KEYS[appKey] || 'KINETIX_POS_SUITE_V3';
       localStorage.removeItem(mainStorageKey);
       sessionStorage.removeItem('KINETIX_DEMO_ACTIONS_' + appKey);
       sessionStorage.removeItem('KINETIX_DEMO_ACTIVE_' + appKey);
