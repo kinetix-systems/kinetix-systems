@@ -1,15 +1,16 @@
 /**
- * KINETIX CLOUD PWA & 2-DEVICE SECURITY GUARD v4.0
+ * KINETIX CLOUD PWA & MULTI-DEVICE SECURITY GUARD v4.5
  * Modelo Web / PWA en la Nube - Alojado en Servidores de Kinetix Systems
  * - Cero archivos instalables descargables (.zip / código fuente protegido)
- * - Límite inteligente de 2 dispositivos autorizados (PC del Negocio + Móvil Personal)
- * - Cierre de sesión automático al detectar un 3er dispositivo con alerta oficial:
+ * - Límite inteligente de dispositivos acorde a la cantidad de usuarios del sistema:
+ *   · Gastro ERP + POS + KDS: 5 Usuarios = Máx. 5 Dispositivos Simultáneos
+ *   · POS / Gimnasios / Clínicas / CRM: 4 Usuarios = Máx. 4 Dispositivos Simultáneos
+ * - Cierre de sesión automático al exceder el límite de dispositivos con alerta oficial:
  *   "Se ha detectado un inicio de sesión en otro dispositivo. Se cerró la sesión anterior por seguridad."
  */
 (function () {
   'use strict';
 
-  const MAX_AUTHORIZED_DEVICES = 2;
   const SECURITY_ALERT_MESSAGE = 'Se ha detectado un inicio de sesión en otro dispositivo. Se cerró la sesión anterior por seguridad.';
 
   // Identificar cuál de los 5 sistemas está corriendo
@@ -29,6 +30,15 @@
     appKey = 'gym';
     appTitle = 'Kinetix Gym ERP Pro Cloud';
   }
+
+  const MAX_DEVICES_BY_APP = {
+    gastro: 5,
+    pos: 4,
+    gym: 4,
+    med: 4,
+    crm: 4
+  };
+  const MAX_AUTHORIZED_DEVICES = MAX_DEVICES_BY_APP[appKey] || 4;
 
   const OFFICIAL_CHECKOUT_URLS = {
     gastro: 'https://www.paypal.com/ncp/payment/U6STW4GVVER82',
@@ -105,7 +115,7 @@
     }
     let saved = localStorage.getItem(STORAGE_LICENSE_KEY);
     if (!saved) {
-      saved = 'KNX-CLOUD-2D-' + Math.random().toString(36).substring(2, 7).toUpperCase();
+      saved = `KNX-CLOUD-${MAX_AUTHORIZED_DEVICES}U-` + Math.random().toString(36).substring(2, 7).toUpperCase();
       localStorage.setItem(STORAGE_LICENSE_KEY, saved);
     }
     return saved;
@@ -141,7 +151,7 @@
     } catch (e) {}
   }
 
-  // Registrar el inicio de sesión del dispositivo actual y verificar límite de 2 dispositivos
+  // Registrar el inicio de sesión del dispositivo actual y verificar límite acorde a los usuarios de la licencia
   function registerDeviceSessionOnLogin() {
     let sessions = getActiveSessions();
     const now = Date.now();
@@ -158,7 +168,7 @@
       return;
     }
 
-    // Si ya hay 2 dispositivos/sesiones activas y entra un 3er dispositivo:
+    // Si ya se alcanzó el máximo de dispositivos/usuarios activos y entra uno nuevo:
     // Cerrar automáticamente la sesión anterior más antigua
     const revokedTokens = [];
     while (sessions.length >= MAX_AUTHORIZED_DEVICES) {
@@ -218,14 +228,14 @@
     showSecurityLockoutModal(newDeviceData);
   }
 
-  // Modal de Alerta de Seguridad por Inicio de Sesión en 3er Dispositivo
+  // Modal de Alerta de Seguridad por Exceder el Límite de Dispositivos de la Licencia
   function showSecurityLockoutModal(newDeviceData) {
     let existing = document.getElementById('kinetix-security-lockout-modal');
     if (existing) existing.remove();
 
     const devInfoText = newDeviceData && newDeviceData.deviceLabel
       ? `${newDeviceData.deviceIcon || '💻'} ${newDeviceData.deviceType || 'Nuevo Dispositivo'} — ${newDeviceData.deviceLabel}`
-      : '3er Dispositivo Externo Detectado';
+      : `Dispositivo Externo #${MAX_AUTHORIZED_DEVICES + 1} Detectado`;
 
     const modal = document.createElement('div');
     modal.id = 'kinetix-security-lockout-modal';
@@ -240,7 +250,7 @@
 
         <div class="space-y-2">
           <span class="px-3 py-1 rounded-full bg-red-500/20 border border-red-500/40 text-red-300 font-mono text-[11px] font-bold uppercase tracking-wider">
-            Protección Cloud Anti-Uso Simultáneo (Máx. 2 Equipos)
+            Protección Cloud Anti-Uso Simultáneo (Máx. ${MAX_AUTHORIZED_DEVICES} Equipos)
           </span>
           <h3 class="text-xl font-black text-white leading-snug pt-1">
             ${SECURITY_ALERT_MESSAGE}
@@ -254,7 +264,7 @@
           </div>
           <div class="flex items-center justify-between text-slate-400">
             <span>Límite Autorizado:</span>
-            <strong class="text-white">2 Dispositivos (PC Negocio + Móvil)</strong>
+            <strong class="text-white">${MAX_AUTHORIZED_DEVICES} Dispositivos (${MAX_AUTHORIZED_DEVICES} Usuarios)</strong>
           </div>
           <div class="pt-1.5 border-t border-slate-800 text-[11px] text-amber-300">
             <strong>Equipo que tomó la sesión:</strong> ${devInfoText}
@@ -262,7 +272,7 @@
         </div>
 
         <p class="text-xs text-slate-400 leading-relaxed">
-          Para proteger tus datos empresariales en los servidores de <strong>Kinetix Systems</strong>, tu licencia solo permite mantener activas tu computadora de trabajo y tu teléfono personal.
+          Para proteger tus datos empresariales en los servidores de <strong>Kinetix Systems</strong>, tu licencia permite mantener hasta <strong>${MAX_AUTHORIZED_DEVICES} dispositivos activos simultáneos</strong> (1 por cada usuario autorizado).
         </p>
 
         <button id="kinetix-lockout-ack-btn" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-red-500 to-amber-500 hover:opacity-95 text-slate-950 font-black text-sm transition cursor-pointer shadow-lg">
@@ -355,18 +365,18 @@
     );
   };
 
-  // Simular intento de acceso en un 3er dispositivo para pruebas de seguridad del propietario
+  // Simular intento de acceso excediendo el límite de dispositivos autorizados para pruebas de seguridad
   window.simulateThirdDeviceIntrusion = function () {
     const closePanel = document.getElementById('kinetix-cloud-device-modal');
     if (closePanel) closePanel.remove();
     enforceAutomaticSessionLogout({
       deviceIcon: '📱',
-      deviceType: '3er Dispositivo No Autorizado',
-      deviceLabel: 'Intento de Acceso Simultáneo Excedido (3/2)'
+      deviceType: `Dispositivo #${MAX_AUTHORIZED_DEVICES + 1} No Autorizado`,
+      deviceLabel: `Intento de Acceso Simultáneo Excedido (${MAX_AUTHORIZED_DEVICES + 1}/${MAX_AUTHORIZED_DEVICES})`
     });
   };
 
-  // Modal informativo de gestión de los 2 dispositivos autorizados (PC + Móvil)
+  // Modal informativo de gestión de los dispositivos autorizados acorde al número de usuarios
   window.openKinetixDeviceGuardModal = function () {
     let existing = document.getElementById('kinetix-cloud-device-modal');
     if (existing) {
@@ -386,14 +396,43 @@
       }];
     }
 
-    const slot1 = sessions[0];
-    const slot2 = sessions[1] || null;
+    let slotsHtml = '';
+    for (let i = 0; i < MAX_AUTHORIZED_DEVICES; i++) {
+      const s = sessions[i];
+      if (s) {
+        slotsHtml += `
+          <div class="p-3 rounded-2xl bg-slate-900 border border-emerald-500/40 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <span class="text-xl">${s.deviceIcon || '💻'}</span>
+              <div>
+                <p class="text-xs font-bold text-white">${s.deviceType} · Equipo #${i + 1} <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono ml-1">ACTIVO</span></p>
+                <p class="text-[11px] text-slate-400">${s.deviceLabel} · ID: ${s.deviceId}</p>
+              </div>
+            </div>
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 ${i === 0 ? 'animate-ping' : ''}"></span>
+          </div>
+        `;
+      } else {
+        slotsHtml += `
+          <div class="p-3 rounded-2xl bg-slate-900/60 border border-dashed border-slate-700 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <span class="text-xl opacity-70">🖥️</span>
+              <div>
+                <p class="text-xs font-bold text-slate-300">Dispositivo #${i + 1} (Usuario / Estación #${i + 1})</p>
+                <p class="text-[11px] text-slate-400">Cupo disponible para abrir tu sistema en otra PC, tablet o móvil de tu equipo.</p>
+              </div>
+            </div>
+            <span class="text-[10px] font-mono px-2 py-1 rounded bg-slate-800 text-slate-300 font-bold">DISPONIBLE</span>
+          </div>
+        `;
+      }
+    }
 
     const modal = document.createElement('div');
     modal.id = 'kinetix-cloud-device-modal';
-    modal.className = 'fixed inset-0 z-[99990] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4';
+    modal.className = 'fixed inset-0 z-[99990] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto';
     modal.innerHTML = `
-      <div class="max-w-lg w-full rounded-3xl bg-slate-950 border-2 border-emerald-500/50 p-6 sm:p-7 text-left shadow-2xl space-y-5 relative">
+      <div class="max-w-lg w-full rounded-3xl bg-slate-950 border-2 border-emerald-500/50 p-6 sm:p-7 text-left shadow-2xl space-y-4 relative my-auto">
         <button onclick="document.getElementById('kinetix-cloud-device-modal').remove()" class="absolute top-4 right-5 text-slate-400 hover:text-white text-2xl leading-none cursor-pointer">&times;</button>
 
         <div class="flex items-center gap-3">
@@ -421,58 +460,24 @@
           </div>
         </div>
 
-        <div class="space-y-2.5">
+        <div class="space-y-2">
           <div class="flex items-center justify-between text-xs">
             <span class="font-bold text-white uppercase tracking-wider">Dispositivos Autorizados (${sessions.length}/${MAX_AUTHORIZED_DEVICES})</span>
-            <span class="text-[11px] text-emerald-400 font-semibold">PC Negocio + Móvil Personal</span>
+            <span class="text-[11px] text-emerald-400 font-semibold">1 Equipo por cada Usuario (${MAX_AUTHORIZED_DEVICES} Usuarios)</span>
           </div>
-
-          <!-- Dispositivo 1 -->
-          <div class="p-3.5 rounded-2xl bg-slate-900 border border-emerald-500/40 flex items-center justify-between gap-3">
-            <div class="flex items-center gap-3">
-              <span class="text-xl">${slot1.deviceIcon || '💻'}</span>
-              <div>
-                <p class="text-xs font-bold text-white">${slot1.deviceType} <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono ml-1">ACTIVO</span></p>
-                <p class="text-[11px] text-slate-400">${slot1.deviceLabel} · ID: ${slot1.deviceId}</p>
-              </div>
-            </div>
-            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+          <div class="space-y-2 max-h-60 overflow-y-auto pr-1">
+            ${slotsHtml}
           </div>
-
-          <!-- Dispositivo 2 -->
-          ${slot2 ? `
-          <div class="p-3.5 rounded-2xl bg-slate-900 border border-emerald-500/40 flex items-center justify-between gap-3">
-            <div class="flex items-center gap-3">
-              <span class="text-xl">${slot2.deviceIcon || '📱'}</span>
-              <div>
-                <p class="text-xs font-bold text-white">${slot2.deviceType} <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono ml-1">ACTIVO</span></p>
-                <p class="text-[11px] text-slate-400">${slot2.deviceLabel} · ID: ${slot2.deviceId}</p>
-              </div>
-            </div>
-            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
-          </div>
-          ` : `
-          <div class="p-3.5 rounded-2xl bg-slate-900/60 border border-dashed border-slate-700 flex items-center justify-between gap-3">
-            <div class="flex items-center gap-3">
-              <span class="text-xl opacity-70">${currentDeviceInfo.isMobile ? '💻' : '📱'}</span>
-              <div>
-                <p class="text-xs font-bold text-slate-300">2do Dispositivo (${currentDeviceInfo.isMobile ? 'PC del Negocio' : 'Teléfono Móvil Personal'})</p>
-                <p class="text-[11px] text-slate-400">Cupo disponible para abrir tu cuenta en tu ${currentDeviceInfo.isMobile ? 'computadora' : 'celular'}.</p>
-              </div>
-            </div>
-            <span class="text-[10px] font-mono px-2 py-1 rounded bg-slate-800 text-slate-300 font-bold">DISPONIBLE</span>
-          </div>
-          `}
         </div>
 
         <div class="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-[11px] text-amber-200 leading-relaxed">
-          🔒 <strong>Regla Anti-Piratería Activa:</strong> Si alguien intenta abrir esta cuenta en una <strong>tercera computadora o en el teléfono de otra persona</strong>, el sistema cerrará inmediatamente la sesión anterior mostrando:<br>
+          🔒 <strong>Regla Anti-Piratería Activa:</strong> Si se intenta abrir esta cuenta en un <strong>dispositivo #${MAX_AUTHORIZED_DEVICES + 1} externo o no autorizado</strong>, el sistema cerrará inmediatamente la sesión anterior mostrando:<br>
           <em class="text-white font-semibold">"${SECURITY_ALERT_MESSAGE}"</em>
         </div>
 
         <div class="grid grid-cols-1 gap-2.5 pt-1">
           <button onclick="simulateThirdDeviceIntrusion()" class="py-3 px-4 rounded-xl bg-slate-900 hover:bg-red-950/60 text-amber-300 hover:text-red-300 border border-amber-500/40 text-xs font-bold transition cursor-pointer flex items-center justify-center gap-1.5">
-            <span>🔒 Probar Alerta de Seguridad ante 3er Dispositivo</span>
+            <span>🔒 Probar Alerta de Seguridad al Exceder ${MAX_AUTHORIZED_DEVICES} Equipos</span>
           </button>
         </div>
       </div>
@@ -502,7 +507,7 @@
     pill.id = 'kinetix-cloud-guard-pill';
     pill.type = 'button';
     pill.onclick = window.openKinetixDeviceGuardModal;
-    pill.title = 'Protección Kinetix Cloud PWA: Límite de 2 Dispositivos Autorizados (PC + Móvil)';
+    pill.title = `Protección Kinetix Cloud PWA: Límite de ${MAX_AUTHORIZED_DEVICES} Dispositivos Autorizados (1 por Usuario)`;
     pill.className = 'fixed bottom-3 left-3 z-40 px-3 py-1.5 rounded-full bg-slate-950/90 hover:bg-slate-900 border border-emerald-500/40 text-[11px] font-semibold text-slate-200 flex items-center gap-2 shadow-lg backdrop-blur-md transition cursor-pointer';
     pill.innerHTML = `
       <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
@@ -632,7 +637,7 @@
         <div style="background:rgba(15,23,42,0.8);border:1px solid #334155;border-radius:12px;padding:12px 14px;margin-bottom:18px;text-align:left;font-size:12px;">
           <div style="color:#34d399;font-weight:600;margin-bottom:6px;">✓ Acceso vitalicio sin suscripciones ni mensualidades</div>
           <div style="color:#34d399;font-weight:600;margin-bottom:6px;">✓ Base de datos permanente protegida en la nube</div>
-          <div style="color:#34d399;font-weight:600;">✓ 2 Dispositivos autorizados (PC Negocio + Móvil)</div>
+          <div style="color:#34d399;font-weight:600;">✓ Hasta ${MAX_AUTHORIZED_DEVICES} Dispositivos simultáneos (1 por Usuario)</div>
         </div>
 
         <a href="${checkoutUrl}" onclick="return window.triggerKinetixDemoBuy(event)" target="_blank" style="display:block;width:100%;padding:14px;background:linear-gradient(135deg,#10b981,#14b8a6);color:#022c22;font-size:14px;font-weight:800;border-radius:14px;text-decoration:none;box-shadow:0 10px 15px -3px rgba(16,185,129,0.3);box-sizing:border-box;">
