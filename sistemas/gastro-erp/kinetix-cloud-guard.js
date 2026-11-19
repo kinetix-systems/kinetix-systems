@@ -1,12 +1,11 @@
 /**
- * KINETIX CLOUD PWA, MULTI-DEVICE SECURITY GUARD & GLOBAL I18N ENGINE v5.0
+ * KINETIX CLOUD PWA, MULTI-DEVICE SECURITY GUARD & GLOBAL I18N ENGINE v5.5
  * Modelo Web / PWA en la Nube - Alojado en Servidores de Kinetix Systems
- * - Multi-Idioma Global Nativo (Español ES, English EN, Português PT, Français FR)
- * - Detección automática por región/zona horaria (USA -> EN, Brasil/Portugal -> PT, Francia -> FR, LATAM/España -> ES)
- * - Límite inteligente de dispositivos acorde a la cantidad de usuarios del sistema:
- *   · Gastro ERP + POS + KDS: 5 Usuarios = Máx. 5 Dispositivos Simultáneos
- *   · POS / Gimnasios / Clínicas / CRM: 4 Usuarios = Máx. 4 Dispositivos Simultáneos
- * - Límite de 5 acciones en Modo Demo en Vivo con restablecimiento efímero
+ * - Traducción integral en tiempo real (ES / EN / PT / FR) de encabezados,
+ *   descripciones, subtítulos, botones, placeholders, tooltips y textos dinámicos
+ * - Detección automática por región (USA/UK/CA -> EN, Brasil/Portugal -> PT, Francia -> FR, LATAM/España -> ES)
+ * - Límite de dispositivos acorde a la cantidad de usuarios (5 en Gastro, 4 en POS/Gym/Med/CRM)
+ * - Límite de 5 acciones en Modo Demo en Vivo con sincronización bidireccional Portal <-> Demo
  * - 100% Abierto a buscadores y crawlers internacionales (Cero bloqueo de bots)
  */
 (function () {
@@ -37,7 +36,6 @@
         .map(l => String(l || '').toLowerCase());
       const primaryNav = (navLangs[0] || 'es').slice(0, 2);
 
-      // 1) Brasil y Portugal -> Português (pt)
       const ptZones = [
         'america/sao_paulo', 'america/fortaleza', 'america/manaus', 'america/recife',
         'america/belem', 'america/bahia', 'america/cuiaba', 'america/campo_grande',
@@ -45,20 +43,14 @@
         'america/noronha', 'america/rio_branco', 'america/santarem',
         'europe/lisbon', 'atlantic/madeira', 'atlantic/azores'
       ];
-      if (ptZones.includes(tz) || primaryNav === 'pt') {
-        return 'pt';
-      }
+      if (ptZones.includes(tz) || primaryNav === 'pt') return 'pt';
 
-      // 2) Francia, Quebec y Territorios Francófonos -> Français (fr)
       const frZones = [
         'europe/paris', 'america/montreal', 'indian/reunion', 'africa/abidjan',
         'africa/dakar', 'america/guadeloupe', 'america/martinique', 'america/cayenne'
       ];
-      if (frZones.includes(tz) || primaryNav === 'fr') {
-        return 'fr';
-      }
+      if (frZones.includes(tz) || primaryNav === 'fr') return 'fr';
 
-      // 3) Latinoamérica y España -> Español (es)
       const esZones = [
         'america/managua', 'america/costa_rica', 'america/mexico_city', 'america/cancun',
         'america/tijuana', 'america/merida', 'america/monterrey', 'america/chihuahua',
@@ -68,11 +60,8 @@
         'america/caracas', 'america/la_paz', 'america/santiago', 'america/asuncion',
         'america/montevideo', 'america/argentina', 'europe/madrid', 'atlantic/canary'
       ];
-      if (esZones.some(z => tz.startsWith(z))) {
-        return 'es';
-      }
+      if (esZones.some(z => tz.startsWith(z))) return 'es';
 
-      // 4) Estados Unidos, Canadá, Reino Unido, Australia o navegador en Inglés -> English (en)
       const enZones = [
         'america/new_york', 'america/chicago', 'america/denver', 'america/los_angeles',
         'america/phoenix', 'america/anchorage', 'pacific/honolulu', 'america/detroit',
@@ -80,20 +69,15 @@
         'america/vancouver', 'america/edmonton', 'america/winnipeg', 'america/halifax',
         'europe/london', 'europe/dublin', 'australia/', 'pacific/auckland'
       ];
-      if (enZones.some(z => tz.startsWith(z)) || primaryNav === 'en') {
-        return 'en';
-      }
+      if (enZones.some(z => tz.startsWith(z)) || primaryNav === 'en') return 'en';
 
-      if (SUPPORTED_LANGS.includes(primaryNav)) {
-        return primaryNav;
-      }
+      if (SUPPORTED_LANGS.includes(primaryNav)) return primaryNav;
     } catch (e) {}
     return 'es';
   }
 
   let currentLang = detectVisitorLanguage();
 
-  // Textos propios del Guardián Cloud y Demo en 4 idiomas
   const GUARD_UI_TEXTS = {
     es: {
       securityAlert: 'Se ha detectado un inicio de sesión en otro dispositivo. Se cerró la sesión anterior por seguridad.',
@@ -253,10 +237,10 @@
     }
   };
 
-  // Diccionario de frases e interfaz para todos los sistemas Kinetix (Gastro, POS, Clínicas, CRM, Gym)
-  // Cada entrada es [TextoEspañol, English, Português, Français]
+  // Diccionario exhaustivo: encabezados, descripciones, subtítulos, botones, placeholders y tooltips
+  // Formato: [Español, English, Português, Français]
   const UI_PHRASE_TABLE = [
-    // Barra Superior Demo & Botones Globales
+    // === BARRA DEMO, TOP BAR & GLOBAL ===
     ['DEMO EN VIVO FUNCIONAL', 'LIVE FUNCTIONAL DEMO', 'DEMO AO VIVO FUNCIONAL', 'DÉMO EN DIRECT FONCTIONNELLE'],
     ['Sistema de Gestión Integral para Restaurantes & Cafeterías — Kinetix Gastro ERP + POS + KDS Pro', 'All-in-One Restaurant & Cafe Management System — Kinetix Gastro ERP + POS + KDS Pro', 'Sistema de Gestão Integral para Restaurantes e Cafeterias — Kinetix Gastro ERP + POS + KDS Pro', 'Système de Gestion Intégral pour Restaurants & Cafés — Kinetix Gastro ERP + POS + KDS Pro'],
     ['Sistema de Facturación, POS y Control de Inventarios Cloud v4.0', 'Cloud Invoicing, POS & Inventory Control System v4.0', 'Sistema de Faturamento, PDV e Controle de Estoque Cloud v4.0', 'Système de Facturation, PDV et Contrôle des Stocks Cloud v4.0'],
@@ -270,10 +254,49 @@
     ['Salir', 'Log Out', 'Sair', 'Quitter'],
     ['Modo Claro', 'Light Mode', 'Modo Claro', 'Mode Clair'],
     ['Modo Oscuro', 'Dark Mode', 'Modo Escuro', 'Mode Sombre'],
-    ['Claro', 'Light', 'Claro', 'Clair'],
-    ['Oscuro', 'Dark', 'Escuro', 'Sombre'],
+    ['← Volver al Catálogo', '← Back to Catalog', '← Voltar ao Catálogo', '← Retour au Catalogue'],
+    ['Volver al Catálogo', 'Back to Catalog', 'Voltar ao Catálogo', 'Retour au Catalogue'],
+    ['Alternar Modo Oscuro / Claro', 'Toggle Dark / Light Mode', 'Alternar Modo Escuro / Claro', 'Basculer Mode Sombre / Clair'],
+    ['Conmutar Modo Oscuro / Modo Claro en tiempo real', 'Toggle Dark / Light Mode in real time', 'Alternar Modo Escuro / Claro em tempo real', 'Basculer Mode Sombre / Clair en temps réel'],
+    ['Restaurar datos iniciales de demostración', 'Restore initial demo data', 'Restaurar dados iniciais da demonstração', 'Restaurer les données de démo initiales'],
+    ['Reiniciar Datos Demo', 'Reset Demo Data', 'Reiniciar Dados Demo', 'Réinitialiser Démo'],
+    ['Mostrar Barra Demo Kinetix ($89 USD)', 'Show Kinetix Demo Bar ($89 USD)', 'Mostrar Barra Demo Kinetix ($89 USD)', 'Afficher la Barre Démo Kinetix (89 $ USD)'],
 
-    // Navegación Gastro ERP + POS + KDS
+    // === LOGIN SCREEN (GASTRO, POS, MED, CRM) ===
+    ['Portal Corporativo de Acceso para Personal Autorizado', 'Corporate Access Portal for Authorized Staff', 'Portal Corporativo de Acesso para Pessoal Autorizado', 'Portail d’Accès Corporatif pour le Personnel Autorisé'],
+    ['Restaurantes, Cafeterías de Especialidad, Bares & Food Trucks', 'Restaurants, Specialty Coffee Shops, Bars & Food Trucks', 'Restaurantes, Cafeterias Especiais, Bares e Food Trucks', 'Restaurants, Cafés de Spécialité, Bars & Food Trucks'],
+    ['Abrir Portal del Menú Digital & QR (Vista Comensal)', 'Open Digital & QR Menu Portal (Guest View)', 'Abrir Portal do Cardápio Digital e QR (Visão Cliente)', 'Ouvrir le Portail Menu Numérique & QR (Vue Client)'],
+    ['Conectividad integral en tiempo real entre', 'Full real-time connectivity between', 'Conectividade integral em tempo real entre', 'Connectivité intégrale en temps réel entre'],
+    ['AUTOCOMPLETADO RÁPIDO — 5 ROLES DE PRUEBA (RBAC):', 'QUICK AUTOCOMPLETE — 5 TRIAL ROLES (RBAC):', 'PREENCHIMENTO RÁPIDO — 5 PERFIS DE TESTE (RBAC):', 'SAISIE RAPIDE — 5 RÔLES D’ESSAI (RBAC) :'],
+    ['Autocompletado Rápido — 5 Roles de Prueba (RBAC):', 'Quick Autocomplete — 5 Trial Roles (RBAC):', 'Preenchimento Rápido — 5 Perfis de Teste (RBAC):', 'Saisie Rapide — 5 Rôles d’Essai (RBAC) :'],
+    ['Toca un rol para autocompletar o doble clic para entrar', 'Tap a role to autocomplete or double-click to log in', 'Toque em um perfil para preencher ou clique duplo para entrar', 'Touchez un rôle pour remplir ou double-cliquez pour entrer'],
+    ['CONTROL DE ACCESO RBAC', 'RBAC ACCESS CONTROL', 'CONTROLE DE ACESSO RBAC', 'CONTRÔLE D’ACCÈS RBAC'],
+    ['CONTROL DE ACCESO POR ROLES (RBAC)', 'ROLE-BASED ACCESS CONTROL (RBAC)', 'CONTROLE DE ACESSO POR PERFIS (RBAC)', 'CONTRÔLE D’ACCÈS PAR RÔLES (RBAC)'],
+    ['Ingresa tu Usuario/Correo y PIN asignado, o utiliza los botones de acceso rápido de demostración.', 'Enter your assigned Username/Email and PIN, or use the quick demo access buttons.', 'Digite seu Usuário/E-mail e PIN atribuído ou use os botões de acesso rápido da demo.', 'Saisissez votre Identifiant/E-mail et code PIN, ou utilisez les boutons d’accès rapide démo.'],
+    ['Usuario o Correo Corporativo', 'Username or Corporate Email', 'Usuário ou E-mail Corporativo', 'Utilisateur ou E-mail Corporatif'],
+    ['PIN / Contraseña de Acceso', 'Access PIN / Password', 'PIN / Senha de Acesso', 'PIN / Mot de Passe d’Accès'],
+    ['Autocompletar Admin (1234)', 'Autocomplete Admin (1234)', 'Preencher Admin (1234)', 'Remplir Admin (1234)'],
+    ['Ingresar al Sistema Kinetix Gastro ERP', 'Sign In to Kinetix Gastro ERP', 'Entrar no Sistema Kinetix Gastro ERP', 'Se Connecter à Kinetix Gastro ERP'],
+    ['Acceso Rápido Demo (Autocompletar y Entrar en 1 Clic)', 'Quick Demo Access (Autocomplete & Enter in 1 Click)', 'Acesso Rápido Demo (Preencher e Entrar em 1 Clique)', 'Accès Rapide Démo (Saisie Auto & Entrer en 1 Clic)'],
+    ['Ingresar al Sistema', 'Sign In to System', 'Entrar no Sistema', 'Se Connecter au Système'],
+    ['Entrar al Sistema Cloud', 'Sign In to Cloud System', 'Entrar no Sistema Cloud', 'Accéder au Système Cloud'],
+    ['📘 Descargar Manual Oficial Kinetix Gastro ERP (PDF)', '📘 Download Official Kinetix Gastro ERP Manual (PDF)', '📘 Baixar Manual Oficial Kinetix Gastro ERP (PDF)', '📘 Télécharger le Manuel Officiel Kinetix Gastro ERP (PDF)'],
+    ['Entrar 1-Clic →', '1-Click Sign In →', 'Entrar 1-Clique →', 'Entrer en 1 Clic →'],
+    ['Todas las Áreas & Gerencia', 'All Areas & Management', 'Todas as Áreas e Gerência', 'Tous Secteurs & Direction'],
+    ['Caja Central & Barra Express', 'Main Cashier & Express Bar', 'Caixa Central e Bar Express', 'Caisse Centrale & Bar Express'],
+    ['Salón Principal', 'Main Dining Room', 'Salão Principal', 'Salle Principale'],
+    ['Terraza & Jardín', 'Terrace & Garden', 'Terraço e Jardim', 'Terrasse & Jardin'],
+    ['Cocina Caliente & Barra de Café (KDS)', 'Hot Kitchen & Coffee Bar (KDS)', 'Cozinha Quente e Bar de Café (KDS)', 'Cuisine Chaude & Bar Café (KDS)'],
+    ['Selecciona tu Usuario (1 Principal + 3 Roles)', 'Select Your User (1 Master + 3 Roles)', 'Selecione seu Usuário (1 Principal + 3 Perfis)', 'Sélectionnez votre Utilisateur (1 Principal + 3 Rôles)'],
+    ['Demo / Inicial: PIN del Admin Principal es', 'Demo / Initial: Main Admin PIN is', 'Demo / Inicial: PIN do Admin Principal é', 'Démo / Initial : Le PIN de l’Admin Principal est'],
+    ['Demo / Inicial: PIN del Director Principal es', 'Demo / Initial: Main Director PIN is', 'Demo / Inicial: PIN do Diretor Principal é', 'Démo / Initial : Le PIN du Directeur Principal est'],
+    ['PIN incorrecto. Verifica tus credenciales.', 'Incorrect PIN. Please verify your credentials.', 'PIN incorreto. Verifique suas credenciais.', 'PIN incorrect. Vérifiez vos identifiants.'],
+    ['Licencia Activa:', 'Active License:', 'Licença Ativa:', 'Licence Active :'],
+    ['Licencia Corporativa · Máx. 4 Usuarios', 'Corporate License · Max 4 Users', 'Licença Corporativa · Máx. 4 Usuários', 'Licence Entreprise · Max 4 Utilisateurs'],
+    ['LICENCIA PARA 4 USUARIOS CON ROLES', 'LICENSE FOR 4 ROLE-BASED USERS', 'LICENÇA PARA 4 USUÁRIOS COM PERFIS', 'LICENCE POUR 4 UTILISATEURS PAR RÔLES'],
+    ['LICENCIA COMERCIAL 4 USUARIOS', '4-USER COMMERCIAL LICENSE', 'LICENÇA COMERCIAL 4 USUÁRIOS', 'LICENCE COMMERCIALE 4 UTILISATEURS'],
+
+    // === NAVEGACIÓN & ROLES ===
     ['Dashboard Ejecutivo en Tiempo Real', 'Real-Time Executive Dashboard', 'Dashboard Executivo em Tempo Real', 'Tableau de Bord Exécutif en Temps Réel'],
     ['Mesas, Toma de Pedidos & Menú QR', 'Tables, Order Taking & QR Menu', 'Mesas, Pedidos e Cardápio QR', 'Tables, Prise de Commande & Menu QR'],
     ['POS & Facturación / Corte de Caja', 'POS & Billing / Cash Register Close', 'PDV e Faturamento / Fechamento de Caixa', 'PDV & Facturation / Clôture de Caisse'],
@@ -285,6 +308,17 @@
     ['Personalizar Marca & Configuración', 'Customize Brand & Configuration', 'Personalizar Marca e Configuração', 'Personnaliser Marque & Configuration'],
     ['Manual de Uso & Procesos (PDF)', 'User Manual & Processes (PDF)', 'Manual de Uso e Processos (PDF)', 'Manuel d’Utilisation & Processus (PDF)'],
     ['📱 Portal Menú Digital & QR', '📱 Digital QR Menu Portal', '📱 Portal Cardápio Digital e QR', '📱 Portail Menu Numérique & QR'],
+    ['ROL ACTIVO (AISLAMIENTO RBAC)', 'ACTIVE ROLE (RBAC ISOLATION)', 'PERFIL ATIVO (ISOLAMENTO RBAC)', 'RÔLE ACTIF (ISOLATION RBAC)'],
+    ['Usuario 1 — Super Admin / Gerente General', 'User 1 — Super Admin / General Manager', 'Usuário 1 — Super Admin / Gerente Geral', 'Utilisateur 1 — Super Admin / Directeur Général'],
+    ['Usuario 2 — Cajero / Encargado de Facturación', 'User 2 — Cashier / Billing Manager', 'Usuário 2 — Caixa / Faturamento', 'Utilisateur 2 — Caissier / Facturation'],
+    ['Usuario 3 — Mesero Salón Principal', 'User 3 — Main Dining Server', 'Usuário 3 — Garçom Salão Principal', 'Utilisateur 3 — Serveur Salle Principale'],
+    ['Usuario 4 — Mesero Terraza / Barra', 'User 4 — Terrace / Bar Server', 'Usuário 4 — Garçom Terraço / Bar', 'Utilisateur 4 — Serveur Terrasse / Bar'],
+    ['Usuario 5 — Cocina & Barra (Operador KDS)', 'User 5 — Kitchen & Bar (KDS Operator)', 'Usuário 5 — Cozinha e Bar (Operador KDS)', 'Utilisateur 5 — Cuisine & Bar (Opérateur KDS)'],
+    ['Probar Vista Rol:', 'Preview Role View:', 'Testar Visão do Perfil:', 'Tester Vue du Rôle :'],
+    ['Flujo KDS:', 'KDS Flow:', 'Fluxo KDS:', 'Flux KDS :'],
+    ['Paso a Cocina al Confirmar Pedido por Mesero', 'Send to Kitchen on Waiter Order Confirmation', 'Enviar à Cozinha ao Confirmar Pedido pelo Garçom', 'Envoyer en Cuisine dès Confirmation Serveur'],
+    ['Paso a Cocina al Facturar en Caja POS', 'Send to Kitchen on POS Invoice Checkout', 'Enviar à Cozinha ao Faturar no Caixa PDV', 'Envoyer en Cuisine dès Facturation PDV'],
+    ['Moneda:', 'Currency:', 'Moeda:', 'Devise :'],
     ['Menú QR', 'QR Menu', 'Cardápio QR', 'Menu QR'],
     ['Manual PDF', 'PDF Manual', 'Manual PDF', 'Manuel PDF'],
     ['Mesas/Menú', 'Tables/Menu', 'Mesas/Cardápio', 'Tables/Menu'],
@@ -298,7 +332,204 @@
     ['En Vivo', 'Live', 'Ao Vivo', 'En Direct'],
     ['Salón', 'Dining', 'Salão', 'Salle'],
 
-    // Navegación POS & Inventarios / Clínicas / CRM
+    // === DASHBOARD GASTRO ERP ===
+    ['CENTRO DE COMANDO GASTRONÓMICO EN VIVO • ERP + POS + KDS', 'LIVE GASTRONOMIC COMMAND CENTER • ERP + POS + KDS', 'CENTRO DE COMANDO GASTRONÔMICO AO VIVO • ERP + PDV + KDS', 'CENTRE DE COMMANDE GASTRONOMIQUE EN DIRECT • ERP + PDV + KDS'],
+    ['Monitoreo sincronizado entre salón, terraza, barra de café, facturación térmica POS, escandallos de inventario y pantallas KDS de cocina.', 'Synchronized monitoring across dining room, terrace, coffee bar, thermal POS billing, recipe inventory costing, and kitchen KDS screens.', 'Monitoramento sincronizado entre salão, terraço, bar de café, faturamento PDV térmico, fichas técnicas de estoque e telas KDS da cozinha.', 'Suivi synchronisé entre salle, terrasse, bar à café, facturation thermique PDV, fiches recettes et écrans cuisine KDS.'],
+    ['Ir a Caja POS →', 'Go to POS Cashier →', 'Ir ao Caixa PDV →', 'Aller à la Caisse PDV →'],
+    ['Monitor KDS →', 'KDS Monitor →', 'Monitor KDS →', 'Moniteur KDS →'],
+    ['Ir al Mapa de Mesas', 'Go to Table Map', 'Ir ao Mapa de Mesas', 'Aller au Plan de Tables'],
+    ['Ventas Facturadas Hoy', 'Invoiced Sales Today', 'Vendas Faturadas Hoje', 'Ventes Facturées Aujourd’hui'],
+    ['Ticket Promedio POS', 'Average POS Ticket', 'Ticket Médio PDV', 'Ticket Moyen PDV'],
+    ['Mesas Activas en Salón', 'Active Dining Tables', 'Mesas Ativas no Salão', 'Tables Actives en Salle'],
+    ['Cocina KDS vs. Despachadas', 'Kitchen KDS vs. Delivered', 'Cozinha KDS vs. Entregues', 'Cuisine KDS vs. Livrées'],
+    ['Ranking de Platillos Más Vendidos', 'Top-Selling Dishes & Drinks Ranking', 'Ranking de Pratos Mais Vendidos', 'Classement des Plats les Plus Vendus'],
+    ['Rotación real en mesas, barra y delivery', 'Real turnover across tables, bar & delivery', 'Giro real em mesas, balcão e delivery', 'Rotation réelle sur tables, bar et livraison'],
+    ['Últimas Facturas Térmicas Emitidas', 'Latest Issued Thermal Receipts', 'Últimos Cupons Térmicos Emitidos', 'Derniers Tickets Thermiques Émis'],
+    ['Reimpresión térmica 58mm/80mm, envío WhatsApp y anulación auditada', '58mm/80mm thermal reprint, WhatsApp delivery & audited void', 'Reimpressão térmica 58mm/80mm, envio WhatsApp e cancelamento auditado', 'Réimpression thermique 58mm/80mm, envoi WhatsApp et annulation auditée'],
+    ['Ver Ticket', 'View Receipt', 'Ver Cupom', 'Voir Ticket'],
+    ['Alertas de Stock Mínimo por Receta', 'Minimum Stock Alerts by Recipe', 'Alertas de Estoque Mínimo por Receita', 'Alertes de Stock Minimum par Recette'],
+    ['Insumos que requieren reposición inmediata', 'Ingredients requiring immediate restocking', 'Insumos que exigem reposição imediata', 'Ingrédients nécessitant un réapprovisionnement immédiat'],
+    ['✓ Todos los insumos están por encima del punto de reorden.', '✓ All ingredients are above the reorder point.', '✓ Todos os insumos estão acima do ponto de reposição.', '✓ Tous les ingrédients sont au-dessus du seuil de réapprovisionnement.'],
+    ['Bitácora de Auditoría (Anti-Robo Hormiga)', 'Audit Log (Anti-Shrinkage Security)', 'Auditoria (Segurança Anti-Desperdício)', 'Journal d’Audit (Sécurité Anti-Vol)'],
+    ['Registro Secreto Exclusivo para Super Admin', 'Secret Log Exclusive to Super Admin', 'Registro Secreto Exclusivo do Super Admin', 'Journal Secret Exclusif au Super Admin'],
+    ['Ver Bitácora Completa →', 'View Full Audit Log →', 'Ver Auditoria Completa →', 'Voir le Journal Complet →'],
+
+    // === MESAS, MENÚ QR & TOMA DE ÓRDENES ===
+    ['Toca cualquier mesa para abrir su comanda o facturarla en POS', 'Tap any table to open its order or bill it in POS', 'Toque em qualquer mesa para abrir a comanda ou faturar no PDV', 'Touchez une table pour ouvrir sa commande ou l’encaisser'],
+    ['Estado del Salón, Terraza & Barra en Tiempo Real', 'Dining Room, Terrace & Bar Live Status', 'Status do Salão, Terraço e Bar em Tempo Real', 'État de la Salle, Terrasse & Bar en Temps Réel'],
+    ['Estados por color, notas de alergia, fusión de mesas y división Split Bill.', 'Color-coded statuses, allergy notes, table merging & Split Bill.', 'Status por cor, notas de alergia, junção de mesas e divisão Split Bill.', 'Statuts par couleur, notes d’allergie, fusion de tables & Split Bill.'],
+    ['Libre (Verde)', 'Available (Green)', 'Livre (Verde)', 'Libre (Vert)'],
+    ['Ocupada / Cuenta (Ámbar)', 'Occupied / Bill (Amber)', 'Ocupada / Conta (Âmbar)', 'Occupée / Addition (Ambre)'],
+    ['En Preparación (Azul)', 'In Preparation (Blue)', 'Em Preparo (Azul)', 'En Préparation (Bleu)'],
+    ['¡Lista para Servir!', 'Ready to Serve!', 'Pronta para Servir!', 'Prête à Servir !'],
+    ['Todas las Zonas', 'All Zones', 'Todas as Áreas', 'Toutes les Zones'],
+    ['Para Llevar (Takeout)', 'Takeout Order', 'Para Viagem (Takeout)', 'À Emporter (Takeout)'],
+    ['Delivery (Domicilio)', 'Home Delivery', 'Delivery (Entrega)', 'Livraison à Domicile'],
+    ['En Mesa (Salón / Terraza)', 'Dine-In (Table / Terrace)', 'Na Mesa (Salão / Terraço)', 'Sur Place (Salle / Terrasse)'],
+    ['Catálogo del Menú Digital (Toma Rápida de Pedido)', 'Digital Menu Catalog (Fast Order Taking)', 'Cardápio Digital (Lançamento Rápido de Pedido)', 'Catalogue du Menu Numérique (Prise de Commande Rapide)'],
+    ['Toca cualquier platillo o café del catálogo izquierdo para añadirlo con sus modificadores.', 'Tap any dish or coffee from the catalog to add it with modifiers.', 'Toque em qualquer prato ou bebida do catálogo para adicionar com opcionais.', 'Touchez un plat ou une boisson du catalogue pour l’ajouter avec ses options.'],
+    ['Buscar platillo, café de especialidad, corte o postre...', 'Search dish, specialty coffee, steak, or dessert...', 'Buscar prato, café especial, corte ou sobremesa...', 'Rechercher plat, café, viande ou dessert...'],
+    ['Buscar plato o código...', 'Search dish or SKU...', 'Buscar prato ou código...', 'Rechercher plat ou code...'],
+    ['Buscar café, bebida, postre...', 'Search coffee, drink, dessert...', 'Buscar café, bebida, sobremesa...', 'Rechercher café, boisson, dessert...'],
+    ['Buscar producto o SKU...', 'Search product or SKU...', 'Buscar produto ou SKU...', 'Rechercher produit ou SKU...'],
+    ['Todas las Categorías', 'All Categories', 'Todas as Categorias', 'Toutes Catégories'],
+    ['Agregar al Pedido de la Mesa', 'Add to Table Order', 'Adicionar ao Pedido da Mesa', 'Ajouter à la Commande'],
+    ['Personalizar Platillo / Modificadores', 'Customize Dish / Modifiers', 'Personalizar Prato / Adicionais', 'Personnaliser Plat / Modificateurs'],
+    ['Elige 1 opción', 'Choose 1 option', 'Escolha 1 opção', 'Choisissez 1 option'],
+    ['Opción múltiple', 'Multiple choice', 'Múltipla escolha', 'Choix multiple'],
+    ['Nota Especial / Alergias', 'Special Note / Allergies', 'Observação Especial / Alergias', 'Note Spéciale / Allergies'],
+    ['Ej: Sin cebolla, salsa aparte...', 'Ex: No onions, sauce on side...', 'Ex: Sem cebola, molho à parte...', 'Ex : Sans oignons, sauce à part...'],
+    ['Nota especial de cocina (ej: sin cebolla, término medio...)', 'Special kitchen note (ex: no onions, medium rare...)', 'Nota especial de cozinha (ex: sem cebola, ao ponto...)', 'Note spéciale cuisine (ex : sans oignons, à point...)'],
+    ['Confirmar Pedido a Mesa & Cocina (KDS)', 'Confirm Order to Table & Kitchen (KDS)', 'Confirmar Pedido para Mesa e Cozinha (KDS)', 'Confirmer Commande Table & Cuisine (KDS)'],
+    ['🔥 Confirmar y Enviar Comanda a Cocina / Barra (KDS)', '🔥 Confirm & Send Ticket to Kitchen / Bar (KDS)', '🔥 Confirmar e Enviar Comanda para Cozinha / Bar (KDS)', '🔥 Confirmer & Envoyer Commande en Cuisine / Bar (KDS)'],
+    ['💳 Pasar a Caja POS (Facturar Mesa o Dividir Cuenta)', '💳 Send to POS Cashier (Bill Table or Split Bill)', '💳 Ir para Caixa PDV (Faturar Mesa ou Dividir Conta)', '💳 Passer en Caisse PDV (Encaisser ou Diviser)'],
+    ['Unir Mesas', 'Merge Tables', 'Juntar Mesas', 'Fusionner Tables'],
+    ['Fusionar Mesas', 'Merge Tables', 'Unir Mesas', 'Fusionner les Tables'],
+    ['Selecciona mesa a anexar...', 'Select table to merge...', 'Selecione a mesa para juntar...', 'Sélectionner la table à joindre...'],
+    ['Generar QR de Mesa / Vista Cliente', 'Generate Table QR / Guest View', 'Gerar QR da Mesa / Visão Cliente', 'Générer QR Table / Vue Client'],
+    ['+ Toca para abrir mesa', '+ Tap to open table', '+ Toque para abrir mesa', '+ Touchez pour ouvrir'],
+    ['MENÚ DIGITAL INTERACTIVO & AUTO-PEDIDO QR', 'INTERACTIVE DIGITAL MENU & QR SELF-ORDER', 'CARDÁPIO DIGITAL INTERATIVO E AUTOATENDIMENTO QR', 'MENU NUMÉRIQUE INTERACTIF & COMMANDE QR'],
+    ['ESCANEÁ Y PEDÍ DESDE TU MESA', 'SCAN & ORDER FROM YOUR TABLE', 'ESCANEIE E PEÇA DA SUA MESA', 'SCANNEZ & COMMANDEZ DEPUIS VOTRE TABLE'],
+    ['Selecciona platillos o bebidas del menú digital para ordenar a tu mesa.', 'Select dishes or drinks from the digital menu to order to your table.', 'Selecione pratos ou bebidas do cardápio digital para pedir na sua mesa.', 'Sélectionnez plats ou boissons du menu pour commander à votre table.'],
+    ['Oculta automáticamente platillos sin stock de insumos en su receta', 'Automatically hides dishes lacking ingredient stock in their recipe', 'Oculta automaticamente pratos sem estoque de ingredientes na receita', 'Masque automatiquement les plats en rupture de stock'],
+    ['Pedir por WhatsApp', 'Order via WhatsApp', 'Pedir pelo WhatsApp', 'Commander par WhatsApp'],
+    ['Tu Pedido en Mesa (QR)', 'Your Table Order (QR)', 'Seu Pedido na Mesa (QR)', 'Votre Commande à Table (QR)'],
+    ['Cerrar Menú QR', 'Close QR Menu', 'Fechar Cardápio QR', 'Fermer le Menu QR'],
+
+    // === POS & FACTURACIÓN / CORTE DE CAJA ===
+    ['Facturar Mesa / Split Bill', 'Bill Table / Split Bill', 'Faturar Mesa / Split Bill', 'Encaisser Table / Split Bill'],
+    ['Venta Directa en Barra (Cafetería Express / Mostrador)', 'Direct Bar Sale (Express Cafe / Counter)', 'Venda Direta no Balcão (Cafeteria Express)', 'Vente Directe au Comptoir (Café Express)'],
+    ['Venta Directa en Barra (Cafetería Express)', 'Direct Bar Sale (Express Cafe)', 'Venda Direta no Balcão (Cafeteria Express)', 'Vente Directe au Comptoir (Café Express)'],
+    ['Arqueo Ciego, Corte Z & Historial', 'Blind Cash Count, Z-Close & History', 'Conferência Cega, Fechamento Z e Histórico', 'Comptage Caisse, Clôture Z & Historique'],
+    ['🔓 Abrir Gaveta (Auditado)', '🔓 Open Cash Drawer (Audited)', '🔓 Abrir Gaveta (Auditado)', '🔓 Ouvrir Tiroir-Caisse (Audité)'],
+    ['Abrir Gaveta (Auditado)', 'Open Cash Drawer (Audited)', 'Abrir Gaveta (Auditado)', 'Ouvrir Tiroir-Caisse (Audité)'],
+    ['1. Selecciona la Mesa u Orden Activa a Cobrar', '1. Select Active Table or Order to Bill', '1. Selecione a Mesa ou Pedido Ativo para Cobrar', '1. Sélectionnez la Table ou Commande Active'],
+    ['Permite facturar la mesa completa o cobrar ítems individuales por comensal', 'Allows billing the entire table or charging individual items per guest', 'Permite faturar a mesa completa ou cobrar itens individuais por pessoa', 'Permet de facturer toute la table ou par articles (Split Bill)'],
+    ['Activar Cobro por Ítems (Split Bill)', 'Enable Pay-by-Item Mode (Split Bill)', 'Ativar Cobrança por Itens (Split Bill)', 'Activer Paiement par Article (Split Bill)'],
+    ['Modo Split Bill Activo (Por Ítems)', 'Split Bill Mode Active (By Items)', 'Modo Split Bill Ativo (Por Itens)', 'Mode Split Bill Actif (Par Articles)'],
+    ['2. Liquidación, Impuestos, Propina & Pago', '2. Checkout, Taxes, Tip & Payment', '2. Liquidação, Impostos, Gorjeta e Pagamento', '2. Règlement, Taxes, Pourboire & Paiement'],
+    ['Descuenta automáticamente los insumos de la receta al facturar', 'Automatically deducts recipe ingredients from stock upon billing', 'Baixa automaticamente os insumos da ficha técnica ao faturar', 'Déduit automatiquement les ingrédients du stock à la facturation'],
+    ['Nombre Cliente / Razón Social', 'Customer Name / Business Name', 'Nome do Cliente / Razão Social', 'Nom du Client / Raison Sociale'],
+    ['RUC / NIT / Cédula', 'Tax ID / EIN / National ID', 'CPF / CNPJ / Documento', 'SIRET / TVA / Identité'],
+    ['Consumidor Final', 'Walk-in Customer', 'Consumidor Final', 'Client de Passage'],
+    ['WhatsApp del Cliente (Para envío de ticket en 1 clic)', 'Customer WhatsApp (For 1-click receipt delivery)', 'WhatsApp do Cliente (Envio de cupom em 1 clique)', 'WhatsApp du Client (Envoi ticket en 1 clic)'],
+    ['Ej: +50588889999', 'Ex: +1 555-234-5678', 'Ex: +55 11 99999-9999', 'Ex : +33 6 12 34 56 78'],
+    ['Propina Sugerida (%)', 'Suggested Tip (%)', 'Gorjeta Sugerida (%)', 'Pourboire Suggéré (%)'],
+    ['Descuento Autorizado (%)', 'Authorized Discount (%)', 'Desconto Autorizado (%)', 'Remise Autorisée (%)'],
+    ['Método de Pago (Soporta Pagos Mixtos & CxC):', 'Payment Method (Supports Split Payment & Credit AR):', 'Forma de Pagamento (Suporta Misto e Fiado/AR):', 'Mode de Paiement (Mixte & Crédit Client) :'],
+    ['Efectivo', 'Cash', 'Dinheiro', 'Espèces'],
+    ['Tarjeta', 'Card', 'Cartão', 'Carte'],
+    ['Transferencia', 'Transfer', 'Transferência', 'Virement'],
+    ['Mixto', 'Split', 'Misto', 'Mixte'],
+    ['Cargar a CxC', 'Charge to AR', 'Lançar em Conta', 'À Crédit'],
+    ['Efectivo Recibido:', 'Cash Received:', 'Valor Recebido:', 'Espèces Reçues :'],
+    ['VUELTO / CAMBIO A ENTREGAR:', 'CHANGE TO RETURN:', 'TROCO A DEVOLVER:', 'MONNAIE À RENDRE :'],
+    ['VUELTO / CAMBIO:', 'CHANGE:', 'TROCO:', 'MONNAIE :'],
+    ['Subtotal Mesa / Orden:', 'Table / Order Subtotal:', 'Subtotal Mesa / Pedido:', 'Sous-total Table / Commande :'],
+    ['TOTAL A COBRAR:', 'TOTAL DUE:', 'TOTAL A COBRAR:', 'TOTAL À ENCAISSER :'],
+    ['TOTAL A PAGAR:', 'TOTAL TO PAY:', 'TOTAL A PAGAR:', 'TOTAL À PAYER :'],
+    ['Emitir Factura Térmica (58mm/80mm) & Descontar Receta', 'Issue Thermal Receipt (58mm/80mm) & Deduct Recipe Stock', 'Emitir Cupom Térmico (58mm/80mm) e Baixar Estoque', 'Émettre Ticket Thermique (58mm/80mm) & Déduire Stock'],
+    ['Dividir Cuenta (Split Bill)', 'Split Bill', 'Dividir Conta (Split Bill)', 'Diviser l’Addition (Split Bill)'],
+    ['División Rápida de Cuenta (Split Bill)', 'Quick Bill Splitting (Split Bill)', 'Divisão Rápida de Conta (Split Bill)', 'Division Rapide d’Addition (Split Bill)'],
+    ['No hay mesas pendientes de cobro en este momento.', 'There are no tables pending checkout right now.', 'Não há mesas pendentes de pagamento no momento.', 'Aucune table en attente d’encaissement pour le moment.'],
+    ['Toca los productos para facturar al instante y enviar a barra/cocina', 'Tap items to bill instantly and route to kitchen/bar KDS', 'Toque nos produtos para faturar na hora e enviar à cozinha/bar', 'Touchez les produits pour encaisser et envoyer en cuisine/bar'],
+    ['CONTROL DE TURNO & CIERRE Z DEL DÍA', 'SHIFT CONTROL & DAILY Z-CLOSE', 'CONTROLE DE TURNO E FECHAMENTO Z DO DIA', 'CONTRÔLE DE ÉQUIPE & CLÔTURE Z'],
+    ['Arqueo de Caja Ciego (Anti-Faltantes)', 'Blind Cash Count (Anti-Shortage)', 'Conferência Cega de Caixa', 'Comptage de Caisse Aveugle'],
+    ['El cajero cuenta e ingresa el efectivo físico total en gaveta. El sistema calcula automáticamente la diferencia frente al saldo esperado (Fondo Inicial + Ventas Efectivo - Retiros).', 'Cashier counts and enters total physical cash in drawer. System calculates variance vs. expected balance (Opening Float + Cash Sales - Payouts).', 'O operador conta e digita o valor físico total na gaveta. O sistema calcula a diferença frente ao saldo esperado.', 'Le caissier compte et saisit les espèces réelles en caisse. Le système calcule l’écart par rapport au solde attendu.'],
+    ['Ejecutar Arqueo Ciego & Emitir Cierre Z', 'Run Blind Cash Count & Issue Z-Close', 'Executar Conferência Cega e Emitir Fechamento Z', 'Exécuter Comptage & Émettre Clôture Z'],
+    ['Fondo Inicial:', 'Opening Float:', 'Fundo Inicial:', 'Fond de Caisse :'],
+    ['Ventas Efectivo:', 'Cash Sales:', 'Vendas em Dinheiro:', 'Ventes Espèces :'],
+    ['Ventas Tarjeta POS:', 'POS Card Sales:', 'Vendas Cartão PDV:', 'Ventes Carte PDV :'],
+    ['Transferencias:', 'Bank Transfers:', 'Transferências:', 'Virements :'],
+    ['Retiros / Egresos:', 'Payouts / Withdrawals:', 'Sangrias / Retiradas:', 'Retraits / Dépenses :'],
+    ['Efectivo Esperado:', 'Expected Cash:', 'Dinheiro Esperado:', 'Espèces Attendues :'],
+    ['Cortes Z Emitidos en la Sesión:', 'Z-Reports Issued in Session:', 'Fechamentos Z Emitidos na Sessão:', 'Clôtures Z Émises dans la Session :'],
+
+    // === KDS COCINA ===
+    ['KDS • KITCHEN DISPLAY SYSTEM EN TIEMPO REAL', 'KDS • REAL-TIME KITCHEN DISPLAY SYSTEM', 'KDS • MONITOR DE COZINHA EM TEMPO REAL', 'KDS • MONITEUR CUISINE EN TEMPS RÉEL'],
+    ['Monitor Táctil de Recepción y Preparación de Comandas', 'Touch Monitor for Order Reception & Preparation', 'Monitor Tátil de Recepção e Preparo de Comandas', 'Écran Tactile de Réception et Préparation des Commandes'],
+    ['Alerta sonora, filtro Cocina vs. Barra, semáforo 10m/20m y aviso al mesero.', 'Sound chime, Kitchen vs. Bar filter, 10m/20m timer & waiter notification.', 'Alerta sonoro, filtro Cozinha vs. Bar, semáforo 10m/20m e aviso ao garçom.', 'Signal sonore, filtre Cuisine/Bar, minuteur 10m/20m et alerte serveur.'],
+    ['Probar timbre sonoro de nueva comanda en cocina', 'Test new kitchen ticket chime', 'Testar campainha sonora da cozinha', 'Tester la sonnerie de nouvelle commande'],
+    ['Cocina Caliente', 'Hot Kitchen', 'Cozinha Quente', 'Cuisine Chaude'],
+    ['Barra Café & Bebidas', 'Coffee Bar & Drinks', 'Bar de Café e Bebidas', 'Bar Café & Boissons'],
+    ['Barra Café / Bebidas', 'Coffee Bar / Drinks', 'Bar Café / Bebidas', 'Bar Café / Boissons'],
+    ['Historial de Comandas Despachadas por Cocina & Barra', 'Completed Kitchen & Bar Orders History', 'Histórico de Comandas Despachadas pela Cozinha/Bar', 'Historique des Commandes Expédiées'],
+    ['EDICIÓN PREVIA AL INICIO DE PREPARACIÓN', 'PRE-PREPARATION ORDER EDITING', 'EDIÇÃO ANTES DO INÍCIO DO PREPARO', 'ÉDITION AVANT PRÉPARATION'],
+    ['Ajusta cantidades, agrega o edita notas de cocina, quita ítems en cola o añade un platillo adicional.', 'Adjust quantities, add or edit kitchen notes, remove queued items, or add another dish.', 'Ajuste quantidades, adicione ou edite notas da cozinha, remova itens na fila ou inclua novo prato.', 'Ajustez les quantités, modifiez les notes cuisine, retirez ou ajoutez un plat.'],
+    ['+ Agregar Platillo Adicional a esta Comanda:', '+ Add Extra Dish to This Ticket:', '+ Adicionar Prato Extra a Esta Comanda:', '+ Ajouter un Plat Supplémentaire :'],
+    ['Guardar Cambios en Comanda', 'Save Ticket Changes', 'Salvar Alterações na Comanda', 'Enregistrer les Modifications'],
+    ['👨‍🍳 Iniciar Preparación', '👨‍🍳 Start Preparation', '👨‍🍳 Iniciar Preparo', '👨‍🍳 Démarrer Préparation'],
+    ['Iniciar Preparación', 'Start Preparation', 'Iniciar Preparo', 'Démarrer Préparation'],
+    ['✏️ Editar Orden (En Cola)', '✏️ Edit Order (Queued)', '✏️ Editar Pedido (Na Fila)', '✏️ Modifier (En Attente)'],
+    ['Editar Orden', 'Edit Order', 'Editar Pedido', 'Modifier Commande'],
+    ['✅ Marcar Orden Lista / Entregada', '✅ Mark Order Ready / Delivered', '✅ Marcar Pedido Pronto / Entregue', '✅ Marquer Commande Prête / Livrée'],
+    ['Confirmar Retiro por Mesero / Despachada', 'Confirm Server Pickup / Delivered', 'Confirmar Retirada pelo Garçom / Entregue', 'Confirmer Retrait Serveur / Livrée'],
+    ['En Cola (Editable)', 'Queued (Editable)', 'Na Fila (Editável)', 'En Attente (Modifiable)'],
+    ['Ya en preparación/listo (Bloqueado)', 'Already preparing/ready (Locked)', 'Em preparo/pronto (Bloqueado)', 'En préparation/prêt (Verrouillé)'],
+    ['¡Cocina y Barra al Día! Cero Comandas Pendientes', 'Kitchen & Bar Caught Up! Zero Pending Orders', 'Cozinha e Bar em Dia! Zero Comandas Pendentes', 'Cuisine & Bar à Jour ! Zéro Commande en Attente'],
+    ['Tan pronto un mesero confirme una orden en mesa o un cliente ordene desde el Menú Digital QR, la comanda aparecerá aquí con alerta sonora instantánea.', 'As soon as a server confirms a table order or a guest orders from the QR Menu, the ticket will appear here with an instant chime.', 'Assim que um garçom confirmar um pedido ou um cliente pedir no Cardápio QR, a comanda aparecerá aqui.', 'Dès qu’un serveur confirme une commande ou qu’un client commande par QR, le bon apparaît ici.'],
+
+    // === INVENTARIO, RECETAS & PROVEEDORES ===
+    ['ESCANDALLO DE RECETA & DESCUENTO AUTOMÁTICO', 'RECIPE COSTING & AUTOMATIC STOCK DEDUCTION', 'FICHA TÉCNICA E BAIXA AUTOMÁTICA DE ESTOQUE', 'FICHES RECETTES & DÉDUCTION AUTOMATIQUE'],
+    ['Controla insumos de cocina/café (g, ml) y bebidas embotelladas o productos listos para venta directa (und) con mínimos, máximos y datos del proveedor.', 'Manage kitchen/coffee ingredients (g, ml) and bottled drinks or retail goods (units) with min/max thresholds and supplier info.', 'Controle insumos de cozinha/café (g, ml) e bebidas engarrafadas ou venda direta (un) com mínimo, máximo e fornecedor.', 'Gérez ingrédients (g, ml) et boissons/produits finis (unités) avec seuils min/max et infos fournisseurs.'],
+    ['Kardex Integral de Insumos & Productos de Venta al Público', 'Full Ingredients & Retail Goods Stock Kardex', 'Kardex Integral de Insumos e Produtos de Venda Direta', 'Kardex Complet Ingrédients & Vente Directe'],
+    ['Nuevo Producto / Insumo', 'New Product / Ingredient', 'Novo Produto / Insumo', 'Nouveau Produit / Ingrédient'],
+    ['Nuevo Plato', 'New Dish', 'Novo Prato', 'Nouveau Plat'],
+    ['+ Editar categorías', '+ Edit Categories', '+ Editar Categorias', '+ Modifier Catégories'],
+    ['Exportar Excel', 'Export Excel', 'Exportar Excel', 'Exporter Excel'],
+    ['🥕 Insumo de Cocina / Receta', '🥕 Kitchen / Recipe Ingredient', '🥕 Insumo de Cozinha / Receita', '🥕 Ingrédient Cuisine / Recette'],
+    ['🍾 Venta Directa al Público (Embotellado/Retail)', '🍾 Direct Retail Sale (Bottled/Packaged)', '🍾 Venda Direta ao Público (Bebida/Varejo)', '🍾 Vente Directe au Public (Bouteille/Détail)'],
+    ['🔄 Mixto (Insumo y Venta)', '🔄 Hybrid (Ingredient & Retail)', '🔄 Misto (Insumo e Venda)', '🔄 Mixte (Ingrédient & Vente)'],
+    ['Configuración de Escandallos (Recetas) y Rentabilidad en Vivo', 'Recipe Costing (BOM) & Live Margin Configuration', 'Configuração de Fichas Técnicas e Rentabilidade ao Vivo', 'Configuration des Recettes & Rentabilité en Direct'],
+    ['Al facturar 1 unidad, el sistema descuenta automáticamente estos insumos o productos de bodega:', 'When billing 1 unit, the system automatically deducts these ingredients or items from stock:', 'Ao faturar 1 unidade, o sistema baixa automaticamente estes insumos ou produtos do estoque:', 'Lors de la facturation d’1 unité, le système déduit automatiquement ces articles du stock :'],
+    ['Publicar automáticamente en Menú Digital QR & Caja POS para vender al público', 'Auto-publish on Digital QR Menu & POS Cashier for public sale', 'Publicar automaticamente no Cardápio Digital QR e Caixa PDV', 'Publier automatiquement sur le Menu QR & Caisse PDV'],
+    ['Stock Actual', 'Current Stock', 'Estoque Atual', 'Stock Actuel'],
+    ['Stock Mínimo', 'Minimum Stock', 'Estoque Mínimo', 'Stock Minimum'],
+    ['Stock Máximo', 'Maximum Stock', 'Estoque Máximo', 'Stock Maximum'],
+    ['Porciones Posibles:', 'Possible Servings:', 'Porções Possíveis:', 'Portions Possibles :'],
+    ['Margen Rentabilidad:', 'Profit Margin:', 'Margem de Lucro:', 'Marge Bénéficiaire :'],
+    ['Costo de Receta:', 'Recipe Cost:', 'Custo da Receita:', 'Coût Recette :'],
+    ['Directorio de Proveedores, Historial de Compras & Comparativa de Costos', 'Suppliers Directory, Purchase History & Cost Comparison', 'Diretório de Fornecedores, Histórico de Compras e Custos', 'Annuaire Fournisseurs, Historique d’Achats & Coûts'],
+    ['Registrar Nuevo Proveedor', 'Register New Supplier', 'Cadastrar Novo Fornecedor', 'Enregistrer Nouveau Fournisseur'],
+
+    // === FINANZAS, USUARIOS Y BRANDING (GASTRO) ===
+    ['Diario Digital del Día', 'Daily Digital Cash Ledger', 'Diário Digital do Dia', 'Journal de Caisse du Jour'],
+    ['Cuentas por Cobrar (CxC)', 'Accounts Receivable (AR)', 'Contas a Receber (AR)', 'Créances Clients'],
+    ['Cuentas por Pagar (CxP)', 'Accounts Payable (AP)', 'Contas a Pagar (AP)', 'Dettes Fournisseurs'],
+    ['Exportar Libro Diario Excel', 'Export Cash Ledger to Excel', 'Exportar Livro Diário Excel', 'Exporter le Journal Excel'],
+    ['Registrar Movimiento en Caja', 'Record Cash Movement', 'Registrar Movimento no Caixa', 'Enregistrer Mouvement Caisse'],
+    ['Proveedor Asociado al Movimiento (Opcional)', 'Linked Supplier (Optional)', 'Fornecedor Associado (Opcional)', 'Fournisseur Associé (Optionnel)'],
+    ['-- Movimiento Interno / Sin Proveedor --', '-- Internal Movement / No Supplier --', '-- Movimento Interno / Sem Fornecedor --', '-- Mouvement Interne / Sans Fournisseur --'],
+    ['Administrar Categorías Contables de Finanzas', 'Manage Finance Accounting Categories', 'Gerenciar Categorias Contábeis', 'Gérer les Catégories Comptables'],
+    ['Control Estricto de 5 Usuarios & Aislamiento de Vistas por Rol (RBAC)', 'Strict 5-User Control & Role-Based View Isolation (RBAC)', 'Controle Estrito de 5 Usuários e Isolamento por Perfil (RBAC)', 'Contrôle Strict de 5 Utilisateurs & Isolation par Rôle (RBAC)'],
+    ['Cada usuario opera bajo aislamiento estricto de interfaz: los meseros solo visualizan el Portal del Menú y Mapa de Mesas; Cocina/Barra solo opera la pantalla táctil KDS; y Caja solo opera facturación, corte y CxC.', 'Each user operates under strict interface isolation: waiters only see Table Map & Menu; Kitchen/Bar only operates KDS; and Cashier only handles billing, Z-close, and AR.', 'Cada usuário opera sob isolamento rigoroso de interface: garçons veem Mesas e Cardápio; Cozinha/Bar opera o KDS; Caixa opera faturamento e fechamento.', 'Chaque utilisateur dispose d’une interface isolée selon son rôle : serveurs (Tables/Menu), cuisine (KDS), caisse (PDV/Clôture).'],
+    ['PANEL WHITE-LABEL KINETIX.OPS • IDENTIDAD COMERCIAL', 'KINETIX.OPS WHITE-LABEL PANEL • BRAND IDENTITY', 'PAINEL WHITE-LABEL KINETIX.OPS • IDENTIDADE COMERCIAL', 'PANNEAU MARQUE BLANCHE KINETIX.OPS • IDENTITÉ'],
+    ['Personalización del Sistema y Datos del Restaurante / Cafetería', 'System Customization & Restaurant / Cafe Profile', 'Personalização do Sistema e Dados do Restaurante / Cafeteria', 'Personnalisation du Système & Profil Restaurant / Café'],
+    ['Actualiza instantáneamente encabezados, menú digital QR y tickets térmicos 58mm / 80mm.', 'Instantly updates headers, digital QR menu, and 58mm / 80mm thermal receipts.', 'Atualiza instantaneamente cabeçalhos, cardápio digital QR e cupons térmicos 58mm / 80mm.', 'Met à jour instantanément les en-têtes, le menu QR et les tickets 58mm / 80mm.'],
+    ['Cargar Logo desde PC', 'Upload Logo from PC', 'Carregar Logo do PC', 'Importer Logo depuis PC'],
+    ['Quitar Logo', 'Remove Logo', 'Remover Logo', 'Supprimer Logo'],
+    ['Guardar Configuración', 'Save Configuration', 'Salvar Configuração', 'Enregistrer Configuration'],
+    ['Columna Izquierda — Identidad Comercial y Facturación', 'Left Column — Brand Identity & Billing', 'Coluna Esquerda — Identidade Comercial e Faturamento', 'Colonne Gauche — Identité & Facturation'],
+    ['Columna Derecha — Ubicación, Zona Horaria y Flujo de Cocina', 'Right Column — Location, Timezone & Kitchen Flow', 'Coluna Direita — Localização, Fuso Horário e Fluxo de Cozinha', 'Colonne Droite — Emplacement, Fuseau Horaire & Flux Cuisine'],
+    ['Nombre Comercial del Restaurante / Cafetería *', 'Restaurant / Cafe Commercial Name *', 'Nome Comercial do Restaurante / Cafeteria *', 'Nom Commercial du Restaurant / Café *'],
+    ['Eslogan / Lema de la Marca', 'Brand Slogan / Tagline', 'Slogan / Lema da Marca', 'Slogan de la Marque'],
+    ['RUC / Identificación Fiscal', 'Tax ID / EIN / VAT', 'CNPJ / NIF / Documento Fiscal', 'SIRET / N° TVA / Fiscal'],
+    ['Moneda del Sistema (Multi-Moneda)', 'System Currency (Multi-Currency)', 'Moeda do Sistema (Multi-Moeda)', 'Devise du Système (Multi-Devises)'],
+    ['Símbolo Moneda', 'Currency Symbol', 'Símbolo da Moeda', 'Symbole Devise'],
+    ['Porcentaje de Impuesto (IVA / ISC %)', 'Tax Percentage (VAT / Sales Tax %)', 'Porcentagem de Imposto (%)', 'Taux de Taxe / TVA (%)'],
+    ['Propina Legal Sugerida (%)', 'Suggested Tip (%)', 'Gorjeta Sugerida (%)', 'Pourboire Suggéré (%)'],
+    ['Mensaje al Pie del Ticket Térmico 58mm / 80mm (Clave Wi-Fi & Agradecimiento)', '58mm / 80mm Thermal Receipt Footer Message (Wi-Fi Password & Thank You)', 'Mensagem de Rodapé do Cupom Térmico (Senha Wi-Fi e Agradecimento)', 'Message Pied de Ticket Thermique (Code Wi-Fi & Remerciement)'],
+    ['Dirección Física del Local', 'Business Street Address', 'Endereço Físico do Local', 'Adresse Physique de l’Établissement'],
+    ['Ciudad / Departamento', 'City / State', 'Cidade / Estado', 'Ville / Département'],
+    ['País', 'Country', 'País', 'Pays'],
+    ['Zona Horaria del Sistema', 'System Timezone', 'Fuso Horário do Sistema', 'Fuseau Horaire du Système'],
+    ['Correo Electrónico Oficial', 'Official Email', 'E-mail Oficial', 'E-mail Officiel'],
+    ['WhatsApp Oficial (Pedidos & Tickets)', 'Official WhatsApp (Orders & Receipts)', 'WhatsApp Oficial (Pedidos e Cupons)', 'WhatsApp Officiel (Commandes & Tickets)'],
+    ['Configuración de Flujo de Cocina (Paso Automático a Pantalla KDS):', 'Kitchen Workflow Rule (Automatic Routing to KDS Screen):', 'Regra de Fluxo da Cozinha (Envio Automático para Tela KDS):', 'Règle de Flux Cuisine (Envoi Auto vers KDS) :'],
+    ['🔥 Al confirmar pedido por mesero (Restaurante con servicio en mesa)', '🔥 When server confirms order (Table-service restaurant)', '🔥 Ao confirmar pedido pelo garçom (Restaurante com mesas)', '🔥 Dès confirmation serveur (Restaurant avec service à table)'],
+    ['💳 Al facturar en caja POS (Cafetería Express / Fast Casual / Food Truck)', '💳 When billed at POS cashier (Express Cafe / Fast Casual / Food Truck)', '💳 Ao faturar no caixa PDV (Cafeteria Express / Food Truck)', '💳 Dès encaissement PDV (Café Express / Food Truck)'],
+
+    // === POS & INVENTARIOS (HTML) ===
     ['Diario & Balance del Día', 'Daily Ledger & Balance', 'Diário e Balanço do Dia', 'Journal & Bilan du Jour'],
     ['Punto de Venta (POS)', 'Point of Sale (POS)', 'Ponto de Venda (PDV)', 'Point de Vente (PDV)'],
     ['Inventario & Stock', 'Inventory & Stock', 'Estoque e Produtos', 'Inventaire & Stock'],
@@ -306,53 +537,123 @@
     ['Gastos, Compras, CxC & CxP', 'Expenses, Purchases, AR & AP', 'Despesas, Compras, Contas a Receber e Pagar', 'Dépenses, Achats, Créances & Dettes'],
     ['4 Usuarios & Roles', '4 Users & Roles', '4 Usuários e Perfis', '4 Utilisateurs & Rôles'],
     ['Personalizar Marca', 'Customize Brand', 'Personalizar Marca', 'Personnaliser Marque'],
-    ['Licencia Activa:', 'Active License:', 'Licença Ativa:', 'Licence Active :'],
     ['4/4 Usuarios', '4/4 Users', '4/4 Usuários', '4/4 Utilisateurs'],
     ['OPERADOR ACTIVO:', 'ACTIVE OPERATOR:', 'OPERADOR ATIVO:', 'OPÉRATEUR ACTIF :'],
+    ['LIBRO DIARIO DIGITAL · ARQUEO & BALANCE EN TIEMPO REAL', 'DIGITAL DAILY LEDGER · LIVE CASH BALANCE', 'LIVRO DIÁRIO DIGITAL · BALANÇO EM TEMPO REAL', 'JOURNAL QUOTIDIEN · BILAN EN TEMPS RÉEL'],
+    ['Balance de Caja Diario', 'Daily Cash Register Balance', 'Balanço Diário de Caixa', 'Bilan de Caisse Quotidien'],
+    ['Control de inicio de caja, ventas (efectivo y tarjeta), compras, egresos del día y utilidad neta histórica.', 'Track opening cash float, cash/card sales, purchases, daily expenses, and net historical profit.', 'Controle de abertura de caixa, vendas em dinheiro/cartão, compras, despesas e lucro líquido.', 'Suivi du fond de caisse, ventes espèces/carte, achats, dépenses du jour et bénéfice net.'],
+    ['Inicio de Caja / Fondo de Apertura del Día', 'Opening Cash Float / Start-of-Day Drawer', 'Abertura de Caixa / Fundo Inicial do Dia', 'Ouverture de Caisse / Fond de Caisse'],
+    ['Digita el monto en efectivo con el que abre la caja. Se guarda automáticamente en el historial de esta fecha.', 'Enter the opening cash amount in drawer. Saved automatically to today’s ledger history.', 'Digite o valor em dinheiro da abertura do caixa. Salvo automaticamente no histórico do dia.', 'Saisissez le montant initial en caisse. Enregistré automatiquement pour cette date.'],
+    ['1. Fondo Inicio de Caja', '1. Opening Cash Float', '1. Fundo Inicial de Caixa', '1. Fond Initial Caisse'],
+    ['2. Total Vendido del Día (+)', '2. Total Daily Sales (+)', '2. Total Vendido no Dia (+)', '2. Total Ventes du Jour (+)'],
+    ['3. Compras & Egresos (-)', '3. Purchases & Expenses (-)', '3. Compras e Despesas (-)', '3. Achats & Dépenses (-)'],
+    ['4. Total Caja del Día (=)', '4. Net Cash in Drawer (=)', '4. Saldo Total em Caixa (=)', '4. Total En Caisse (=)'],
+    ['5. Utilidad Diaria Neta', '5. Daily Net Profit', '5. Lucro Líquido Diário', '5. Bénéfice Net Quotidien'],
+    ['Histórico de Movimientos de la Fecha', 'Transactions History for Selected Date', 'Histórico de Movimentos da Data', 'Historique des Mouvements du Jour'],
+    ['Historial de Movimientos de la Fecha', 'Transactions History for Selected Date', 'Histórico de Movimentos da Data', 'Historique des Mouvements du Jour'],
+    ['TERMINAL DE FACTURACIÓN', 'BILLING TERMINAL (POS)', 'TERMINAL DE FATURAMENTO (PDV)', 'TERMINAL DE FACTURATION (PDV)'],
+    ['Buscar por nombre, código o escanear código de barras...', 'Search by name, SKU, or scan barcode...', 'Buscar por nome, código ou código de barras...', 'Rechercher par nom, code ou code-barres...'],
+    ['Comprobante / Orden Actual', 'Current Receipt / Cart', 'Cupom / Pedido Atual', 'Ticket / Commande Actuelle'],
+    ['Vaciar Carrito', 'Empty Cart', 'Esvaziar Carrinho', 'Vider le Panier'],
+    ['KARDEX & ALMACÉN EN TIEMPO REAL', 'LIVE KARDEX & WAREHOUSE STOCK', 'KARDEX E ESTOQUE EM TEMPO REAL', 'KARDEX & ENTREPÔT EN TEMPS RÉEL'],
+    ['Control de Inventarios y Productos', 'Inventory & Products Control', 'Controle de Estoque e Produtos', 'Contrôle des Stocks et Produits'],
+    ['Abastecimiento de mercancía, insumos y control de stock', 'Merchandise replenishment, supplies, and live stock tracking', 'Abastecimento de mercadorias, insumos e controle de estoque', 'Approvisionnement, fournitures et gestion des stocks'],
+    ['Nuevo Producto / Servicio', 'New Product / Service', 'Novo Produto / Serviço', 'Nouveau Produit / Service'],
+    ['DASHBOARD EJECUTIVO · ARQUEO, INVENTARIO & FINANZAS', 'EXECUTIVE DASHBOARD · CASH CLOSE, INVENTORY & FINANCE', 'DASHBOARD EXECUTIVO · CAIXA, ESTOQUE E FINANÇAS', 'TABLEAU DE BORD · CLÔTURE, STOCK & FINANCES'],
+    ['Facturas, Corte de Caja y Reportes por Fechas', 'Invoices, Cash Close & Date Range Reports', 'Faturas, Fechamento de Caixa e Relatórios', 'Factures, Clôture de Caisse & Rapports'],
+    ['MÓDULO FINANCIERO & CONTROL ADMINISTRATIVO', 'FINANCIAL MODULE & ADMINISTRATIVE CONTROL', 'MÓDULO FINANCEIRO E CONTROLE ADMINISTRATIVO', 'MODULE FINANCIER & CONTRÔLE ADMINISTRATIF'],
+    ['Gastos, Compras, CxC y CxP', 'Expenses, Purchases, AR & AP', 'Despesas, Compras, Contas a Receber e Pagar', 'Dépenses, Achats, Créances & Dettes'],
+    ['Deducción de caja operativa con proveedor vinculado por categoría', 'Operating cash deduction linked with category suppliers', 'Dedução de caixa operacional com fornecedor vinculado', 'Déduction de caisse liée au fournisseur par catégorie'],
+    ['ABASTECIMIENTO & SOCIOS COMERCIALES', 'SUPPLY CHAIN & COMMERCIAL PARTNERS', 'ABASTECIMENTO E PARCEIROS COMERCIAIS', 'APPROVISIONNEMENT & FOURNISSEURS'],
+    ['Directorio de Proveedores Comerciales', 'Commercial Suppliers Directory', 'Diretório de Fornecedores Comerciais', 'Annuaire des Fournisseurs Commerciaux'],
+    ['Control centralizado de empresas proveedoras, datos de contacto WhatsApp, RUC fiscal y vinculación por categorías de productos y compras.', 'Centralized management of supplier companies, WhatsApp contacts, Tax IDs, and product/purchase categories.', 'Controle centralizado de fornecedores, WhatsApp, CNPJ e categorias de produtos.', 'Gestion centralisée des fournisseurs, contacts WhatsApp, SIRET et catégories.'],
+    ['Administración de Usuarios de Licencia (Máx. 4)', 'License Users Management (Max 4)', 'Administração de Usuários da Licença (Máx. 4)', 'Gestion des Utilisateurs de Licence (Max 4)'],
+    ['PERSONALIZACIÓN INTERNA WHITE-LABEL', 'INTERNAL WHITE-LABEL CUSTOMIZATION', 'PERSONALIZAÇÃO INTERNA WHITE-LABEL', 'PERSONNALISATION MARQUE BLANCHE'],
+    ['Identidad de Marca, Logo y Parámetros del Negocio', 'Brand Identity, Logo & Business Settings', 'Identidade da Marca, Logo e Parâmetros do Negócio', 'Identité de Marque, Logo & Paramètres'],
+    ['Personaliza el sistema con tu propio logo, nombre comercial y giro de negocio.', 'Customize the system with your own logo, business name, and store type.', 'Personalize o sistema com seu próprio logo, nome comercial e ramo de negócio.', 'Personnalisez le système avec votre logo, nom commercial et secteur.'],
+    ['💾 Guardar Cambios Ahora', '💾 Save Changes Now', '💾 Salvar Alterações Agora', '💾 Enregistrer les Modifications'],
+
+    // === CLÍNICAS & CITAS (HTML) ===
     ['Dashboard Clínico', 'Clinical Dashboard', 'Dashboard Clínico', 'Tableau de Bord Clinique'],
     ['Agenda de Citas & WhatsApp', 'Appointments & WhatsApp Reminders', 'Agenda de Consultas e WhatsApp', 'Agenda Rendez-vous & WhatsApp'],
     ['Pacientes & Expedientes', 'Patients & Medical Records', 'Pacientes e Prontuários', 'Patients & Dossiers Médicaux'],
     ['Consultas & Recetario PDF', 'Consultations & PDF Prescriptions', 'Consultas e Receituário PDF', 'Consultations & Ordonnances PDF'],
+    ['Finanzas, Ingresos & Gastos', 'Finance, Income & Expenses', 'Finanças, Receitas e Despesas', 'Finances, Revenus & Dépenses'],
+    ['PROFESIONAL ACTIVO:', 'ACTIVE PRACTITIONER:', 'PROFISSIONAL ATIVO:', 'PRATICIEN ACTIF :'],
+    ['SISTEMA ANTI-AUSENTISMO, AGENDAMIENTO & REPORTES', 'ANTI-NO-SHOW BOOKING, REMINDERS & REPORTS', 'SISTEMA ANTI-FALTAS, AGENDAMENTO E RELATÓRIOS', 'SYSTÈME ANTI-ABSENCES, RENDEZ-VOUS & RAPPORTS'],
+    ['Dashboard de Agenda, Consultas y Finanzas Clínicas', 'Appointments, Consultations & Clinic Finance Dashboard', 'Dashboard de Agenda, Consultas e Finanças da Clínica', 'Tableau de Bord Agenda, Consultations & Finances'],
+    ['Agendar Nueva Cita / Reserva', 'Schedule New Appointment / Booking', 'Agendar Nova Consulta / Reserva', 'Planifier Nouveau Rendez-vous'],
+    ['Centro de Recordatorios Automáticos (WhatsApp, SMS y Correo)', 'Automated Reminders Center (WhatsApp, SMS & Email)', 'Central de Lembretes Automáticos (WhatsApp, SMS e E-mail)', 'Centre de Rappels Automatiques (WhatsApp, SMS & E-mail)'],
+    ['Personaliza la plantilla y dispara recordatorios automáticos con 1 clic a todos tus pacientes/clientes citados.', 'Customize the template and trigger automated 1-click reminders to all scheduled patients/clients.', 'Personalize o modelo e dispare lembretes automáticos em 1 clique para pacientes agendados.', 'Personnalisez le modèle et envoyez des rappels automatiques en 1 clic à vos patients.'],
+    ['EXPEDIENTE DIGITAL INTEGRAL', 'INTEGRATED DIGITAL MEDICAL RECORD (EMR)', 'PRONTUÁRIO DIGITAL INTEGRAL', 'DOSSIER MÉDICAL NUMÉRIQUE INTÉGRAL'],
+    ['Directorio de Expedientes e Historial Clínico', 'Medical Records & Clinical History Directory', 'Diretório de Prontuários e Histórico Clínico', 'Annuaire des Dossiers & Historique Clinique'],
+    ['Crear Nuevo Expediente', 'Create New Patient Record', 'Criar Novo Prontuário', 'Créer Nouveau Dossier Patient'],
+    ['ATENCIÓN DE CONSULTA & ÓRDENES', 'CONSULTATION CARE & ORDERS', 'ATENDIMENTO DE CONSULTA E RECEITAS', 'SOINS EN CONSULTATION & ORDONNANCES'],
+    ['Registro de Consulta Multi-Especialidad y Receta', 'Multi-Specialty Consultation & Prescription Entry', 'Registro de Consulta Multiespecialidade e Receita', 'Saisie de Consultation Multispécialité & Ordonnance'],
+    ['CONTROL FINANCIERO MÉDICO, CLÍNICO & DE SERVICIOS', 'CLINIC, MEDICAL & SERVICES FINANCIAL CONTROL', 'CONTROLE FINANCEIRO MÉDICO, CLÍNICO E DE SERVIÇOS', 'CONTRÔLE FINANCIER MÉDICAL & SERVICES'],
+    ['Finanzas: Ingresos por Consultas, Gastos de Clínica y Cuentas', 'Finance: Consultation Revenue, Clinic Expenses & Accounts', 'Finanças: Receitas de Consultas, Despesas da Clínica e Contas', 'Finances : Recettes de Consultations, Dépenses & Comptes'],
+    ['WHITE-LABEL CONFIG', 'WHITE-LABEL CONFIG', 'CONFIGURAÇÃO WHITE-LABEL', 'CONFIGURATION MARQUE BLANCHE'],
+    ['Personalizar Logo, Nombre y Especialidad', 'Customize Logo, Name & Specialty', 'Personalizar Logo, Nome e Especialidade', 'Personnaliser Logo, Nom & Spécialité'],
+    ['💾 Guardar Configuración', '💾 Save Configuration', '💾 Salvar Configuração', '💾 Enregistrer la Configuration'],
+
+    // === CRM & COTIZADOR PDF (HTML) ===
     ['Embudo Kanban de Ventas', 'Kanban Sales Pipeline', 'Funil Kanban de Vendas', 'Pipeline Kanban des Ventes'],
     ['Clientes & Prospectos', 'Clients & Leads', 'Clientes e Leads', 'Clients & Prospects'],
     ['Cotizador Formal PDF', 'Formal PDF Quoter', 'Orçamentos Formais em PDF', 'Générateur de Devis PDF'],
     ['Seguimiento WhatsApp', 'WhatsApp Follow-up', 'Acompanhamento WhatsApp', 'Suivi WhatsApp'],
+    ['EJECUTIVO ACTIVO:', 'ACTIVE EXECUTIVE:', 'EXECUTIVO ATIVO:', 'COMMERCIAL ACTIF :'],
+    ['EMBUDO DE VENTAS, AUTOMATIZACIÓN & REPORTES COMERCIALES', 'SALES PIPELINE, AUTOMATION & COMMERCIAL REPORTS', 'FUNIL DE VENDAS, AUTOMAÇÃO E RELATÓRIOS COMERCIAIS', 'PIPELINE DE VENTES, AUTOMATISATION & RAPPORTS'],
+    ['Dashboard de Pipeline, Cierres y Finanzas B2B', 'Pipeline, Closings & B2B Finance Dashboard', 'Dashboard de Funil, Fechamentos e Finanças B2B', 'Tableau de Bord Pipeline, Ventes & Finances B2B'],
+    ['Captar Nuevo Lead / Prospecto', 'Capture New Lead / Prospect', 'Captar Novo Lead / Prospecto', 'Capturer Nouveau Prospect'],
+    ['GENERADOR DE PROPUESTAS PDF', 'PDF PROPOSAL GENERATOR', 'GERADOR DE PROPOSTAS PDF', 'GÉNÉRATEUR DE DEVIS PDF'],
+    ['Emitir Nueva Cotización Formal', 'Issue New Formal Quotation', 'Emitir Novo Orçamento Formal', 'Émettre un Nouveau Devis Formel'],
+    ['Historial y Seguimiento de Cotizaciones', 'Quotations History & Follow-Up', 'Histórico e Acompanhamento de Orçamentos', 'Historique & Suivi des Devis'],
+    ['DIRECTORIO & SEGUIMIENTO EN 1 CLIC', 'DIRECTORY & 1-CLICK FOLLOW-UP', 'DIRETÓRIO E ACOMPANHAMENTO EM 1 CLIQUE', 'ANNUAIRE & SUIVI EN 1 CLIC'],
+    ['Base de Datos de Clientes y Plantillas de Automatización', 'Client Database & Automation Templates', 'Base de Clientes e Modelos de Automação', 'Base Clients & Modèles d’Automatisation'],
+    ['CONTROL FINANCIERO B2B & AGENCIA', 'B2B & AGENCY FINANCIAL CONTROL', 'CONTROLE FINANCEIRO B2B E AGÊNCIA', 'CONTRÔLE FINANCIER B2B & AGENCE'],
+    ['Ingresos por Cierres, Gastos Comerciales, CxC y CxP', 'Revenue from Deals, Commercial Expenses, AR & AP', 'Receitas de Fechamentos, Despesas Comerciais, AR e AP', 'Revenus des Ventes, Dépenses, Créances & Dettes'],
+    ['WHITE-LABEL BRANDING', 'WHITE-LABEL BRANDING', 'IDENTIDADE WHITE-LABEL', 'MARQUE BLANCHE'],
+    ['Personalizar Logo, Empresa y Datos de Cotización', 'Customize Logo, Company & Quotation Details', 'Personalizar Logo, Empresa e Dados de Orçamento', 'Personnaliser Logo, Entreprise & Détails des Devis'],
 
-    // Login & Acceso Rápido
-    ['Portal Corporativo de Acceso para Personal Autorizado', 'Corporate Access Portal for Authorized Staff', 'Portal Corporativo de Acesso para Pessoal Autorizado', 'Portail d’Accès Corporatif pour le Personnel Autorisé'],
-    ['Abrir Portal del Menú Digital & QR (Vista Comensal)', 'Open Digital & QR Menu Portal (Guest View)', 'Abrir Portal do Cardápio Digital e QR (Visão Cliente)', 'Ouvrir le Portail Menu Numérique & QR (Vue Client)'],
-    ['Acceso Rápido Demo (Autocompletar y Entrar en 1 Clic)', 'Quick Demo Access (Autocomplete & Enter in 1 Click)', 'Acesso Rápido Demo (Autocompletar e Entrar em 1 Clique)', 'Accès Rapide Démo (Saisie Auto & Entrer en 1 Clic)'],
-    ['Ingresar al Sistema', 'Sign In to System', 'Entrar no Sistema', 'Se Connecter au Système'],
-    ['Entrar al Sistema Cloud', 'Sign In to Cloud System', 'Entrar no Sistema Cloud', 'Accéder au Système Cloud'],
-    ['📘 Descargar Manual Oficial Kinetix Gastro ERP (PDF)', '📘 Download Official Kinetix Gastro ERP Manual (PDF)', '📘 Baixar Manual Oficial Kinetix Gastro ERP (PDF)', '📘 Télécharger le Manuel Officiel Kinetix Gastro ERP (PDF)'],
-    ['Usuario / Correo Corporativo', 'Username / Corporate Email', 'Usuário / E-mail Corporativo', 'Utilisateur / E-mail Corporatif'],
-    ['PIN de Seguridad / Contraseña', 'Security PIN / Password', 'PIN de Segurança / Senha', 'PIN de Sécurité / Mot de Passe'],
-
-    // Acciones Comunes, POS, Cocina, Inventario, Finanzas y Configuración
-    ['Guardar Configuración', 'Save Configuration', 'Salvar Configuração', 'Enregistrer la Configuration'],
-    ['💾 Guardar Configuración', '💾 Save Configuration', '💾 Salvar Configuração', '💾 Enregistrer la Configuration'],
-    ['💾 Guardar Cambios Ahora', '💾 Save Changes Now', '💾 Salvar Alterações Agora', '💾 Enregistrer les Modifications'],
-    ['Cargar Logo desde PC', 'Upload Logo from PC', 'Carregar Logo do PC', 'Téléverser le Logo depuis le PC'],
-    ['Quitar Logo', 'Remove Logo', 'Remover Logo', 'Supprimer le Logo'],
-    ['Efectivo', 'Cash', 'Dinheiro', 'Espèces'],
-    ['Tarjeta', 'Card', 'Cartão', 'Carte'],
-    ['Transferencia', 'Bank Transfer', 'Transferência', 'Virement'],
-    ['Mixto', 'Split Payment', 'Pagamento Misto', 'Paiement Mixte'],
-    ['Cargar a CxC', 'Charge to AR (Credit)', 'Lançar em Conta (Fiado)', 'Facturer à Crédit'],
-    ['Cobrar y Emitir Ticket Térmico (58mm / 80mm)', 'Charge & Issue Thermal Receipt (58mm / 80mm)', 'Cobrar e Emitir Cupom Térmico (58mm / 80mm)', 'Encaisser & Émettre Ticket Thermique (58mm / 80mm)'],
-    ['Imprimir Ticket (80mm)', 'Print Receipt (80mm)', 'Imprimir Cupom (80mm)', 'Imprimer Ticket (80mm)'],
-    ['Imprimir Ticket (58mm)', 'Print Receipt (58mm)', 'Imprimir Cupom (58mm)', 'Imprimer Ticket (58mm)'],
-    ['Enviar por WhatsApp (1 Clic)', 'Send via WhatsApp (1 Click)', 'Enviar por WhatsApp (1 Clique)', 'Envoyer par WhatsApp (1 Clic)'],
-    ['✅ Marcar Orden Lista / Entregada', '✅ Mark Order Ready / Delivered', '✅ Marcar Pedido Pronto / Entregue', '✅ Marquer Commande Prête / Livrée'],
-    ['Iniciar Preparación', 'Start Preparation', 'Iniciar Preparo', 'Démarrer la Préparation'],
-    ['Editar Orden', 'Edit Order', 'Editar Pedido', 'Modifier la Commande'],
-    ['Personalización del Sistema y Datos del Restaurante / Cafetería', 'System Customization & Restaurant / Cafe Profile', 'Personalização do Sistema e Dados do Restaurante / Cafeteria', 'Personnalisation du Système & Profil du Restaurant / Café'],
-    ['Identidad de Marca, Logo y Parámetros del Negocio', 'Brand Identity, Logo & Business Parameters', 'Identidade da Marca, Logo e Parâmetros do Negócio', 'Identité de Marque, Logo & Paramètres de l’Entreprise'],
-    ['Personalizar Logo, Nombre y Especialidad', 'Customize Logo, Name & Specialty', 'Personalizar Logo, Nome e Especialidade', 'Personnaliser Logo, Nom & Spécialité'],
-    ['Personalizar Logo, Empresa y Datos de Cotización', 'Customize Logo, Company & Quotation Details', 'Personalizar Logo, Empresa e Dados de Orçamento', 'Personnaliser Logo, Entreprise & Détails des Devis']
+    // === SUBTÍTULOS / ETIQUETAS COMPARTIDAS & TABLAS ===
+    ['Menú Digital QR', 'Digital QR Menu', 'Cardápio Digital QR', 'Menu Numérique QR'],
+    ['Mapa de Mesas', 'Table Map', 'Mapa de Mesas', 'Plan de Tables'],
+    ['Facturación POS & Recetas', 'POS Billing & Recipes', 'Faturamento PDV e Receitas', 'Facturation PDV & Recettes'],
+    ['Monitor de Cocina (KDS)', 'Kitchen Display Monitor (KDS)', 'Monitor de Cozinha (KDS)', 'Moniteur Cuisine (KDS)'],
+    ['Acciones', 'Actions', 'Ações', 'Actions'],
+    ['Concepto', 'Concept / Description', 'Conceito', 'Libellé'],
+    ['Categoría', 'Category', 'Categoria', 'Catégorie'],
+    ['Proveedor', 'Supplier', 'Fornecedor', 'Fournisseur'],
+    ['Cliente', 'Client', 'Cliente', 'Client'],
+    ['Fecha y Hora', 'Date & Time', 'Data e Hora', 'Date & Heure'],
+    ['Fecha', 'Date', 'Data', 'Date'],
+    ['Monto Total', 'Total Amount', 'Valor Total', 'Montant Total'],
+    ['Saldo Pendiente', 'Pending Balance', 'Saldo Pendente', 'Solde Dû'],
+    ['Estado', 'Status', 'Status', 'Statut'],
+    ['Cancelar', 'Cancel', 'Cancelar', 'Annuler'],
+    ['Cerrar', 'Close', 'Fechar', 'Fermer'],
+    ['Editar', 'Edit', 'Editar', 'Modifier'],
+    ['Anular', 'Void', 'Cancelar', 'Annuler'],
+    ['Hoy', 'Today', 'Hoje', 'Aujourd’hui'],
+    ['Este Mes', 'This Month', 'Este Mês', 'Ce Mois'],
+    ['Todo', 'All', 'Tudo', 'Tout'],
+    ['Desde:', 'From:', 'De:', 'Du :'],
+    ['Hasta:', 'To:', 'Até:', 'Au :'],
+    ['Total', 'Total', 'Total', 'Total'],
+    ['Subir Logo de tu Clínica / Negocio', 'Upload Clinic / Business Logo', 'Enviar Logo da Clínica / Negócio', 'Importer Logo Clinique / Entreprise'],
+    ['Logo de tu Negocio', 'Your Business Logo', 'Logo do Seu Negócio', 'Logo de Votre Entreprise'],
+    ['Logo de tu Empresa', 'Your Company Logo', 'Logo da Sua Empresa', 'Logo de Votre Entreprise'],
+    ['Nombre Comercial de la Empresa', 'Business Commercial Name', 'Nome Comercial da Empresa', 'Nom Commercial de l’Entreprise'],
+    ['Nombre de la Clínica / Salón / Taller', 'Clinic / Salon / Workshop Name', 'Nome da Clínica / Salão / Oficina', 'Nom de la Clinique / Salon / Atelier'],
+    ['Nombre de tu Empresa / Agencia', 'Your Company / Agency Name', 'Nome da Sua Empresa / Agência', 'Nom de Votre Entreprise / Agence'],
+    ['Especialidad o Giro Principal', 'Specialty or Main Industry', 'Especialidade ou Ramo Principal', 'Spécialité ou Secteur Principal'],
+    ['Giro del Comercio (Plantilla Rápida)', 'Store Industry (Quick Template)', 'Ramo do Comércio (Modelo Rápido)', 'Secteur d’Activité (Modèle Rapide)'],
+    ['Símbolo de Moneda', 'Currency Symbol', 'Símbolo da Moeda', 'Symbole Devise']
   ];
 
-  // Construir mapas rápidos de traducción a partir de la tabla en español
+  // Ordenar por longitud descendente para que frases largas se reemplacen antes que subfrases
+  UI_PHRASE_TABLE.sort((a, b) => b[0].length - a[0].length);
+
   const EXACT_TRANSLATION_MAP = { en: new Map(), pt: new Map(), fr: new Map() };
   UI_PHRASE_TABLE.forEach(row => {
     const [esText, enText, ptText, frText] = row;
@@ -360,6 +661,46 @@
     EXACT_TRANSLATION_MAP.pt.set(esText, ptText);
     EXACT_TRANSLATION_MAP.fr.set(esText, frText);
   });
+
+  // Reglas dinámicas para textos con números/variables incrustadas (ej. "Mesa 02", "6 Abiertas", "Usuario #1/5", "4 Activas")
+  function applyDynamicPatterns(text, targetLang) {
+    if (targetLang === 'es' || !text) return text;
+    let out = text;
+
+    if (targetLang === 'en') {
+      out = out
+        .replace(/\bMesa\s+(\d+|VIP|QR)/g, 'Table $1')
+        .replace(/\bMesas\b/g, 'Tables')
+        .replace(/\bUsuario #(\d+\/\d+)/g, 'User #$1')
+        .replace(/\bUsuario (\d+) —/g, 'User $1 —')
+        .replace(/(\d+)\s+Abiertas\b/g, '$1 Open')
+        .replace(/(\d+)\s+Activas\b/g, '$1 Active')
+        .replace(/(\d+)\s+¡Listas!/g, '$1 Ready!')
+        .replace(/Detalle de Consumo en /g, 'Order Details for ')
+        .replace(/\bSaldo Mesa:/g, 'Table Balance:')
+        .replace(/\bPersonaliza también el Mensaje al Pie/g, 'Also customize the Footer Message');
+    } else if (targetLang === 'pt') {
+      out = out
+        .replace(/\bUsuario #(\d+\/\d+)/g, 'Usuário #$1')
+        .replace(/\bUsuario (\d+) —/g, 'Usuário $1 —')
+        .replace(/(\d+)\s+Abiertas\b/g, '$1 Abertas')
+        .replace(/(\d+)\s+Activas\b/g, '$1 Ativas')
+        .replace(/(\d+)\s+¡Listas!/g, '$1 Prontas!')
+        .replace(/Detalle de Consumo en /g, 'Detalhes do Consumo na ');
+    } else if (targetLang === 'fr') {
+      out = out
+        .replace(/\bMesa\s+(\d+|VIP|QR)/g, 'Table $1')
+        .replace(/\bMesas\b/g, 'Tables')
+        .replace(/\bUsuario #(\d+\/\d+)/g, 'Utilisateur #$1')
+        .replace(/\bUsuario (\d+) —/g, 'Utilisateur $1 —')
+        .replace(/(\d+)\s+Abiertas\b/g, '$1 Ouvertes')
+        .replace(/(\d+)\s+Activas\b/g, '$1 Actives')
+        .replace(/(\d+)\s+¡Listas!/g, '$1 Prêtes !')
+        .replace(/Detalle de Consumo en /g, 'Détails de Commande ')
+        .replace(/\bSaldo Mesa:/g, 'Solde Table :');
+    }
+    return out;
+  }
 
   function translateTextString(origEsText, targetLang) {
     if (!origEsText || targetLang === 'es') return origEsText;
@@ -373,45 +714,78 @@
       return origEsText.replace(trimmed, map.get(trimmed));
     }
 
-    // Reemplazo parcial para cadenas compuestas
+    // Reemplazo por coincidencia de subcadenas (ordenadas de mayor a menor longitud)
     let out = origEsText;
+    const idx = targetLang === 'en' ? 1 : targetLang === 'pt' ? 2 : 3;
     for (let i = 0; i < UI_PHRASE_TABLE.length; i++) {
       const esPhrase = UI_PHRASE_TABLE[i][0];
-      if (esPhrase.length > 5 && out.includes(esPhrase)) {
-        const idx = targetLang === 'en' ? 1 : targetLang === 'pt' ? 2 : 3;
+      if (esPhrase.length >= 4 && out.includes(esPhrase)) {
         out = out.split(esPhrase).join(UI_PHRASE_TABLE[i][idx]);
       }
     }
-    return out;
+
+    return applyDynamicPatterns(out, targetLang);
+  }
+
+  function translateAttribute(el, attrName) {
+    if (!el || !el.hasAttribute(attrName)) return;
+    const storeKey = '__kinetixOrigAttr_' + attrName;
+    const lastKey = '__kinetixLastAttr_' + attrName;
+    const cur = el.getAttribute(attrName) || '';
+
+    if (typeof el[storeKey] === 'undefined' || cur !== el[lastKey]) {
+      el[storeKey] = cur;
+    }
+
+    const baseEs = el[storeKey];
+    const nextVal = currentLang === 'es' ? baseEs : translateTextString(baseEs, currentLang);
+    el[lastKey] = nextVal;
+    if (cur !== nextVal) {
+      el.setAttribute(attrName, nextVal);
+    }
   }
 
   function translateDOMTree(root) {
     if (!root) return;
+
+    // 1. Nodos de texto (respetando actualizaciones dinámicas de React)
     const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
     let node;
     while ((node = walker.nextNode())) {
       const parent = node.parentElement;
       if (!parent) continue;
+      if (parent.closest && (parent.closest('#kinetix-cloud-guard-bar') || parent.closest('#kinetix-settings-i18n-card') || parent.closest('#kinetix-cloud-device-modal') || parent.closest('#kinetix-demo-limit-modal') || parent.closest('#kinetix-security-lockout-modal'))) {
+        continue;
+      }
       const tag = parent.tagName;
       if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'CODE' || tag === 'TEXTAREA') continue;
 
-      if (typeof node.__kinetixOrigEs === 'undefined') {
-        const val = node.nodeValue || '';
-        if (val.trim().length > 0) {
-          node.__kinetixOrigEs = val;
-        }
+      const curVal = node.nodeValue || '';
+      if (!curVal.trim()) continue;
+
+      // Si React modificó el texto desde nuestra última escritura, actualizar la base original
+      if (typeof node.__kinetixOrigEs === 'undefined' || curVal !== node.__kinetixLastOut) {
+        node.__kinetixOrigEs = curVal;
       }
-      if (node.__kinetixOrigEs) {
-        const nextVal = currentLang === 'es'
-          ? node.__kinetixOrigEs
-          : translateTextString(node.__kinetixOrigEs, currentLang);
-        if (node.nodeValue !== nextVal) {
-          node.nodeValue = nextVal;
-        }
+
+      const nextVal = currentLang === 'es'
+        ? node.__kinetixOrigEs
+        : translateTextString(node.__kinetixOrigEs, currentLang);
+
+      node.__kinetixLastOut = nextVal;
+      if (curVal !== nextVal) {
+        node.nodeValue = nextVal;
       }
     }
 
-    // Sincronizar todos los selectores de idioma que existan en la página o en Configuración
+    // 2. Placeholders, tooltips (title) y aria-label
+    root.querySelectorAll('input[placeholder], textarea[placeholder], [title], [aria-label]').forEach(el => {
+      if (el.hasAttribute('placeholder')) translateAttribute(el, 'placeholder');
+      if (el.hasAttribute('title')) translateAttribute(el, 'title');
+      if (el.hasAttribute('aria-label')) translateAttribute(el, 'aria-label');
+    });
+
+    // 3. Sincronizar todos los selectores de idioma
     document.querySelectorAll('[data-kinetix-lang-select]').forEach(sel => {
       if (sel.value !== currentLang) {
         sel.value = currentLang;
@@ -435,19 +809,24 @@
     }
     injectSettingsLanguageSelector();
 
+    // Sincronizar con la ventana padre del portal si está dentro de un iframe
+    try {
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({ type: 'KINETIX_LANG_SYNC', lang: clean }, '*');
+      }
+    } catch (e) {}
+
     try {
       window.dispatchEvent(new CustomEvent('kinetix:langchange', { detail: { lang: clean } }));
     } catch (e) {}
   }
 
-  // Escuchar cambios de idioma enviados por postMessage desde el portal padre
   window.addEventListener('message', function (e) {
     if (e.data && e.data.type === 'KINETIX_SET_LANG' && e.data.lang) {
       setGlobalLanguage(e.data.lang);
     }
   });
 
-  // Inyectar selector de idioma dentro de la pestaña de Configuración (#tab-settings) en sistemas HTML (POS, Clínica, CRM)
   function injectSettingsLanguageSelector() {
     const settingsTab = document.getElementById('tab-settings');
     if (!settingsTab) return;
@@ -488,7 +867,6 @@
       setGlobalLanguage(this.value);
     });
 
-    // Insertar justo después del encabezado de configuración
     const headerDiv = container.firstElementChild;
     if (headerDiv && headerDiv.nextSibling) {
       container.insertBefore(card, headerDiv.nextSibling);
@@ -1000,7 +1378,6 @@
       <span id="kinetix-cloud-guard-badge-text">${t.cloudPill(1, MAX_AUTHORIZED_DEVICES)}</span>
     `;
 
-    // Selector rápido de idioma junto a la píldora Cloud PWA
     const langSel = document.createElement('select');
     langSel.id = 'kinetix-cloud-guard-lang-pill';
     langSel.setAttribute('data-kinetix-lang-select', '1');
@@ -1024,8 +1401,7 @@
   }
 
   // ========================================================
-  // 3. KINETIX DEMO SECURITY & EPHEMERAL GUARD v5.0
-  // Límite estricto de 5 acciones en modo prueba
+  // 3. KINETIX DEMO SECURITY & EPHEMERAL GUARD v5.5
   // ========================================================
   const DEMO_MAX_ACTIONS = 5;
 
@@ -1197,14 +1573,13 @@
     injectSettingsLanguageSelector();
     translateDOMTree(document.body);
 
-    // Observar cambios dinámicos en el DOM (React / pestañas / modales) para traducir en tiempo real
     try {
       const observer = new MutationObserver(function () {
         if (currentLang !== 'es') {
           scheduleDOMTranslation();
         }
       });
-      observer.observe(document.body, { childList: true, subtree: true });
+      observer.observe(document.body, { childList: true, subtree: true, characterData: true });
     } catch (e) {}
 
     const params = new URLSearchParams(window.location.search);
