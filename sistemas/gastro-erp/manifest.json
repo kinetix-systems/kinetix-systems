@@ -1,0 +1,20 @@
+{
+  "name": "Sistema de Gestión Integral para Restaurantes & Cafeterías — Kinetix Gastro ERP Pro",
+  "short_name": "Kinetix Gastro ERP",
+  "description": "Powered by Kinetix.ops — ERP + POS + KDS Cloud & PWA para Restaurantes, Cafeterías, Bares y Food Trucks.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0B0F19",
+  "theme_color": "#10B981",
+  "categories": ["business", "food", "finance", "productivity"],
+  "icons": [
+    {
+      "src": "./kinetix-gastro-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
