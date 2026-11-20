@@ -1,0 +1,31 @@
+{
+  "name": "Kinetix.ops — Intelligent Logistics ERP + TMS + WMS Pro",
+  "short_name": "Kinetix Logistics ERP",
+  "description": "Sistema ERP + TMS + WMS Integral de Gestión de Transporte, Casillero Internacional y Última Milla. Powered by Kinetix.ops.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0B0F19",
+  "theme_color": "#10B981",
+  "icons": [
+    {
+      "src": "./kinetix-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./kinetix-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./kinetix-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

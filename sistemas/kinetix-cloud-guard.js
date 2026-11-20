@@ -648,7 +648,30 @@
     ['Nombre de tu Empresa / Agencia', 'Your Company / Agency Name', 'Nome da Sua Empresa / Agência', 'Nom de Votre Entreprise / Agence'],
     ['Especialidad o Giro Principal', 'Specialty or Main Industry', 'Especialidade ou Ramo Principal', 'Spécialité ou Secteur Principal'],
     ['Giro del Comercio (Plantilla Rápida)', 'Store Industry (Quick Template)', 'Ramo do Comércio (Modelo Rápido)', 'Secteur d’Activité (Modèle Rapide)'],
-    ['Símbolo de Moneda', 'Currency Symbol', 'Símbolo da Moeda', 'Symbole Devise']
+    ['Símbolo de Moneda', 'Currency Symbol', 'Símbolo da Moeda', 'Symbole Devise'],
+
+    // === GESTIÓN DE TRANSPORTE, LOGÍSTICA & CASILLEROS (LOGISTICS ERP + TMS + WMS) ===
+    ['Punto de Venta (POS) & Recepción / Guías', 'POS Billing, Receiving & Airway Bills', 'PDV, Recepção e Guias de Envio', 'PDV, Réception & Bordereaux'],
+    ['Inventario Bodega, Casilleros & Stock (WMS)', 'Warehouse, Lockers & Stock (WMS)', 'Estoque Galpão, Lockers e Insumos (WMS)', 'Entrepôt, Casiers & Stock (WMS)'],
+    ['Rastreo End-to-End & Última Milla (TMS)', 'End-to-End Tracking & Last Mile (TMS)', 'Rastreamento Ponta a Ponta e Última Milha (TMS)', 'Suivi Bout-en-Bout & Dernier Kilomètre (TMS)'],
+    ['Facturas & Corte de Caja', 'Invoices & Cash Close', 'Faturas e Fechamento de Caixa', 'Factures & Clôture de Caisse'],
+    ['Proveedores & Agentes de Carga', 'Carriers, Freight Forwarders & Agents', 'Fornecedores e Agentes de Carga', 'Fournisseurs & Transitaires'],
+    ['4 Usuarios, Roles & 3 Sucursales', '4 Users, Roles & 3 Branches', '4 Usuários, Perfis e 3 Filiais', '4 Utilisateurs, Rôles & 3 Agences'],
+    ['Personalizar Marca & Seguridad', 'Customize Brand & Security', 'Personalizar Marca e Segurança', 'Personnaliser Marque & Sécurité'],
+    ['Manual del Sistema & Procesos (HD)', 'System & Operations Manual (HD)', 'Manual do Sistema e Processos (HD)', 'Manuel du Système & Processus (HD)'],
+    ['Portal Público de Rastreo Rápido (Sin Login)', 'Public Fast Package Tracking Portal (No Login)', 'Portal Público de Rastreamento (Sem Login)', 'Portail Public de Suivi Colis (Sans Connexion)'],
+    ['Rastreo Público', 'Public Tracking', 'Rastreio Público', 'Suivi Public'],
+    ['ERP + TMS + WMS • Casillero Internacional & Última Milla', 'ERP + TMS + WMS • International Courier & Last Mile', 'ERP + TMS + WMS • Courier Internacional e Última Milha', 'ERP + TMS + WMS • Fret International & Dernier Kilomètre'],
+    ['Powered by Kinetix.ops — Intelligent Logistics ERP Pro', 'Powered by Kinetix.ops — Intelligent Logistics ERP Pro', 'Powered by Kinetix.ops — Intelligent Logistics ERP Pro', 'Powered by Kinetix.ops — Intelligent Logistics ERP Pro'],
+    ['Consolidado Global (3 Sedes)', 'Global Consolidated (3 Branches)', 'Consolidado Global (3 Filiais)', 'Consolidé Global (3 Agences)'],
+    ['Acceso Rápido a los 4 Usuarios Licenciados (RBAC):', 'Quick Access to the 4 Licensed Users (RBAC):', 'Acesso Rápido aos 4 Usuários Licenciados (RBAC):', 'Accès Rapide aux 4 Utilisateurs Licenciés (RBAC) :'],
+    ['Personalización del Sistema y Datos de la Empresa', 'System Customization & Logistics Company Profile', 'Personalização do Sistema e Dados da Transportadora', 'Personnalisation du Système & Profil Entreprise'],
+    ['Actualiza instantáneamente encabezados, tickets térmicos 58mm/80mm, etiquetas QR y portal público.', 'Instantly updates headers, 58mm/80mm thermal receipts, QR labels, and public tracking portal.', 'Atualiza instantaneamente cabeçalhos, cupons 58mm/80mm, etiquetas QR e portal público.', 'Met à jour en-têtes, tickets 58mm/80mm, étiquettes QR et portail public en direct.'],
+    ['Nombre Comercial de la Agencia de Envíos / Empresa *', 'Courier / Logistics Agency Commercial Name *', 'Nome Comercial da Transportadora / Agência *', 'Nom Commercial de l’Agence de Transport *'],
+    ['Identidad Comercial y Facturación', 'Brand Identity & Billing Rates', 'Identidade Comercial e Tarifas', 'Identité Commerciale & Tarification'],
+    ['Configuración White-Label & Identidad Corporativa', 'White-Label Config & Corporate Identity', 'Configuração White-Label e Identidade Corporativa', 'Configuration Marque Blanche & Identité'],
+    ['Confirmación de Seguridad — Cerrar Sesión', 'Security Confirmation — Log Out', 'Confirmação de Segurança — Sair', 'Confirmation de Sécurité — Déconnexion'],
+    ['Confirmar y Salir', 'Confirm & Log Out', 'Confirmar e Sair', 'Confirmer & Quitter']
   ];
 
   // Ordenar por longitud descendente para que frases largas se reemplacen antes que subfrases
@@ -900,11 +923,15 @@
   } else if (pathName.includes('gym')) {
     appKey = 'gym';
     appTitle = 'Kinetix Gym ERP Pro Cloud';
+  } else if (pathName.includes('logistics') || pathName.includes('transporte') || pathName.includes('courier')) {
+    appKey = 'logistics';
+    appTitle = 'Kinetix Logistics ERP + TMS + WMS Pro Cloud';
   }
 
   const MAX_DEVICES_BY_APP = {
     gastro: 5,
     pos: 4,
+    logistics: 4,
     gym: 4,
     med: 4,
     crm: 4
@@ -914,6 +941,7 @@
   const OFFICIAL_CHECKOUT_URLS = {
     gastro: 'https://www.paypal.com/ncp/payment/U6STW4GVVER82',
     pos: 'https://www.paypal.com/ncp/payment/6N33BA6V5CXM4',
+    logistics: 'https://kinetix-systems.github.io/kinetix-systems/?comprar=logistics',
     gym: 'https://www.paypal.com/ncp/payment/F9BEG5X5AJWR8',
     med: 'https://www.paypal.com/ncp/payment/D7L3CB8AWY75Y',
     crm: 'https://www.paypal.com/ncp/payment/5LX3ZS2TR4A22'
@@ -922,6 +950,7 @@
   const MAIN_STORAGE_KEYS = {
     gastro: 'kinetix_gastro_erp_pro_v5_state',
     pos: 'KINETIX_POS_SUITE_V3',
+    logistics: 'kinetix_ops_erp_pro_v4_state',
     gym: 'kinetix_gym_erp_pro_v1',
     med: 'KINETIX_MED_SUITE_V3',
     crm: 'KINETIX_CRM_SUITE_V3'

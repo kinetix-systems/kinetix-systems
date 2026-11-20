@@ -288,13 +288,16 @@
         <div class="mb-8 p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
           <div class="flex flex-wrap items-center gap-1.5" id="marketplace-category-pills">
             <button type="button" onclick="filterMarketplace('all', this)" class="mkt-pill px-3.5 py-2 rounded-xl text-xs font-extrabold transition cursor-pointer bg-emerald-400 text-slate-950 shadow">
-              Todos (5 Sistemas)
+              Todos (6 Sistemas)
             </button>
             <button type="button" onclick="filterMarketplace('gastro', this)" class="mkt-pill px-3.5 py-2 rounded-xl text-xs font-bold transition cursor-pointer bg-slate-950 text-slate-300 hover:text-white border border-slate-800">
               🍽️ Restaurantes &amp; KDS
             </button>
             <button type="button" onclick="filterMarketplace('pos', this)" class="mkt-pill px-3.5 py-2 rounded-xl text-xs font-bold transition cursor-pointer bg-slate-950 text-slate-300 hover:text-white border border-slate-800">
               🛒 Comercios &amp; POS
+            </button>
+            <button type="button" onclick="filterMarketplace('logistics', this)" class="mkt-pill px-3.5 py-2 rounded-xl text-xs font-bold transition cursor-pointer bg-slate-950 text-slate-300 hover:text-white border border-slate-800">
+              🚚 Logística &amp; Transporte
             </button>
             <button type="button" onclick="filterMarketplace('gym', this)" class="mkt-pill px-3.5 py-2 rounded-xl text-xs font-bold transition cursor-pointer bg-slate-950 text-slate-300 hover:text-white border border-slate-800">
               🏋️ Gimnasios &amp; Fitness
@@ -746,9 +749,94 @@
           </div>
 
           <!-- =====================================================================
-               TARJETA 6: PRÓXIMOS SISTEMAS DEL MARKETPLACE & SOLICITUD A MEDIDA
+               SISTEMA 6 (NUEVO): TRANSPORTE, LOGÍSTICA, CASILLERO & ÚLTIMA MILLA (ERP + TMS + WMS)
                ===================================================================== -->
-          <div data-category="custom" data-keywords="logistica transporte casillero hoteles talleres colegios inmobiliarias medida" class="mkt-card glass-card rounded-3xl p-5 flex flex-col justify-between border-2 border-dashed border-slate-700/80 hover:border-emerald-500/50 relative overflow-hidden">
+          <div data-category="logistics" data-keywords="transporte logistica courier casillero internacional encomiendas paqueteria carga aerea maritima aduana bodega tms wms rastreo guias ultima milla flotas" class="mkt-card glass-card rounded-3xl p-5 flex flex-col justify-between border-2 border-emerald-500/45 relative overflow-hidden">
+            <div class="space-y-3.5">
+              <div class="flex items-center justify-between gap-2">
+                <div class="w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/40 flex items-center justify-center text-emerald-400 shrink-0">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/>
+                  </svg>
+                </div>
+                <span class="bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 font-mono font-bold text-[10px] px-2.5 py-1 rounded-full flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                  <span>NUEVO · LOGÍSTICA, TMS &amp; WMS</span>
+                </span>
+              </div>
+
+              <div>
+                <span class="text-[10px] font-mono uppercase text-emerald-400 font-bold block leading-relaxed">Agencias de Carga · Couriers · Casilleros · Encomiendas · Paquetería · Mudanzas · Última Milla</span>
+                <h3 class="text-lg font-black text-white leading-snug mt-1">Sistema ERP + TMS + WMS para Gestión de Transporte, Casilleros Internacionales y Encomiendas</h3>
+              </div>
+
+              <!-- Imagen Vista Previa -->
+              <div class="relative rounded-2xl overflow-hidden border border-emerald-500/30 group shadow-lg">
+                <img src="preview_logistics.jpg" alt="Vista previa Kinetix Logistics ERP + TMS + WMS" class="w-full h-36 object-cover object-center rounded-2xl group-hover:scale-105 transition-transform duration-300" />
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-transparent to-transparent pointer-events-none"></div>
+                <button onclick="openLiveDemo('logistics')" class="absolute bottom-2 right-2 px-2.5 py-1 rounded-xl bg-emerald-400 text-slate-950 font-extrabold text-[11px] shadow-lg hover:bg-emerald-300 transition flex items-center gap-1 cursor-pointer">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                  <span>Ver Demo en Vivo</span>
+                </button>
+              </div>
+
+              <!-- PRECIO Y LLAMADO A LA ACCIÓN INMEDIATO DEBAJO DE LA IMAGEN -->
+              <div class="p-3.5 rounded-2xl bg-slate-950/90 border border-emerald-500/35 space-y-2.5">
+                <div class="flex items-center justify-between gap-2">
+                  <div>
+                    <span class="text-[10px] text-slate-400 uppercase font-bold block">Licencia Cloud Vitalicia + PWA</span>
+                    <span class="text-[11px] text-emerald-400 font-bold">3 Sucursales · 4 Usuarios RBAC</span>
+                  </div>
+                  <div class="text-right">
+                    <div class="flex items-center justify-end gap-1">
+                      <span class="text-[11px] text-slate-500 line-through font-mono">$189 USD</span>
+                      <span class="text-[9px] font-extrabold px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400">LANZAMIENTO</span>
+                    </div>
+                    <span class="text-2xl font-black text-white font-mono leading-none">$89 <span class="text-[10px] font-normal text-slate-400">USD</span></span>
+                  </div>
+                </div>
+                <div class="grid grid-cols-1 gap-1.5">
+                  <button onclick="openCheckoutModal('logistics')" class="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-emerald-400 to-teal-400 text-slate-950 font-black text-xs hover:opacity-95 transition shadow-md shadow-emerald-500/20 flex items-center justify-center gap-1.5 cursor-pointer">
+                    <span>⚡ Comprar y Activar Cloud + PWA ($89 USD)</span>
+                  </button>
+                  <button onclick="openLiveDemo('logistics')" class="w-full py-2 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-emerald-300 border border-emerald-500/30 text-[11px] font-bold transition flex items-center justify-center gap-1.5 cursor-pointer">
+                    <span>▶ Probar Demo en Vivo</span>
+                  </button>
+                </div>
+              </div>
+
+              <p data-i18n="card_logistics_desc" class="text-slate-300 text-xs leading-relaxed">
+                Suite integral para <strong>agencias de carga aérea/marítima, casilleros internacionales, couriers y flotas de encomiendas</strong>. Controla guías QR, manifiestos, bodega, facturación POS y entrega con firma digital.
+              </p>
+
+              <div data-i18n="card_logistics_tags" class="flex flex-wrap gap-1 text-[10px]">
+                <span class="px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800 text-emerald-300">Couriers &amp; Casilleros</span>
+                <span class="px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800 text-emerald-300">Carga Aérea &amp; Marítima</span>
+                <span class="px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800 text-slate-300">Última Milla &amp; Flotas</span>
+                <span class="px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800 text-slate-300">Aduana &amp; Manifiestos</span>
+              </div>
+
+              <ul data-i18n="card_logistics_list" class="space-y-1.5 text-[11px] text-slate-200 border-t border-slate-800/90 pt-2.5">
+                <li class="flex items-start gap-2">
+                  <span class="text-emerald-400 font-bold">✓</span>
+                  <span><strong>Rastreo TMS de 8 Etapas + Portal Público:</strong> Pre-alertas, recepción origen, manifiestos, aduana y tracking QR para tus clientes.</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-emerald-400 font-bold">✓</span>
+                  <span><strong>Escudo Anti-Fraude &amp; Bodega WMS:</strong> Bloquea Order IDs o trackings duplicados, calcula peso real vs. volumétrico y estanterías.</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-emerald-400 font-bold">✓</span>
+                  <span><strong>POS Dual, Corte Z &amp; Firma Táctil POD:</strong> Cobro por libra, tickets térmicos, CxC/CxP y entrega puerta a puerta con foto y PIN.</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- =====================================================================
+               TARJETA 7: PRÓXIMOS SISTEMAS DEL MARKETPLACE & SOLICITUD A MEDIDA
+               ===================================================================== -->
+          <div data-category="custom" data-keywords="hoteles talleres colegios inmobiliarias medida" class="mkt-card glass-card rounded-3xl p-5 flex flex-col justify-between border-2 border-dashed border-slate-700/80 hover:border-emerald-500/50 relative overflow-hidden">
             <div class="space-y-3.5">
               <div class="flex items-center justify-between gap-2">
                 <div class="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-emerald-400 shrink-0">
@@ -762,14 +850,14 @@
               </div>
 
               <div>
-                <span class="text-[10px] font-mono uppercase text-emerald-400 font-bold block">Logística · Hoteles · Talleres · Colegios</span>
+                <span class="text-[10px] font-mono uppercase text-emerald-400 font-bold block">Hoteles · Talleres · Colegios · Proyectos</span>
                 <h3 class="text-lg font-black text-white leading-snug mt-0.5">¿Buscas Otro Giro de Negocio o un Sistema a Tu Medida?</h3>
               </div>
 
               <div class="p-4 rounded-2xl bg-gradient-to-br from-slate-900 via-slate-950 to-emerald-950/30 border border-slate-800 h-36 flex flex-col justify-center items-center text-center space-y-1.5">
                 <span data-i18n="card_custom_soon_lbl" class="text-xs font-mono uppercase text-emerald-400 font-bold">Próximos Lanzamientos Kinetix.ops</span>
                 <p data-i18n="card_custom_soon_txt" class="text-xs text-slate-300 font-semibold">
-                  🚚 Logística &amp; Casilleros (TMS/WMS) · 🏨 Hoteles &amp; Reservas · 🔧 Talleres Automotrices · 🎓 Colegios
+                  🏨 Hoteles &amp; Reservas · 🔧 Talleres Automotrices · 🎓 Colegios &amp; Academias · 🏗️ Constructoras
                 </p>
               </div>
 
@@ -1123,6 +1211,7 @@
     const HOTMART_LINKS = {
       gastro: "https://pay.hotmart.com/I108446645M", // Enlace Hotmart $89 USD - Restaurantes & Cafeterías (Gastro ERP + POS + KDS)
       pos: "https://pay.hotmart.com/I108446645M", // Enlace Oficial Hotmart $89 USD - POS & Inventarios (ID 8945055)
+      logistics: "https://pay.hotmart.com/I108446645M", // Enlace Hotmart $89 USD - Transporte, Logística & Casilleros (ERP + TMS + WMS)
       gym: "https://pay.hotmart.com/K108327655X", // Enlace Hotmart $89 USD - Gimnasios & Fitness ERP
       med: "https://pay.hotmart.com/K108327655X", // Se actualizará al crear producto Clínica en Hotmart
       crm: "https://pay.hotmart.com/K108327655X"  // Se actualizará al crear producto CRM en Hotmart
@@ -1131,6 +1220,7 @@
     const PAYPAL_LINKS = {
       gastro: "https://www.paypal.com/ncp/payment/U6STW4GVVER82", // Enlace PayPal $89 USD - Kinetix Gastro ERP + POS + KDS Pro (Licencia 5 Usuarios)
       pos: "https://www.paypal.com/ncp/payment/6N33BA6V5CXM4", // Enlace PayPal $89 USD - Sistema Facturación, POS e Inventarios
+      logistics: "", // Pendiente enlace oficial PayPal de Gestión de Transporte (se conectará en cuanto nos lo compartas)
       gym: "https://www.paypal.com/ncp/payment/F9BEG5X5AJWR8", // Enlace PayPal $89 USD - Kinetix Gym ERP Pro
       med: "https://www.paypal.com/ncp/payment/D7L3CB8AWY75Y", // Enlace PayPal $89 USD - Sistema Expedientes Clínicos, Consultas y Citas
       crm: "https://www.paypal.com/ncp/payment/5LX3ZS2TR4A22"  // Enlace PayPal $89 USD - Sistema CRM, Cotizador y Automatización
@@ -1154,6 +1244,15 @@
         maxUsers: 4,
         demoUrl: 'sistemas/kinetix-pos-inventario.html',
         badge: 'POS & Inventario Cloud'
+      },
+      logistics: {
+        id: 'logistics',
+        name: 'Sistema ERP + TMS + WMS para Gestión de Transporte, Logística y Casilleros Internacionales',
+        shortDesc: 'Aplicación Web en la Nube (PWA) para couriers, agencias de carga aérea/marítima, casilleros internacionales y flotas de última milla. Incluye 8 etapas TMS, bodega WMS anti-duplicidad, POS bimoneda, portal público QR, 3 sucursales y 4 usuarios por roles (4 dispositivos simultáneos).',
+        price: 89,
+        maxUsers: 4,
+        demoUrl: 'sistemas/logistics-erp/index.html',
+        badge: 'Logística, TMS & WMS Cloud'
       },
       gym: {
         id: 'gym',
@@ -1254,7 +1353,7 @@
       modal.classList.remove('flex');
       // Restablecer automticamente el demo al salir para que la prxima visita inicie 100% limpia
       try {
-        ['gastro', 'pos', 'gym', 'med', 'crm'].forEach(function(k) {
+        ['gastro', 'pos', 'logistics', 'gym', 'med', 'crm'].forEach(function(k) {
           sessionStorage.removeItem('KINETIX_DEMO_ACTIONS_' + k);
           sessionStorage.removeItem('KINETIX_DEMO_ACTIVE_' + k);
         });
@@ -1263,6 +1362,8 @@
         localStorage.removeItem('KINETIX_CRM_SUITE_V3');
         localStorage.removeItem('kinetix_gym_erp_pro_v1');
         localStorage.removeItem('kinetix_gastro_erp_pro_v5_state');
+        localStorage.removeItem('kinetix_ops_erp_pro_v4_state');
+        localStorage.removeItem('kinetix_ops_session_user_id');
       } catch(e) {}
     }
 
@@ -1323,7 +1424,19 @@
       if (pkgLbl) pkgLbl.textContent = pkgTxt[currentPortalLang] || pkgTxt.es;
       if (devBadge) devBadge.textContent = devTxt[currentPortalLang] || devTxt.es;
       document.getElementById('chk-hotmart-btn').href = HOTMART_LINKS[key] || HOTMART_LINKS.pos;
-      document.getElementById('chk-paypal-btn').href = PAYPAL_LINKS[key] || PAYPAL_LINKS.pos;
+      const ppBtn = document.getElementById('chk-paypal-btn');
+      const ppUrl = PAYPAL_LINKS[key];
+      if (ppUrl) {
+        ppBtn.href = ppUrl;
+        ppBtn.onclick = null;
+        ppBtn.classList.remove('opacity-70');
+      } else {
+        ppBtn.href = '#';
+        ppBtn.onclick = function(ev) {
+          ev.preventDefault();
+          alert('El enlace directo de PayPal para ' + p.name + ' se está activando en estos momentos. También puedes pagar con Hotmart abajo o escribirnos por WhatsApp.');
+        };
+      }
       const modal = document.getElementById('checkout-modal');
       modal.classList.remove('hidden');
       modal.classList.add('flex');
@@ -1383,7 +1496,7 @@
 
     function openDeliveryVaultModal(highlightKey = null) {
       const box = document.getElementById('vault-products-list');
-      const keys = highlightKey ? [highlightKey] : ['gastro', 'pos', 'gym', 'med', 'crm'];
+      const keys = highlightKey ? [highlightKey] : ['gastro', 'pos', 'logistics', 'gym', 'med', 'crm'];
 
       box.innerHTML = keys.map(k => {
         const p = getLocalizedProduct(k);
@@ -1526,12 +1639,17 @@
       // Marketplace Header & Filters
       ['Kinetix Marketplace Cloud & PWA · Activación Automática al Instante', 'Kinetix Cloud & PWA Marketplace · Instant Automated Activation', 'Kinetix Marketplace Cloud & PWA · Ativação Automática Instantânea', 'Kinetix Marketplace Cloud & PWA · Activation Automatique Instantanée'],
       ['Elige Tu Sistema, Pruébalo en Vivo y Activa Tu Acceso Cloud + PWA al Instante', 'Choose Your System, Test It Live & Activate Your Cloud + PWA Access Instantly', 'Escolha Seu Sistema, Teste ao Vivo e Ative Seu Acesso Cloud + PWA na Hora', 'Choisissez Votre Système, Testez-le en Direct & Activez Votre Accès Cloud + PWA'],
-      ['Todos (5 Sistemas)', 'All (5 Systems)', 'Todos (5 Sistemas)', 'Tous (5 Systèmes)'],
+      ['Todos (6 Sistemas)', 'All (6 Systems)', 'Todos (6 Sistemas)', 'Tous (6 Systèmes)'],
       ['🍽️ Restaurantes & KDS', '🍽️ Restaurants & KDS', '🍽️ Restaurantes e KDS', '🍽️ Restaurants & KDS'],
       ['🛒 Comercios & POS', '🛒 Retail & POS', '🛒 Comércios e PDV', '🛒 Commerces & PDV'],
+      ['🚚 Logística & Transporte', '🚚 Logistics & Freight', '🚚 Logística e Transporte', '🚚 Logistique & Transport'],
       ['🏋️ Gimnasios & Fitness', '🏋️ Gyms & Fitness', '🏋️ Academias e Fitness', '🏋️ Salles de Sport & Fitness'],
       ['🩺 Clínicas & Salud', '🩺 Clinics & Health', '🩺 Clínicas e Saúde', '🩺 Cliniques & Santé'],
       ['📈 CRM & Empresas', '📈 CRM & Business', '📈 CRM e Empresas', '📈 CRM & Entreprises'],
+      ['3 Sucursales · 4 Usuarios RBAC', '3 Branches · 4 RBAC Users (4 Devices)', '3 Filiais · 4 Usuários RBAC', '3 Agences · 4 Utilisateurs RBAC'],
+      ['NUEVO · LOGÍSTICA, TMS & WMS', 'NEW · LOGISTICS, TMS & WMS', 'NOVO · LOGÍSTICA, TMS E WMS', 'NOUVEAU · LOGISTIQUE, TMS & WMS'],
+      ['Agencias de Carga · Couriers · Casilleros · Encomiendas · Paquetería · Mudanzas · Última Milla', 'Freight Forwarders · Couriers · Mailboxes · Parcel Delivery · Customs · Fleet & Last Mile', 'Agências de Carga · Couriers · Lockers · Encomendas · Alfândega · Frotas e Última Milha', 'Transitaires · Couriers · Casiers · Colis · Douane · Flottes & Dernier Kilomètre'],
+      ['Sistema ERP + TMS + WMS para Gestión de Transporte, Casilleros Internacionales y Encomiendas', 'Transportation, Freight, International Courier & Parcel Management ERP + TMS + WMS System', 'Sistema ERP + TMS + WMS para Gestão de Transporte, Couriers Internacionais e Encomendas', 'Système ERP + TMS + WMS de Gestion Transport, Fret International & Colis'],
 
       // Cards Shared Elements & CTAs
       ['Ver Demo en Vivo', 'Try Live Demo', 'Ver Demo ao Vivo', 'Voir Démo en Direct'],
@@ -1605,6 +1723,11 @@
           shortDesc: 'Cloud Web App (PWA) for retail stores, minimarkets, pharmacies, hardware stores, boutiques, and shops. Hosted on Kinetix servers for 4 simultaneous devices (1 per user) and 4 role-based users.',
           badge: 'POS & Inventory Cloud'
         },
+        logistics: {
+          name: 'Intelligent Transportation, Freight, Courier & Last-Mile ERP + TMS + WMS System',
+          shortDesc: 'Cloud Web App (PWA) for freight forwarders, international mailboxes/couriers, parcel shipping, and last-mile fleets. Includes 8-stage TMS tracking, anti-fraud duplicate tracking lock, dual-currency POS, 3 branches, and 4 RBAC users (4 simultaneous devices).',
+          badge: 'Logistics, TMS & WMS Cloud'
+        },
         gym: {
           name: 'Comprehensive Gym, Fitness & CrossFit Box ERP System',
           shortDesc: 'Cloud Web App (PWA) for gyms, fitness centers, CrossFit boxes, and martial arts schools. Includes sound-alert QR front desk, biomedical tracking, counter POS, digital cash close, and 4 simultaneous devices.',
@@ -1632,6 +1755,11 @@
           shortDesc: 'Aplicativo Web na Nuvem (PWA) para lojas, mercadinhos, farmácias, ferragens, boutiques e comércios. Hospedado nos servidores Kinetix para 4 dispositivos simultâneos e 4 usuários por perfil.',
           badge: 'PDV e Estoque Cloud'
         },
+        logistics: {
+          name: 'Sistema ERP + TMS + WMS para Gestão de Transporte, Couriers e Encomendas',
+          shortDesc: 'Aplicativo Web na Nuvem (PWA) para transportadoras, carga aérea/marítima, lockers internacionais e entregas de última milha. Inclui rastreamento TMS em 8 etapas, trava antifraude, PDV, 3 filiais e 4 usuários (4 dispositivos).',
+          badge: 'Logística, TMS e WMS Cloud'
+        },
         gym: {
           name: 'Sistema de Gestão Integral para Academias, Fitness e CrossFit (Gym ERP Pro)',
           shortDesc: 'Aplicativo Web na Nuvem (PWA) para academias, estúdios fitness, boxes de CrossFit e lutas. Inclui recepção com semáforo sonoro QR, fichas biomédicas, PDV de balcão e 4 dispositivos simultâneos.',
@@ -1658,6 +1786,11 @@
           name: 'Système Cloud de Facturation, PDV & Gestion des Stocks v4.0',
           shortDesc: 'Application Web Cloud (PWA) pour boutiques, supérettes, pharmacies, quincailleries et commerces. Hébergé sur les serveurs Kinetix pour 4 appareils simultanés et 4 utilisateurs par rôle.',
           badge: 'PDV & Stock Cloud'
+        },
+        logistics: {
+          name: 'Système ERP + TMS + WMS pour Gestion de Transport, Fret International & Colis',
+          shortDesc: 'Application Web Cloud (PWA) pour transitaires, transporteurs aériens/maritimes, coursiers et flottes de dernier kilomètre. Inclut suivi TMS 8 étapes, sécurité anti-doublon, PDV, 3 agences et 4 utilisateurs (4 appareils).',
+          badge: 'Logistique, TMS & WMS Cloud'
         },
         gym: {
           name: 'Système de Gestion Intégral pour Salles de Sport, Fitness & CrossFit',
@@ -1697,8 +1830,11 @@
         card_crm_desc: 'Built for <strong>real estate agencies, construction firms, wholesale distributors, repair workshops, marketing agencies, consultancies, and service businesses</strong> that close deals via quotes.',
         card_crm_tags: '<span class="px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800 text-indigo-300">Real Estate &amp; Construction</span><span class="px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800 text-indigo-300">Distributors &amp; B2B</span><span class="px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800 text-slate-300">Workshops &amp; Tech Services</span><span class="px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800 text-slate-300">Agencies &amp; Advisors</span>',
         card_crm_list: '<li class="flex items-start gap-2"><span class="text-indigo-400 font-bold">✓</span><span><strong>Visual Kanban Sales Pipeline:</strong> Track every lead from "New Lead" through "Closed Won" with live revenue metrics.</span></li><li class="flex items-start gap-2"><span class="text-indigo-400 font-bold">✓</span><span><strong>Formal PDF Quote Generator:</strong> Branded commercial proposals sent by WhatsApp or email in 1 click.</span></li><li class="flex items-start gap-2"><span class="text-indigo-400 font-bold">✓</span><span><strong>Goals, Commissions &amp; 4 Reps:</strong> Track closings per sales executive and automated WhatsApp follow-up templates.</span></li>',
+        card_logistics_desc: 'Comprehensive suite for <strong>air/ocean freight forwarders, international mailboxes, couriers, and parcel fleets</strong>. Controls QR waybills, manifests, warehouse racks, POS billing, and digital signature POD.',
+        card_logistics_tags: '<span class="px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800 text-emerald-300">Couriers &amp; Mailboxes</span><span class="px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800 text-emerald-300">Air &amp; Sea Freight</span><span class="px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800 text-slate-300">Last Mile &amp; Fleets</span><span class="px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800 text-slate-300">Customs &amp; Manifests</span>',
+        card_logistics_list: '<li class="flex items-start gap-2"><span class="text-emerald-400 font-bold">✓</span><span><strong>8-Stage TMS Tracking + Public Portal:</strong> Pre-alerts, origin receiving, manifests, customs &amp; live QR tracking for clients.</span></li><li class="flex items-start gap-2"><span class="text-emerald-400 font-bold">✓</span><span><strong>Anti-Fraud Shield &amp; WMS Warehouse:</strong> Blocks duplicate Order IDs/trackings, calculates actual vs. volumetric weight &amp; racks.</span></li><li class="flex items-start gap-2"><span class="text-emerald-400 font-bold">✓</span><span><strong>Dual-Currency POS, Z-Close &amp; POD Signature:</strong> Weight billing, thermal receipts, AR/AP &amp; door-to-door photo + PIN delivery.</span></li>',
         card_custom_soon_lbl: 'Upcoming Kinetix.ops Releases',
-        card_custom_soon_txt: '🚚 Logistics &amp; Couriers (TMS/WMS) · 🏨 Hotels &amp; Booking · 🔧 Auto Repair Shops · 🎓 Schools',
+        card_custom_soon_txt: '🏨 Hotels &amp; Booking · 🔧 Auto Repair Shops · 🎓 Schools &amp; Academies · 🏗️ Construction',
         card_custom_std_price: 'Standard Launch Price',
         card_custom_desc: 'Our Marketplace continuously adds ready-to-activate Cloud &amp; PWA ERP systems configurable with your logo, local currency, timezone, and language.',
         card_custom_list: '<li class="flex items-start gap-2"><span class="text-emerald-400 font-bold">✓</span><span><strong>Same Cloud + PWA Architecture:</strong> Zero monthly fees, runs on PC &amp; mobile with automatic updates.</span></li><li class="flex items-start gap-2"><span class="text-emerald-400 font-bold">✓</span><span><strong>Custom Modules or Adaptations:</strong> Request tailored workflows directly from our engineering team.</span></li>',
@@ -1759,8 +1895,11 @@
         card_crm_desc: 'Desenvolvido para <strong>imobiliárias, construtoras, distribuidoras, oficinas, agências de marketing, consultorias e empresas de serviços</strong> que vendem por orçamentos.',
         card_crm_tags: '<span class="px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800 text-indigo-300">Imobiliárias e Construtoras</span><span class="px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800 text-indigo-300">Distribuidoras B2B</span><span class="px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800 text-slate-300">Oficinas e Serviços</span><span class="px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800 text-slate-300">Agências e Consultorias</span>',
         card_crm_list: '<li class="flex items-start gap-2"><span class="text-indigo-400 font-bold">✓</span><span><strong>Funil Kanban Visual:</strong> Acompanhe cada lead de "Novo Prospecto" até "Fechado Ganho".</span></li><li class="flex items-start gap-2"><span class="text-indigo-400 font-bold">✓</span><span><strong>Orçamentos Formais em PDF:</strong> Propostas comerciais com seu logo prontas para envio por WhatsApp em 1 clique.</span></li><li class="flex items-start gap-2"><span class="text-indigo-400 font-bold">✓</span><span><strong>Metas, Comissões e 4 Vendedores:</strong> Controle de fechamentos por executivo e modelos de follow-up.</span></li>',
+        card_logistics_desc: 'Suíte completa para <strong>transportadoras aéreas/marítimas, lockers internacionais, couriers e frotas</strong>. Controla guias QR, manifestos, armazém, caixa PDV e entrega com assinatura digital.',
+        card_logistics_tags: '<span class="px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800 text-emerald-300">Couriers e Lockers</span><span class="px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800 text-emerald-300">Carga Aérea e Marítima</span><span class="px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800 text-slate-300">Última Milha e Frotas</span><span class="px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800 text-slate-300">Alfândega e Manifestos</span>',
+        card_logistics_list: '<li class="flex items-start gap-2"><span class="text-emerald-400 font-bold">✓</span><span><strong>Rastreio TMS em 8 Etapas + Portal Público:</strong> Pré-alertas, recebimento na origem, manifestos, alfândega e QR para clientes.</span></li><li class="flex items-start gap-2"><span class="text-emerald-400 font-bold">✓</span><span><strong>Escudo Antifraude e Galpão WMS:</strong> Bloqueia rastreios duplicados, calcula peso real vs. cubagem e prateleiras.</span></li><li class="flex items-start gap-2"><span class="text-emerald-400 font-bold">✓</span><span><strong>PDV Dual, Fechamento Z e Assinatura POD:</strong> Cobrança por peso, cupom térmico, contas e entrega com foto e PIN.</span></li>',
         card_custom_soon_lbl: 'Próximos Lançamentos Kinetix.ops',
-        card_custom_soon_txt: '🚚 Logística e Cargas (TMS/WMS) · 🏨 Hotéis e Reservas · 🔧 Oficinas Mecânicas · 🎓 Escolas',
+        card_custom_soon_txt: '🏨 Hotéis e Reservas · 🔧 Oficinas Mecânicas · 🎓 Escolas e Academias · 🏗️ Construtoras',
         card_custom_std_price: 'Preço Padrão de Lançamento',
         card_custom_desc: 'Nosso Marketplace adiciona continuamente novos sistemas ERP Cloud &amp; PWA prontos para ativar com seu logo, moeda local e idioma.',
         card_custom_list: '<li class="flex items-start gap-2"><span class="text-emerald-400 font-bold">✓</span><span><strong>Mesma Arquitetura Cloud + PWA:</strong> Sem mensalidades, acesso no PC e celular com atualizações automáticas.</span></li><li class="flex items-start gap-2"><span class="text-emerald-400 font-bold">✓</span><span><strong>Desenvolvimento Sob Medida:</strong> Solicite módulos exclusivos com nossa equipe de engenharia.</span></li>',
@@ -1821,8 +1960,11 @@
         card_crm_desc: 'Conçu pour <strong>agences immobilières, constructeurs, grossistes, ateliers, agences marketing, cabinets de conseil et sociétés de services</strong> vendant sur devis.',
         card_crm_tags: '<span class="px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800 text-indigo-300">Immobilier &amp; BTP</span><span class="px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800 text-indigo-300">Grossistes &amp; B2B</span><span class="px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800 text-slate-300">Ateliers &amp; Services</span><span class="px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800 text-slate-300">Agences &amp; Conseil</span>',
         card_crm_list: '<li class="flex items-start gap-2"><span class="text-indigo-400 font-bold">✓</span><span><strong>Pipeline Kanban Visuel :</strong> Suivi complet des prospects jusqu’à la signature du contrat.</span></li><li class="flex items-start gap-2"><span class="text-indigo-400 font-bold">✓</span><span><strong>Devis Formels en PDF :</strong> Propositions commerciales avec votre logo envoyées sur WhatsApp en 1 clic.</span></li><li class="flex items-start gap-2"><span class="text-indigo-400 font-bold">✓</span><span><strong>Objectifs, Commissions &amp; 4 Commerciaux :</strong> Suivi des ventes par conseiller et modèles de relance.</span></li>',
+        card_logistics_desc: 'Suite complète pour <strong>transitaires aériens/maritimes, casiers internationaux, coursiers et flottes</strong>. Gère bordereaux QR, manifestes, entrepôt, caisse PDV et livraison avec signature.',
+        card_logistics_tags: '<span class="px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800 text-emerald-300">Coursiers &amp; Casiers</span><span class="px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800 text-emerald-300">Fret Aérien &amp; Maritime</span><span class="px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800 text-slate-300">Dernier Kilomètre</span><span class="px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800 text-slate-300">Douanes &amp; Manifestes</span>',
+        card_logistics_list: '<li class="flex items-start gap-2"><span class="text-emerald-400 font-bold">✓</span><span><strong>Suivi TMS 8 Étapes + Portail Public :</strong> Pré-alertes, réception origine, manifestes, douanes et suivi QR client.</span></li><li class="flex items-start gap-2"><span class="text-emerald-400 font-bold">✓</span><span><strong>Bouclier Anti-Fraude &amp; Entrepôt WMS :</strong> Bloque doublons de suivi, calcule poids réel vs volumétrique et rayons.</span></li><li class="flex items-start gap-2"><span class="text-emerald-400 font-bold">✓</span><span><strong>PDV Double Devise, Clôture Z &amp; Signature POD :</strong> Facturation au poids, tickets et preuve photo + PIN.</span></li>',
         card_custom_soon_lbl: 'Prochaines Sorties Kinetix.ops',
-        card_custom_soon_txt: '🚚 Logistique &amp; Fret (TMS/WMS) · 🏨 Hôtels &amp; Réservations · 🔧 Garages Auto · 🎓 Écoles',
+        card_custom_soon_txt: '🏨 Hôtels &amp; Réservations · 🔧 Garages Auto · 🎓 Écoles &amp; Académies · 🏗️ BTP',
         card_custom_std_price: 'Tarif Standard de Lancement',
         card_custom_desc: 'Notre Marketplace intègre régulièrement de nouveaux ERP Cloud &amp; PWA prêts à être personnalisés avec votre logo, devise et langue.',
         card_custom_list: '<li class="flex items-start gap-2"><span class="text-emerald-400 font-bold">✓</span><span><strong>Même Architecture Cloud + PWA :</strong> Zéro frais mensuels, PC et mobile avec mises à jour automatiques.</span></li><li class="flex items-start gap-2"><span class="text-emerald-400 font-bold">✓</span><span><strong>Développement Sur Mesure :</strong> Demandez des modules dédiés à notre équipe d’ingénieurs.</span></li>',
@@ -1990,8 +2132,11 @@
       setPortalLanguage(detectedLang);
       const params = new URLSearchParams(window.location.search);
       const entrega = params.get('entrega');
+      const comprar = params.get('comprar');
       if (entrega && PRODUCTS[entrega]) {
         triggerAutomatedDelivery(entrega);
+      } else if (comprar && PRODUCTS[comprar]) {
+        openCheckoutModal(comprar);
       }
     });
 
