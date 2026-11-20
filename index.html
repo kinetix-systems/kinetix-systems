@@ -111,6 +111,10 @@
     }
   </script>
   <style>
+    html, body {
+      overflow-x: hidden;
+      max-width: 100%;
+    }
     body {
       background-color: #070b13;
       color: #f1f5f9;
@@ -165,8 +169,8 @@
   <div class="relative z-40 bg-gradient-to-r from-emerald-950 via-slate-900 to-cyan-950 border-b border-emerald-500/20 py-2.5 px-4 text-center text-xs md:text-sm font-medium text-emerald-300">
     <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-center gap-2">
       <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-      <span>🔥 <strong>Oferta de Lanzamiento (30 Días):</strong> Licencia White-Label para 4 Usuarios por solo <strong>$89 USD</strong> (Antes <span class="line-through opacity-75">$189 USD</span>).</span>
-      <a href="#catalogo-sistemas" class="underline hover:text-white transition font-bold ml-1">Ver los 5 Sistemas del Marketplace &rarr;</a>
+      <span>🔥 <strong>Oferta de Lanzamiento (30 Días):</strong> Licencia White-Label para 4 a 5 Usuarios por solo <strong>$89 USD</strong> (Antes <span class="line-through opacity-75">$189 USD</span>).</span>
+      <a href="#catalogo-sistemas" class="underline hover:text-white transition font-bold ml-1">Ver los 6 Sistemas del Marketplace &rarr;</a>
     </div>
   </div>
 
@@ -183,9 +187,9 @@
         </div>
       </a>
 
-      <nav class="hidden lg:flex items-center gap-5 xl:gap-7 text-xs xl:text-sm font-medium text-slate-300">
-        <a href="#catalogo-sistemas" class="text-emerald-400 font-bold hover:text-emerald-300 transition whitespace-nowrap">Catálogo de Sistemas ($89)</a>
-        <a href="#personalizacion" class="hover:text-emerald-400 transition whitespace-nowrap">Marca Propia &amp; 4 Usuarios</a>
+      <nav class="hidden lg:flex items-center justify-center gap-4 xl:gap-6 text-xs xl:text-sm font-medium text-slate-300">
+        <a href="#catalogo-sistemas" class="text-emerald-400 font-bold hover:text-emerald-300 transition whitespace-nowrap">Catálogo ($89)</a>
+        <a href="#personalizacion" class="hover:text-emerald-400 transition whitespace-nowrap">Marca &amp; 4–5 Usuarios</a>
         <a href="#problema" class="hover:text-emerald-400 transition whitespace-nowrap">Por Qué Kinetix</a>
         <a href="#faq" class="hover:text-emerald-400 transition whitespace-nowrap">Preguntas Frecuentes</a>
       </nav>
@@ -226,7 +230,7 @@
         </h1>
 
         <p data-i18n="hero_desc" class="text-base sm:text-xl text-slate-300 max-w-3xl mx-auto font-normal leading-relaxed mb-10">
-          Olvídate de las hojas de cálculo rotas y de pagar rentas mensuales eternas. Elige tu sistema en la nube alojado en servidores de Kinetix (<strong>Facturación POS &amp; Inventarios</strong>, <strong>Gimnasios, Fitness &amp; Box ERP</strong>, <strong>Expedientes Clínicos &amp; Citas</strong> o <strong>CRM &amp; Cotizador PDF</strong>), úsalo en la <strong>PC de tu negocio y en tu teléfono móvil</strong>, personalízalo con tu marca y asigna acceso hasta a <strong>4 usuarios por roles</strong>.
+          Olvídate de las hojas de cálculo rotas y de pagar rentas mensuales eternas. Elige tu sistema en la nube alojado en servidores de Kinetix (<strong>Restaurantes ERP + KDS</strong>, <strong>Facturación POS &amp; Inventarios</strong>, <strong>Logística &amp; Transporte ERP</strong>, <strong>Gimnasios &amp; Fitness</strong>, <strong>Clínicas &amp; Citas</strong> o <strong>CRM &amp; Cotizador PDF</strong>), úsalo en tu <strong>PC, tablet y celular</strong>, personalízalo con tu marca y asigna acceso de <strong>4 a 5 usuarios por roles</strong>.
         </p>
 
         <div class="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-xl mx-auto mb-14">
@@ -241,9 +245,9 @@
         </div>
 
         <!-- Highlights Bar (Incluye Plus Multi-Idioma Global ES/EN/PT/FR) -->
-        <div class="pt-8 border-t border-slate-800/80 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 max-w-5xl mx-auto text-left">
+        <div class="pt-8 border-t border-slate-800/80 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 max-w-5xl mx-auto text-center">
           <div class="p-4 rounded-2xl bg-slate-900/60 border border-emerald-500/30">
-            <div class="flex items-center gap-2">
+            <div class="flex items-center justify-center gap-2">
               <p class="text-xl md:text-2xl font-black text-emerald-400">$89 USD</p>
               <span class="text-xs text-slate-400 line-through">$189</span>
             </div>
@@ -1611,10 +1615,10 @@
     const PORTAL_PHRASE_TABLE = [
       // Top bar & Nav
       ['Oferta de Lanzamiento (30 Días):', 'Launch Offer (30 Days):', 'Oferta de Lançamento (30 Dias):', 'Offre de Lancement (30 Jours) :'],
-      ['Licencia White-Label para 4 Usuarios por solo', 'White-Label License for 4/5 Users for only', 'Licença White-Label para 4/5 Usuários por apenas', 'Licence White-Label pour 4/5 Utilisateurs pour seulement'],
-      ['Ver los 5 Sistemas del Marketplace →', 'View All 5 Marketplace Systems →', 'Ver os 5 Sistemas do Marketplace →', 'Voir les 5 Systèmes du Marketplace →'],
-      ['Catálogo de Sistemas ($89)', 'Systems Catalog ($89)', 'Catálogo de Sistemas ($89)', 'Catalogue des Systèmes (89 $)'],
-      ['Marca Propia & 4 Usuarios', 'Custom Brand & Users', 'Marca Própria e Usuários', 'Marque Propre & Utilisateurs'],
+      ['Licencia White-Label para 4 a 5 Usuarios por solo', 'White-Label License for 4 to 5 Users for only', 'Licença White-Label para 4 a 5 Usuários por apenas', 'Licence White-Label pour 4 à 5 Utilisateurs pour seulement'],
+      ['Ver los 6 Sistemas del Marketplace →', 'View All 6 Marketplace Systems →', 'Ver os 6 Sistemas do Marketplace →', 'Voir les 6 Systèmes du Marketplace →'],
+      ['Catálogo ($89)', 'Catalog ($89)', 'Catálogo ($89)', 'Catalogue (89 $)'],
+      ['Marca & 4–5 Usuarios', 'Brand & 4–5 Users', 'Marca & 4–5 Usuários', 'Marque & 4–5 Utilisateurs'],
       ['Por Qué Kinetix', 'Why Kinetix', 'Por Que Kinetix', 'Pourquoi Kinetix'],
       ['Preguntas Frecuentes', 'FAQ', 'Perguntas Frequentes', 'Questions Fréquentes'],
       ['Modo Claro', 'Light Mode', 'Modo Claro', 'Mode Clair'],
@@ -1814,7 +1818,7 @@
     const PORTAL_HTML_I18N = {
       en: {
         hero_title: 'Business Systems Ready to Use Today, <span class="bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent">On Your PC, Tablet &amp; Phone, With Your Brand &amp; Zero Monthly Fees.</span>',
-        hero_desc: 'Forget broken spreadsheets and endless monthly subscriptions. Choose your cloud system hosted on Kinetix servers (<strong>Restaurants ERP + KDS</strong>, <strong>Retail POS &amp; Inventory</strong>, <strong>Gym &amp; Fitness ERP</strong>, <strong>Medical Records &amp; Booking</strong>, or <strong>CRM &amp; PDF Quotes</strong>), run it on your <strong>business PC, tablets &amp; phone</strong>, brand it with your logo, and manage up to <strong>4 or 5 role-based users</strong>.',
+        hero_desc: 'Forget broken spreadsheets and endless monthly subscriptions. Choose your cloud system hosted on Kinetix servers (<strong>Restaurants ERP + KDS</strong>, <strong>Retail POS &amp; Inventory</strong>, <strong>Logistics &amp; Freight ERP</strong>, <strong>Gym &amp; Fitness ERP</strong>, <strong>Medical Records &amp; Booking</strong>, or <strong>CRM &amp; PDF Quotes</strong>), run it on your <strong>business PC, tablets &amp; phone</strong>, brand it with your logo, and manage <strong>4 to 5 role-based users</strong>.',
         mkt_sub: 'All the business systems you need in one scalable Marketplace. Cloud-hosted (PWA) for your <strong>business PC and mobile phone</strong>, with built-in Logo/Brand customization, multi-language support (ES/EN/PT/FR), and a one-time launch fee of <strong>$89 USD</strong>.',
         card_gastro_desc: 'Ideal for <strong>restaurants, coffee shops, bars, pizzerias, steakhouses, bakeries, and food trucks</strong>. Connects <strong>Digital QR Menu &rarr; Table Map &rarr; POS Billing &rarr; Kitchen Display KDS</strong> in real time.',
         card_gastro_tags: '<span class="px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800 text-emerald-300">Restaurants &amp; Grills</span><span class="px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800 text-emerald-300">Coffee &amp; Bakeries</span><span class="px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800 text-slate-300">Bars &amp; Lounges</span><span class="px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800 text-slate-300">Pizzerias &amp; Food Trucks</span>',
@@ -1879,7 +1883,7 @@
       },
       pt: {
         hero_title: 'Sistemas Para o Seu Negócio Prontos Para Usar, <span class="bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent">No Seu PC, Tablet e Celular, Com Sua Marca e Sem Mensalidades.</span>',
-        hero_desc: 'Esqueça planilhas quebradas e mensalidades eternas. Escolha seu sistema na nuvem hospedado nos servidores Kinetix (<strong>Restaurantes ERP + KDS</strong>, <strong>PDV e Estoque</strong>, <strong>Academias ERP</strong>, <strong>Prontuários Clínicos</strong> ou <strong>CRM e Orçamentos PDF</strong>), use no <strong>PC, tablet e celular</strong>, personalize com sua marca e gerencie <strong>4 ou 5 usuários por perfil</strong>.',
+        hero_desc: 'Esqueça planilhas quebradas e mensalidades eternas. Escolha seu sistema na nuvem hospedado nos servidores Kinetix (<strong>Restaurantes ERP + KDS</strong>, <strong>PDV e Estoque</strong>, <strong>Logística &amp; Transporte ERP</strong>, <strong>Academias ERP</strong>, <strong>Prontuários Clínicos</strong> ou <strong>CRM e Orçamentos PDF</strong>), use no <strong>PC, tablet e celular</strong>, personalize com sua marca e gerencie <strong>4 a 5 usuários por perfil</strong>.',
         mkt_sub: 'Todos os sistemas que seu negócio precisa em um único Marketplace escalável. Operam na nuvem (PWA) para <strong>PC e celular</strong>, com personalização de Logo/Marca, suporte multi-idioma (ES/EN/PT/FR) e pagamento único de lançamento de <strong>$89 USD</strong>.',
         card_gastro_desc: 'Ideal para <strong>restaurantes, cafeterias, bares, pizzarias, churrascarias, padarias e food trucks</strong>. Conecta em tempo real <strong>Cardápio Digital QR &rarr; Mesas &rarr; Caixa PDV &rarr; Monitor KDS da Cozinha</strong>.',
         card_gastro_tags: '<span class="px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800 text-emerald-300">Restaurantes e Churrasco</span><span class="px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800 text-emerald-300">Cafeterias e Padarias</span><span class="px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800 text-slate-300">Bares e Pubs</span><span class="px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800 text-slate-300">Pizzarias e Food Trucks</span>',
@@ -1944,7 +1948,7 @@
       },
       fr: {
         hero_title: 'Systèmes Pour Votre Entreprise Prêts à l’Emploi, <span class="bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent">Sur PC, Tablette et Mobile, Avec Votre Marque et Sans Abonnement.</span>',
-        hero_desc: 'Oubliez les tableurs cassés et les abonnements mensuels sans fin. Choisissez votre système Cloud hébergé sur les serveurs Kinetix (<strong>Restaurants ERP + KDS</strong>, <strong>PDV &amp; Stocks</strong>, <strong>Salles de Sport</strong>, <strong>Dossiers Médicaux</strong> ou <strong>CRM &amp; Devis PDF</strong>), utilisez-le sur <strong>PC, tablette et mobile</strong> avec votre marque et <strong>4 à 5 utilisateurs par rôle</strong>.',
+        hero_desc: 'Oubliez les tableurs cassés et les abonnements mensuels sans fin. Choisissez votre système Cloud hébergé sur les serveurs Kinetix (<strong>Restaurants ERP + KDS</strong>, <strong>PDV &amp; Stocks</strong>, <strong>Logistique &amp; Transport ERP</strong>, <strong>Salles de Sport</strong>, <strong>Dossiers Médicaux</strong> ou <strong>CRM &amp; Devis PDF</strong>), utilisez-le sur <strong>PC, tablette et mobile</strong> avec votre marque et <strong>4 à 5 utilisateurs par rôle</strong>.',
         mkt_sub: 'Tous les logiciels dont votre entreprise a besoin dans un seul Marketplace évolutif. Hébergés dans le Cloud (PWA) pour <strong>PC et mobile</strong>, avec personnalisation de marque, support multilingue (ES/EN/PT/FR) et paiement unique de lancement de <strong>89 $ USD</strong>.',
         card_gastro_desc: 'Idéal pour <strong>restaurants, cafés, bars, pizzerias, grillades, boulangeries et food trucks</strong>. Connecte en temps réel <strong>Menu QR &rarr; Plan de Tables &rarr; Encaissement PDV &rarr; Moniteur Cuisine KDS</strong>.',
         card_gastro_tags: '<span class="px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800 text-emerald-300">Restaurants &amp; Grill</span><span class="px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800 text-emerald-300">Cafés &amp; Boulangeries</span><span class="px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800 text-slate-300">Bars &amp; Brasseries</span><span class="px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800 text-slate-300">Pizzerias &amp; Food Trucks</span>',
