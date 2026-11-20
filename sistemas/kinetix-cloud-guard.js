@@ -962,7 +962,7 @@
 
   const OFFICIAL_CHECKOUT_URLS = {
     gastro: 'https://www.paypal.com/ncp/payment/U6STW4GVVER82',
-    salon: 'https://kinetix-systems.github.io/kinetix-systems/?comprar=salon',
+    salon: 'https://www.paypal.com/ncp/payment/5YHHHD49C3Q7L',
     pos: 'https://www.paypal.com/ncp/payment/6N33BA6V5CXM4',
     logistics: 'https://kinetix-systems.github.io/kinetix-systems/?comprar=logistics',
     gym: 'https://www.paypal.com/ncp/payment/F9BEG5X5AJWR8',
