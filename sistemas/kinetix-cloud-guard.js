@@ -972,7 +972,7 @@
 
   const MAIN_STORAGE_KEYS = {
     gastro: 'kinetix_gastro_erp_pro_v5_state',
-    salon: 'kinetix_salon_barber_erp_pro_v5_state',
+    salon: 'kinetix_salon_barber_erp_pro_v6_state',
     pos: 'KINETIX_POS_SUITE_V3',
     logistics: 'kinetix_ops_erp_pro_v4_state',
     gym: 'kinetix_gym_erp_pro_v1',
