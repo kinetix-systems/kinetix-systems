@@ -170,7 +170,7 @@
     <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-center gap-2">
       <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
       <span>🔥 <strong>Oferta de Lanzamiento (30 Días):</strong> Licencia White-Label para 4 a 5 Usuarios por solo <strong>$89 USD</strong> (Antes <span class="line-through opacity-75">$189 USD</span>).</span>
-      <a href="#catalogo-sistemas" class="underline hover:text-white transition font-bold ml-1">Ver los 6 Sistemas del Marketplace &rarr;</a>
+      <a href="#catalogo-sistemas" class="underline hover:text-white transition font-bold ml-1">Ver los 7 Sistemas del Marketplace &rarr;</a>
     </div>
   </div>
 
@@ -292,10 +292,13 @@
         <div class="mb-8 p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
           <div class="flex flex-wrap items-center gap-1.5" id="marketplace-category-pills">
             <button type="button" onclick="filterMarketplace('all', this)" class="mkt-pill px-3.5 py-2 rounded-xl text-xs font-extrabold transition cursor-pointer bg-emerald-400 text-slate-950 shadow">
-              Todos (6 Sistemas)
+              Todos (7 Sistemas)
             </button>
             <button type="button" onclick="filterMarketplace('gastro', this)" class="mkt-pill px-3.5 py-2 rounded-xl text-xs font-bold transition cursor-pointer bg-slate-950 text-slate-300 hover:text-white border border-slate-800">
               🍽️ Restaurantes &amp; KDS
+            </button>
+            <button type="button" onclick="filterMarketplace('salon', this)" class="mkt-pill px-3.5 py-2 rounded-xl text-xs font-bold transition cursor-pointer bg-slate-950 text-slate-300 hover:text-white border border-slate-800">
+              💈 Barberías, Salones &amp; Spas
             </button>
             <button type="button" onclick="filterMarketplace('pos', this)" class="mkt-pill px-3.5 py-2 rounded-xl text-xs font-bold transition cursor-pointer bg-slate-950 text-slate-300 hover:text-white border border-slate-800">
               🛒 Comercios &amp; POS
@@ -838,7 +841,91 @@
           </div>
 
           <!-- =====================================================================
-               TARJETA 7: PRÓXIMOS SISTEMAS DEL MARKETPLACE & SOLICITUD A MEDIDA
+               SISTEMA 7 (NUEVO): BARBERÍAS, SALONES DE BELLEZA, ESTÉTICAS & SPAS (AGENDA 24/7 + POS + VIP)
+               ===================================================================== -->
+          <div data-category="salon" data-keywords="barberias salones belleza esteticas spas peluquerias uñas nail bar colorimetria masajes citas agenda 24/7 comisiones barberos estilistas tarjetas vip sellos yolo pos" class="mkt-card glass-card rounded-3xl p-5 flex flex-col justify-between border-2 border-amber-500/50 relative overflow-hidden">
+            <div class="space-y-3.5">
+              <div class="flex items-center justify-between gap-2">
+                <div class="w-10 h-10 rounded-xl bg-amber-500/15 border border-amber-500/40 flex items-center justify-center text-amber-400 shrink-0">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 5.758a3 3 0 10-4.243 4.243 3 3 0 004.243-4.243zm0-5.758a3 3 0 10-4.243-4.243 3 3 0 004.243 4.243z"/>
+                  </svg>
+                </div>
+                <span class="bg-amber-500/15 border border-amber-500/30 text-amber-300 font-mono font-bold text-[10px] px-2.5 py-1 rounded-full">
+                  NUEVO · AGENDA 24/7, POS &amp; VIP
+                </span>
+              </div>
+
+              <div>
+                <span class="text-[10px] font-mono uppercase text-amber-400 font-bold block">Barberías · Salones de Belleza · Estéticas · Nail Bars · Spas &amp; Wellness</span>
+                <h3 class="text-lg font-black text-white leading-snug mt-0.5">Sistema de Reservas 24/7, POS, Comisiones y Lealtad VIP para Barberías, Salones &amp; Spas</h3>
+              </div>
+
+              <div class="relative rounded-2xl overflow-hidden border border-slate-800 bg-slate-950 h-36 group cursor-pointer" onclick="openLiveDemo('salon')">
+                <img src="preview_salon.svg" alt="Vista previa Kinetix Salon & Barber ERP Pro" class="w-full h-full object-cover object-top group-hover:scale-105 transition duration-500" />
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent flex items-end justify-between p-2.5">
+                  <span class="text-[10px] font-mono bg-amber-400 text-slate-950 font-extrabold px-2.5 py-1 rounded-lg shadow flex items-center gap-1">
+                    ▶ Ver Demo en Vivo
+                  </span>
+                  <span class="text-[10px] font-mono bg-slate-900/90 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded">
+                    Admin: 1234 | Barbero: 5678
+                  </span>
+                </div>
+              </div>
+
+              <!-- PRECIO Y BOTONES -->
+              <div class="p-3.5 rounded-2xl bg-slate-950/90 border border-amber-500/30 space-y-2.5">
+                <div class="flex items-center justify-between gap-2">
+                  <div>
+                    <span class="text-[10px] text-slate-400 uppercase font-bold block">Licencia Cloud Vitalicia + PWA</span>
+                    <span class="text-[11px] text-amber-400 font-bold">PC + Móvil · 5 Usuarios RBAC</span>
+                  </div>
+                  <div class="text-right">
+                    <div class="flex items-center justify-end gap-1.5">
+                      <span class="text-xs text-slate-400 line-through font-mono">$189</span>
+                      <span class="text-[9px] font-mono uppercase bg-amber-500/20 text-amber-300 border border-amber-500/40 px-1.5 py-0.5 rounded font-bold">LANZAMIENTO</span>
+                    </div>
+                    <span class="text-2xl font-black text-white font-mono leading-none">$89 <span class="text-[10px] font-normal text-slate-400">USD</span></span>
+                  </div>
+                </div>
+                <div class="grid grid-cols-1 gap-2">
+                  <button onclick="openLiveDemo('salon')" class="w-full py-2 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs border border-slate-700 transition flex items-center justify-center gap-1.5 cursor-pointer">
+                    <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+                    <span>▶ Probar Demo en Vivo</span>
+                  </button>
+                  <button onclick="openCheckoutModal('salon')" class="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-amber-400 to-emerald-400 hover:opacity-95 text-slate-950 font-black text-xs shadow-md shadow-amber-500/20 transition cursor-pointer">
+                    ⚡ Comprar y Activar Cloud + PWA ($89 USD)
+                  </button>
+                </div>
+              </div>
+
+              <p class="text-slate-300 text-xs leading-relaxed">
+                Gestiona reservas online 24/7 sin contraseña, cola de walk-ins, caja POS rápida, cálculo automático de comisiones por barbero/estilista y tarjetas VIP digitales de 6 y 12 sellos con candado anti-fraude.
+              </p>
+
+              <ul class="space-y-1.5 text-[11px] text-slate-200 border-t border-slate-800/90 pt-2.5">
+                <li class="flex items-start gap-2">
+                  <span class="text-amber-400 font-bold">✓</span>
+                  <span><strong>Portal de Reservas Online 24/7 + Walk-Ins:</strong> Tus clientes eligen servicio, barbero/estilista y horario libre con confirmación por WhatsApp.</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-amber-400 font-bold">✓</span>
+                  <span><strong>Comisiones Automáticas &amp; Aislamiento RBAC:</strong> 50% servicios, 15% retail y 100% propinas. Los barberos/estilistas solo ven su silla y su propia comisión.</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-amber-400 font-bold">✓</span>
+                  <span><strong>Tarjetas VIP de 6 y 12 Sellos + Radar 30 Días:</strong> Validación con PIN/OTP anti-fraude y reactivación de clientes inactivos por WhatsApp en 1 clic.</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-amber-400 font-bold">✓</span>
+                  <span><strong>5 Usuarios &amp; 5 Equipos Simultáneos:</strong> 1 Super Admin + 1 Recepción/Caja + 3 Especialistas con Manual PDF Oficial integrado.</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- =====================================================================
+               TARJETA 8: PRÓXIMOS SISTEMAS DEL MARKETPLACE & SOLICITUD A MEDIDA
                ===================================================================== -->
           <div data-category="custom" data-keywords="hoteles talleres colegios inmobiliarias medida" class="mkt-card glass-card rounded-3xl p-5 flex flex-col justify-between border-2 border-dashed border-slate-700/80 hover:border-emerald-500/50 relative overflow-hidden">
             <div class="space-y-3.5">
@@ -1214,6 +1301,7 @@
     // =========================================================================
     const HOTMART_LINKS = {
       gastro: "https://pay.hotmart.com/I108446645M", // Enlace Hotmart $89 USD - Restaurantes & Cafeterías (Gastro ERP + POS + KDS)
+      salon: "https://pay.hotmart.com/I108446645M", // Enlace Hotmart $89 USD - Barberías, Salones & Spas (Salon & Barber ERP Pro)
       pos: "https://pay.hotmart.com/I108446645M", // Enlace Oficial Hotmart $89 USD - POS & Inventarios (ID 8945055)
       logistics: "https://pay.hotmart.com/I108446645M", // Enlace Hotmart $89 USD - Transporte, Logística & Casilleros (ERP + TMS + WMS)
       gym: "https://pay.hotmart.com/K108327655X", // Enlace Hotmart $89 USD - Gimnasios & Fitness ERP
@@ -1223,6 +1311,7 @@
 
     const PAYPAL_LINKS = {
       gastro: "https://www.paypal.com/ncp/payment/U6STW4GVVER82", // Enlace PayPal $89 USD - Kinetix Gastro ERP + POS + KDS Pro (Licencia 5 Usuarios)
+      salon: "", // Pendiente enlace oficial PayPal de Barberías, Salones & Spas
       pos: "https://www.paypal.com/ncp/payment/6N33BA6V5CXM4", // Enlace PayPal $89 USD - Sistema Facturación, POS e Inventarios
       logistics: "https://www.paypal.com/ncp/payment/GN7TCJN7XJKSC", // Enlace PayPal $89 USD - Kinetix Logistics ERP + TMS + WMS Pro (Licencia 4 Usuarios)
       gym: "https://www.paypal.com/ncp/payment/F9BEG5X5AJWR8", // Enlace PayPal $89 USD - Kinetix Gym ERP Pro
@@ -1239,6 +1328,15 @@
         maxUsers: 5,
         demoUrl: 'sistemas/gastro-erp/index.html',
         badge: 'Restaurantes, POS & KDS Cloud'
+      },
+      salon: {
+        id: 'salon',
+        name: 'Sistema de Reservas y Gestión para Barberías, Salones & Spas — Kinetix Salon & Barber ERP Pro',
+        shortDesc: 'Aplicación Web en la Nube (PWA) para barberías, salones de belleza, estéticas y spas. Incluye Portal Público de Reservas 24/7, cola de walk-ins, POS con cálculo automático de comisiones por barbero/estilista, Tarjetas VIP Digitales de 6 y 12 sellos anti-fraude, Radar de Reactivación 30 días y 5 usuarios con aislamiento RBAC (5 dispositivos simultáneos).',
+        price: 89,
+        maxUsers: 5,
+        demoUrl: 'sistemas/salon-erp/index.html',
+        badge: 'Barberías, Salones & Spas Cloud'
       },
       pos: {
         id: 'pos',
@@ -1358,7 +1456,7 @@
       modal.classList.remove('flex');
       // Restablecer automticamente el demo al salir para que la prxima visita inicie 100% limpia
       try {
-        ['gastro', 'pos', 'logistics', 'gym', 'med', 'crm'].forEach(function(k) {
+        ['gastro', 'salon', 'pos', 'logistics', 'gym', 'med', 'crm'].forEach(function(k) {
           sessionStorage.removeItem('KINETIX_DEMO_ACTIONS_' + k);
           sessionStorage.removeItem('KINETIX_DEMO_ACTIVE_' + k);
         });
@@ -1367,6 +1465,7 @@
         localStorage.removeItem('KINETIX_CRM_SUITE_V3');
         localStorage.removeItem('kinetix_gym_erp_pro_v1');
         localStorage.removeItem('kinetix_gastro_erp_pro_v5_state');
+        localStorage.removeItem('kinetix_salon_barber_erp_pro_v5_state');
         localStorage.removeItem('kinetix_ops_erp_pro_v4_state');
         localStorage.removeItem('kinetix_ops_session_user_id');
       } catch(e) {}
@@ -1616,7 +1715,7 @@
       // Top bar & Nav
       ['Oferta de Lanzamiento (30 Días):', 'Launch Offer (30 Days):', 'Oferta de Lançamento (30 Dias):', 'Offre de Lancement (30 Jours) :'],
       ['Licencia White-Label para 4 a 5 Usuarios por solo', 'White-Label License for 4 to 5 Users for only', 'Licença White-Label para 4 a 5 Usuários por apenas', 'Licence White-Label pour 4 à 5 Utilisateurs pour seulement'],
-      ['Ver los 6 Sistemas del Marketplace →', 'View All 6 Marketplace Systems →', 'Ver os 6 Sistemas do Marketplace →', 'Voir les 6 Systèmes du Marketplace →'],
+      ['Ver los 7 Sistemas del Marketplace →', 'View All 7 Marketplace Systems →', 'Ver os 7 Sistemas do Marketplace →', 'Voir les 7 Systèmes du Marketplace →'],
       ['Catálogo ($89)', 'Catalog ($89)', 'Catálogo ($89)', 'Catalogue (89 $)'],
       ['Marca & 4–5 Usuarios', 'Brand & 4–5 Users', 'Marca & 4–5 Usuários', 'Marque & 4–5 Utilisateurs'],
       ['Por Qué Kinetix', 'Why Kinetix', 'Por Que Kinetix', 'Pourquoi Kinetix'],
@@ -1644,8 +1743,9 @@
       // Marketplace Header & Filters
       ['Kinetix Marketplace Cloud & PWA · Activación Automática al Instante', 'Kinetix Cloud & PWA Marketplace · Instant Automated Activation', 'Kinetix Marketplace Cloud & PWA · Ativação Automática Instantânea', 'Kinetix Marketplace Cloud & PWA · Activation Automatique Instantanée'],
       ['Elige Tu Sistema, Pruébalo en Vivo y Activa Tu Acceso Cloud + PWA al Instante', 'Choose Your System, Test It Live & Activate Your Cloud + PWA Access Instantly', 'Escolha Seu Sistema, Teste ao Vivo e Ative Seu Acesso Cloud + PWA na Hora', 'Choisissez Votre Système, Testez-le en Direct & Activez Votre Accès Cloud + PWA'],
-      ['Todos (6 Sistemas)', 'All (6 Systems)', 'Todos (6 Sistemas)', 'Tous (6 Systèmes)'],
+      ['Todos (7 Sistemas)', 'All (7 Systems)', 'Todos (7 Sistemas)', 'Tous (7 Systèmes)'],
       ['🍽️ Restaurantes & KDS', '🍽️ Restaurants & KDS', '🍽️ Restaurantes e KDS', '🍽️ Restaurants & KDS'],
+      ['💈 Barberías, Salones & Spas', '💈 Barbers, Salons & Spas', '💈 Barbearias, Salões e Spas', '💈 Barbiers, Salons & Spas'],
       ['🛒 Comercios & POS', '🛒 Retail & POS', '🛒 Comércios e PDV', '🛒 Commerces & PDV'],
       ['🚚 Logística & Transporte', '🚚 Logistics & Freight', '🚚 Logística e Transporte', '🚚 Logistique & Transport'],
       ['🏋️ Gimnasios & Fitness', '🏋️ Gyms & Fitness', '🏋️ Academias e Fitness', '🏋️ Salles de Sport & Fitness'],
@@ -1723,6 +1823,11 @@
           shortDesc: 'Cloud Web App (PWA) for restaurants, coffee shops, bars, pizzerias, and food trucks. Includes Digital QR Menu, Table Map, POS Billing with Split Bill, real-time Kitchen Display System (KDS), automatic recipe inventory deduction, and 5 RBAC users (5 simultaneous devices).',
           badge: 'Restaurants, POS & KDS Cloud'
         },
+        salon: {
+          name: '24/7 Booking, POS, Commissions & VIP Loyalty ERP for Barbershops, Salons & Spas',
+          shortDesc: 'Cloud Web App (PWA) for barbershops, beauty salons, aesthetics clinics, and spas. Includes Public 24/7 Online Booking, walk-in queue, POS with automatic barber/stylist commission split, 6 & 12-stamp anti-fraud VIP digital cards, 30-day reactivation radar, and 5 RBAC users (5 devices).',
+          badge: 'Barbers, Salons & Spas Cloud'
+        },
         pos: {
           name: 'Cloud Invoicing, Point of Sale (POS) & Inventory Control v4.0',
           shortDesc: 'Cloud Web App (PWA) for retail stores, minimarkets, pharmacies, hardware stores, boutiques, and shops. Hosted on Kinetix servers for 4 simultaneous devices (1 per user) and 4 role-based users.',
@@ -1755,6 +1860,11 @@
           shortDesc: 'Aplicativo Web na Nuvem (PWA) para restaurantes, cafeterias, bares, pizzarias e food trucks. Inclui Cardápio Digital QR, Mapa de Mesas, Faturamento PDV com Split Bill, Monitor KDS de Cozinha em tempo real, baixa automática por ficha técnica e 5 usuários (5 dispositivos simultâneos).',
           badge: 'Restaurantes, PDV e KDS Cloud'
         },
+        salon: {
+          name: 'Sistema de Agendamento 24/7, PDV, Comissões e Cartão VIP para Barbearias, Salões e Spas',
+          shortDesc: 'Aplicativo Web na Nuvem (PWA) para barbearias, salões de beleza, clínicas de estética e spas. Inclui Portal Público de Agendamento 24/7, fila walk-in, PDV com cálculo automático de comissões, Cartões VIP de 6 e 12 selos antifraude, Radar de Reativação 30 dias e 5 usuários RBAC (5 dispositivos).',
+          badge: 'Barbearias, Salões e Spas Cloud'
+        },
         pos: {
           name: 'Sistema de Faturamento, PDV e Controle de Estoque Cloud v4.0',
           shortDesc: 'Aplicativo Web na Nuvem (PWA) para lojas, mercadinhos, farmácias, ferragens, boutiques e comércios. Hospedado nos servidores Kinetix para 4 dispositivos simultâneos e 4 usuários por perfil.',
@@ -1786,6 +1896,11 @@
           name: 'Système ERP + PDV + Cuisine KDS Pro pour Restaurants & Cafés',
           shortDesc: 'Application Web Cloud (PWA) pour restaurants, cafés, bars, pizzerias et food trucks. Inclut Menu Numérique QR, Plan de Tables, Encaissement PDV (Split Bill), Moniteur Cuisine KDS en temps réel, déduction automatique des recettes et 5 utilisateurs (5 appareils simultanés).',
           badge: 'Restaurants, PDV & KDS Cloud'
+        },
+        salon: {
+          name: 'Système de Réservation 24/7, PDV, Commissions & Fidélité VIP pour Barbiers, Salons & Spas',
+          shortDesc: 'Application Web Cloud (PWA) pour barbiers, salons de coiffure, instituts de beauté et spas. Inclut Portail Public de Réservation 24/7, file sans RDV, PDV avec calcul automatique des commissions, Cartes VIP 6 et 12 tampons anti-fraude, Radar de Réactivation 30 jours et 5 utilisateurs RBAC.',
+          badge: 'Barbiers, Salons & Spas Cloud'
         },
         pos: {
           name: 'Système Cloud de Facturation, PDV & Gestion des Stocks v4.0',

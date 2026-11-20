@@ -1,0 +1,32 @@
+{
+  "name": "Sistema de Reservas y Gestión para Barberías, Salones & Spas — Kinetix Salon & Barber ERP Pro",
+  "short_name": "Kinetix Salon ERP",
+  "description": "Powered by Kinetix.ops — Agenda 24/7, POS, Comisiones Automáticas y Tarjetas VIP de Lealtad para Barberías, Salones y Spas.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0B0F19",
+  "theme_color": "#10B981",
+  "categories": ["business", "lifestyle", "finance", "productivity"],
+  "icons": [
+    {
+      "src": "./kinetix-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./kinetix-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./kinetix-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

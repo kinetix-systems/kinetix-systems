@@ -671,7 +671,25 @@
     ['Identidad Comercial y Facturación', 'Brand Identity & Billing Rates', 'Identidade Comercial e Tarifas', 'Identité Commerciale & Tarification'],
     ['Configuración White-Label & Identidad Corporativa', 'White-Label Config & Corporate Identity', 'Configuração White-Label e Identidade Corporativa', 'Configuration Marque Blanche & Identité'],
     ['Confirmación de Seguridad — Cerrar Sesión', 'Security Confirmation — Log Out', 'Confirmação de Segurança — Sair', 'Confirmation de Sécurité — Déconnexion'],
-    ['Confirmar y Salir', 'Confirm & Log Out', 'Confirmar e Sair', 'Confirmer & Quitter']
+    ['Confirmar y Salir', 'Confirm & Log Out', 'Confirmar e Sair', 'Confirmer & Quitter'],
+    ['Sistema de Reservas y Gestión para Barberías, Salones & Spas — Kinetix Salon & Barber ERP Pro', '24/7 Booking, POS & Commission ERP for Barbershops, Salons & Spas — Kinetix Salon & Barber ERP Pro', 'Sistema de Agendamento 24/7, PDV e Comissões para Barbearias, Salões e Spas — Kinetix Salon & Barber ERP Pro', 'Système de Réservation 24/7, PDV & Commissions pour Barbiers, Salons & Spas — Kinetix Salon & Barber ERP Pro'],
+    ['Portal Corporativo de Acceso para Personal Autorizado', 'Corporate Access Portal for Authorized Staff', 'Portal Corporativo de Acesso para Equipe Autorizada', 'Portail d’Accès Corporatif pour le Personnel Autorisé'],
+    ['Abrir Portal Público de Reservas 24/7 (Vista Cliente)', 'Open Public 24/7 Online Booking Portal (Client View)', 'Abrir Portal Público de Agendamento 24/7 (Visão Cliente)', 'Ouvrir le Portail Public de Réservation 24/7 (Vue Client)'],
+    ['Ingresar al Sistema Kinetix Salon ERP', 'Sign In to Kinetix Salon ERP', 'Entrar no Sistema Kinetix Salon ERP', 'Se Connecter au Système Kinetix Salon ERP'],
+    ['📘 Descargar Manual Oficial Kinetix Salon ERP (PDF)', '📘 Download Official Kinetix Salon ERP Manual (PDF)', '📘 Baixar Manual Oficial Kinetix Salon ERP (PDF)', '📘 Télécharger le Manuel Officiel Kinetix Salon ERP (PDF)'],
+    ['Agenda 24/7 & Cola Walk-Ins', '24/7 Booking & Walk-In Queue', 'Agenda 24/7 e Fila Walk-Ins', 'Agenda 24/7 & File Walk-Ins'],
+    ['Mi Agenda Personal del Día', 'My Personal Daily Schedule', 'Minha Agenda Pessoal do Dia', 'Mon Agenda Personnel du Jour'],
+    ['Registro de Servicios & POS (Caja)', 'Service Registration & POS Cashier', 'Registro de Serviços e PDV (Caixa)', 'Enregistrement des Services & PDV (Caisse)'],
+    ['Registro de Servicios & Silla', 'Chair Service Registration', 'Registro de Serviços e Cadeira', 'Enregistrement des Services & Fauteuil'],
+    ['Clientes, Fichas Técnicas & Tarjetas VIP', 'Clients, Technical Sheets & VIP Stamp Cards', 'Clientes, Fichas Técnicas e Cartões VIP', 'Clients, Fiches Techniques & Cartes VIP'],
+    ['Comisiones & Liquidación Personal', 'Staff Commissions & Payroll Settlement', 'Comissões e Liquidação da Equipe', 'Commissions & Règlement du Personnel'],
+    ['Mis Comisiones Ganadas', 'My Earned Commissions', 'Minhas Comissões Ganhas', 'Mes Commissions Gagnées'],
+    ['Catálogo Servicios, Retail & Insumos', 'Services Catalog, Retail & Cabin Supplies', 'Catálogo de Serviços, Varejo e Insumos', 'Catalogue Services, Vente & Fournitures'],
+    ['Finanzas (Caja Día, Diario, CxC & CxP)', 'Finance (Daily Cash, Ledger, AR & AP)', 'Finanças (Caixa do Dia, Diário, Contas)', 'Finances (Caisse, Journal, Créances & Dettes)'],
+    ['Proveedores Cosmética & Barbería', 'Cosmetics, Barber & Spa Suppliers', 'Fornecedores de Cosméticos e Barbearia', 'Fournisseurs Cosmétiques & Barbier'],
+    ['Control Estricto 5 Usuarios & Roles (RBAC)', 'Strict 5 Users & Role Control (RBAC)', 'Controle Estrito de 5 Usuários e Perfis (RBAC)', 'Contrôle Strict 5 Utilisateurs & Rôles (RBAC)'],
+    ['Personalizar Marca & Reglas VIP', 'Customize Brand & VIP Loyalty Rules', 'Personalizar Marca e Regras VIP', 'Personnaliser Marque & Règles VIP'],
+    ['Manual de Uso & Procesos (PDF)', 'Operations Manual & SOP (PDF)', 'Manual de Uso e Processos (PDF)', 'Manuel d’Utilisation & Processus (PDF)']
   ];
 
   // Ordenar por longitud descendente para que frases largas se reemplacen antes que subfrases
@@ -926,10 +944,14 @@
   } else if (pathName.includes('logistics') || pathName.includes('transporte') || pathName.includes('courier')) {
     appKey = 'logistics';
     appTitle = 'Kinetix Logistics ERP + TMS + WMS Pro Cloud';
+  } else if (pathName.includes('salon') || pathName.includes('barber')) {
+    appKey = 'salon';
+    appTitle = 'Kinetix Salon & Barber ERP Pro Cloud';
   }
 
   const MAX_DEVICES_BY_APP = {
     gastro: 5,
+    salon: 5,
     pos: 4,
     logistics: 4,
     gym: 4,
@@ -940,6 +962,7 @@
 
   const OFFICIAL_CHECKOUT_URLS = {
     gastro: 'https://www.paypal.com/ncp/payment/U6STW4GVVER82',
+    salon: 'https://kinetix-systems.github.io/kinetix-systems/?comprar=salon',
     pos: 'https://www.paypal.com/ncp/payment/6N33BA6V5CXM4',
     logistics: 'https://kinetix-systems.github.io/kinetix-systems/?comprar=logistics',
     gym: 'https://www.paypal.com/ncp/payment/F9BEG5X5AJWR8',
@@ -949,6 +972,7 @@
 
   const MAIN_STORAGE_KEYS = {
     gastro: 'kinetix_gastro_erp_pro_v5_state',
+    salon: 'kinetix_salon_barber_erp_pro_v5_state',
     pos: 'KINETIX_POS_SUITE_V3',
     logistics: 'kinetix_ops_erp_pro_v4_state',
     gym: 'kinetix_gym_erp_pro_v1',
