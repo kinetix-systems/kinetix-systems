@@ -1,6 +1,6 @@
 {
-  "name": "Kinetix Systems Cloud ERP & POS",
-  "short_name": "Kinetix.OS",
+  "name": "Kinetix.ops — Sistemas Empresariales",
+  "short_name": "Kinetix.ops",
   "description": "Plataforma Empresarial Kinetix Systems (Restaurantes KDS, POS e Inventarios, Gimnasios ERP, Clínicas y CRM) con Multi-Idioma Global y sin rentas mensuales.",
   "start_url": "./index.html",
   "scope": "./",
