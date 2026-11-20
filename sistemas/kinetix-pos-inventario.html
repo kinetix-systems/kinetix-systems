@@ -1228,6 +1228,12 @@
               <input id="set-phone" type="text" placeholder="+505 8888-8888" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-white">
             </div>
             <div>
+              <label class="text-xs font-bold text-slate-400 block mb-1">Moneda del Sistema (Global — USD Predeterminado)</label>
+              <select id="set-currency-code" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-white font-bold">
+                <option value="USD">$ USD — Dólar Estadounidense (Predeterminado)</option>
+              </select>
+            </div>
+            <div>
               <label class="text-xs font-bold text-slate-400 block mb-1">Símbolo de Moneda</label>
               <input id="set-currency" type="text" placeholder="$ / C$ / MX$ / €" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-white mono">
             </div>
@@ -1961,6 +1967,7 @@
         taxId: 'NIT-9012834-1',
         phone: '+505 8888-0000',
         address: 'Av. Central Corporativa, Local 4',
+        currencyCode: 'USD',
         currency: '$',
         taxRate: 15,
         footer: '¡Gracias por su compra! Comprobante emitido con Kinetix POS.',
@@ -4056,6 +4063,8 @@
       document.getElementById('set-timezone').value = s.timezone || 'America/Managua';
       document.getElementById('set-tax-id').value = s.taxId || '';
       document.getElementById('set-phone').value = s.phone || '';
+      const curCodeEl = document.getElementById('set-currency-code');
+      if (curCodeEl) curCodeEl.value = s.currencyCode || 'USD';
       document.getElementById('set-currency').value = s.currency || '$';
       document.getElementById('set-tax-rate').value = s.taxRate || 0;
       document.getElementById('set-address').value = s.address || '';
@@ -4105,6 +4114,8 @@
       state.settings.timezone = document.getElementById('set-timezone').value || 'America/Managua';
       state.settings.taxId = document.getElementById('set-tax-id').value.trim();
       state.settings.phone = document.getElementById('set-phone').value.trim();
+      const curCodeEl = document.getElementById('set-currency-code');
+      if (curCodeEl) state.settings.currencyCode = curCodeEl.value || 'USD';
       state.settings.currency = document.getElementById('set-currency').value.trim() || '$';
       state.settings.taxRate = Number(document.getElementById('set-tax-rate').value) || 0;
       state.settings.address = document.getElementById('set-address').value.trim();

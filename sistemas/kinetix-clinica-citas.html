@@ -612,6 +612,16 @@
               <label class="text-slate-400 font-bold block mb-1">Correo de Notificaciones</label>
               <input id="set-clinic-email" type="text" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-white">
             </div>
+            <div>
+              <label class="text-cyan-400 font-bold block mb-1">💵 Moneda del Sistema (USD Predeterminado)</label>
+              <select id="set-clinic-currency-code" class="w-full bg-slate-900 border border-cyan-500/50 rounded-xl px-3 py-2.5 text-white font-bold">
+                <option value="USD">$ USD — Dólar Estadounidense (Predeterminado)</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-slate-400 font-bold block mb-1">Símbolo de Moneda</label>
+              <input id="set-clinic-currency" type="text" placeholder="$ / C$ / MX$ / €" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-white mono">
+            </div>
 
             <!-- UBICACIÓN, PAÍS Y ZONA HORARIA CLÍNICA -->
             <div>
@@ -995,6 +1005,8 @@
         country: 'Nicaragua',
         city: 'Managua',
         timezone: 'America/Managua',
+        currencyCode: 'USD',
+        currency: '$',
         regId: 'REG-MED-90421',
         phone: '+505 8888-1111',
         email: 'citas@clinicakinetix.com',
@@ -1088,7 +1100,7 @@
     }
 
     function medFmt(n) {
-      return '$' + Number(n || 0).toFixed(2);
+      return ((state && state.settings && state.settings.currency) || '$') + Number(n || 0).toFixed(2);
     }
 
     function medInDateRange(d, fromISO, toISO) {
@@ -2098,6 +2110,10 @@
       document.getElementById('set-clinic-reg').value = s.regId || '';
       document.getElementById('set-clinic-phone').value = s.phone || '';
       document.getElementById('set-clinic-email').value = s.email || '';
+      const curCodeEl = document.getElementById('set-clinic-currency-code');
+      if (curCodeEl) curCodeEl.value = s.currencyCode || 'USD';
+      const curSymEl = document.getElementById('set-clinic-currency');
+      if (curSymEl) curSymEl.value = s.currency || '$';
       document.getElementById('set-clinic-address').value = s.address || '';
       previewClinicTimezoneTime();
     }
@@ -2145,6 +2161,10 @@
       state.settings.regId = document.getElementById('set-clinic-reg').value.trim();
       state.settings.phone = document.getElementById('set-clinic-phone').value.trim();
       state.settings.email = document.getElementById('set-clinic-email').value.trim();
+      const curCodeEl = document.getElementById('set-clinic-currency-code');
+      if (curCodeEl) state.settings.currencyCode = curCodeEl.value || 'USD';
+      const curSymEl = document.getElementById('set-clinic-currency');
+      if (curSymEl) state.settings.currency = curSymEl.value.trim() || '$';
       state.settings.address = document.getElementById('set-clinic-address').value.trim();
       saveState();
       renderReminders();

@@ -1325,6 +1325,7 @@
     function openLiveDemo(key) {
       const p = getLocalizedProduct(key);
       if (!p) return;
+      try { localStorage.removeItem('kinetix_ops_session_user_id'); } catch (e) {}
       selectedProductKey = key;
       if (window.kinetixTrack) window.kinetixTrack('demo_opened', { system: key, product_name: p.name, lang: currentPortalLang });
       document.getElementById('demo-modal-title').textContent = p.name;

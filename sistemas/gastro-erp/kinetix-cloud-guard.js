@@ -1596,10 +1596,170 @@
     });
   }
 
+  window.KinetixGlobalIntl = (function () {
+    const PRIORITY_CURRENCIES = [
+      { code: 'USD', symbol: '$', label: '$ USD — Dólar Estadounidense (Predeterminado)' },
+      { code: 'EUR', symbol: '€', label: '€ EUR — Euro (Europa)' },
+      { code: 'NIO', symbol: 'C$', label: 'C$ NIO — Córdoba Nicaragüense' },
+      { code: 'MXN', symbol: 'MX$', label: 'MX$ MXN — Peso Mexicano' },
+      { code: 'CRC', symbol: '₡', label: '₡ CRC — Colón Costarricense' },
+      { code: 'GTQ', symbol: 'Q', label: 'Q GTQ — Quetzal Guatemalteco' },
+      { code: 'HNL', symbol: 'L', label: 'L HNL — Lempira Hondureño' },
+      { code: 'PAB', symbol: 'B/.', label: 'B/. PAB — Balboa Panameño' },
+      { code: 'DOP', symbol: 'RD$', label: 'RD$ DOP — Peso Dominicano' },
+      { code: 'COP', symbol: 'COP$', label: 'COP$ COP — Peso Colombiano' },
+      { code: 'PEN', symbol: 'S/', label: 'S/ PEN — Sol Peruano' },
+      { code: 'CLP', symbol: 'CLP$', label: 'CLP$ CLP — Peso Chileno' },
+      { code: 'ARS', symbol: 'ARS$', label: 'ARS$ ARS — Peso Argentino' },
+      { code: 'BRL', symbol: 'R$', label: 'R$ BRL — Real Brasileño' },
+      { code: 'UYU', symbol: '$U', label: '$U UYU — Peso Uruguayo' },
+      { code: 'PYG', symbol: '₲', label: '₲ PYG — Guaraní Paraguayo' },
+      { code: 'BOB', symbol: 'Bs', label: 'Bs BOB — Boliviano' },
+      { code: 'VES', symbol: 'Bs.S', label: 'Bs.S VES — Bolívar Venezolano' },
+      { code: 'CAD', symbol: 'CA$', label: 'CA$ CAD — Dólar Canadiense' },
+      { code: 'GBP', symbol: '£', label: '£ GBP — Libra Esterlina' },
+      { code: 'CHF', symbol: 'CHF', label: 'CHF — Franco Suizo' },
+      { code: 'JPY', symbol: '¥', label: '¥ JPY — Yen Japonés' },
+      { code: 'CNY', symbol: '¥', label: '¥ CNY — Yuan Chino' },
+      { code: 'AUD', symbol: 'A$', label: 'A$ AUD — Dólar Australiano' },
+    ];
+    const FALLBACK_TZ = [
+      'America/Managua', 'America/New_York', 'America/Chicago', 'America/Denver',
+      'America/Los_Angeles', 'America/Costa_Rica', 'America/Guatemala',
+      'America/El_Salvador', 'America/Tegucigalpa', 'America/Panama',
+      'America/Mexico_City', 'America/Cancun', 'America/Tijuana', 'America/Bogota',
+      'America/Lima', 'America/Guayaquil', 'America/Caracas', 'America/La_Paz',
+      'America/Santo_Domingo', 'America/Puerto_Rico', 'America/Santiago',
+      'America/Asuncion', 'America/Argentina/Buenos_Aires', 'America/Montevideo',
+      'America/Sao_Paulo', 'America/Toronto', 'Europe/Madrid', 'Europe/Paris',
+      'Europe/Lisbon', 'Europe/London', 'Europe/Berlin', 'Europe/Rome',
+      'Asia/Tokyo', 'Asia/Dubai', 'Asia/Shanghai', 'Australia/Sydney',
+      'Pacific/Auckland', 'Africa/Cairo', 'Africa/Johannesburg', 'UTC'
+    ];
+
+    function getCurrencySymbol(code) {
+      const k = PRIORITY_CURRENCIES.find(function (c) { return c.code === code; });
+      if (k) return k.symbol;
+      try {
+        const parts = new Intl.NumberFormat('en-US', {
+          style: 'currency', currency: code, currencyDisplay: 'narrowSymbol'
+        }).formatToParts(0);
+        const found = parts.find(function (p) { return p.type === 'currency'; });
+        return found ? found.value : code;
+      } catch (e) { return code; }
+    }
+
+    function getCurrencies() {
+      const seen = new Set(PRIORITY_CURRENCIES.map(function (c) { return c.code; }));
+      const list = PRIORITY_CURRENCIES.slice();
+      let names = null;
+      try { names = new Intl.DisplayNames(['es'], { type: 'currency' }); } catch (e) {}
+      let all = [];
+      try {
+        if (typeof Intl.supportedValuesOf === 'function') all = Intl.supportedValuesOf('currency');
+      } catch (e) {}
+      all.forEach(function (code) {
+        if (seen.has(code)) return;
+        seen.add(code);
+        const sym = getCurrencySymbol(code);
+        const n = (names && names.of(code)) || code;
+        list.push({ code: code, symbol: sym, label: sym + ' ' + code + ' — ' + n.charAt(0).toUpperCase() + n.slice(1) });
+      });
+      return list;
+    }
+
+    function getUtcOffsetLabel(iana) {
+      try {
+        const parts = new Intl.DateTimeFormat('en-US', { timeZone: iana, timeZoneName: 'shortOffset' }).formatToParts(new Date());
+        const p = parts.find(function (x) { return x.type === 'timeZoneName'; });
+        if (!p || p.value === 'GMT' || p.value === 'UTC') return 'UTC+00:00';
+        return p.value.replace('GMT', 'UTC');
+      } catch (e) { return 'UTC'; }
+    }
+
+    function getTimezones() {
+      let zones = FALLBACK_TZ;
+      try {
+        if (typeof Intl.supportedValuesOf === 'function') {
+          const all = Intl.supportedValuesOf('timeZone');
+          if (all && all.length) zones = Array.from(new Set(all.concat(['UTC'])));
+        }
+      } catch (e) {}
+      return zones.map(function (iana) {
+        const off = getUtcOffsetLabel(iana);
+        return { iana: iana, offsetLabel: off, label: iana + ' (' + off + ')' };
+      });
+    }
+
+    function populateTimezoneSelect(selectEl, preserveVal) {
+      if (!selectEl || selectEl.dataset.kinetixAllTz === '1') return;
+      const cur = preserveVal || selectEl.value || 'America/Managua';
+      const zones = getTimezones();
+      const hasCur = zones.some(function (z) { return z.iana === cur; });
+      selectEl.innerHTML = '';
+      if (!hasCur && cur) {
+        const opt = document.createElement('option');
+        opt.value = cur;
+        opt.textContent = cur;
+        selectEl.appendChild(opt);
+      }
+      zones.forEach(function (z) {
+        const opt = document.createElement('option');
+        opt.value = z.iana;
+        opt.textContent = z.label;
+        selectEl.appendChild(opt);
+      });
+      selectEl.value = cur;
+      selectEl.dataset.kinetixAllTz = '1';
+    }
+
+    function populateCurrencySelect(selectEl, symbolInputEl, preserveCode) {
+      if (!selectEl || selectEl.dataset.kinetixAllCur === '1') return;
+      const cur = preserveCode || selectEl.value || 'USD';
+      const list = getCurrencies();
+      selectEl.innerHTML = '';
+      list.forEach(function (c) {
+        const opt = document.createElement('option');
+        opt.value = c.code;
+        opt.textContent = c.label;
+        selectEl.appendChild(opt);
+      });
+      selectEl.value = list.some(function (c) { return c.code === cur; }) ? cur : 'USD';
+      selectEl.addEventListener('change', function () {
+        if (symbolInputEl) symbolInputEl.value = getCurrencySymbol(selectEl.value);
+      });
+      selectEl.dataset.kinetixAllCur = '1';
+    }
+
+    return {
+      getCurrencies: getCurrencies,
+      getTimezones: getTimezones,
+      getCurrencySymbol: getCurrencySymbol,
+      populateTimezoneSelect: populateTimezoneSelect,
+      populateCurrencySelect: populateCurrencySelect
+    };
+  })();
+
+  function initGlobalCatalogSelectors() {
+    if (!window.KinetixGlobalIntl) return;
+    [
+      ['set-timezone', 'set-currency-code', 'set-currency'],
+      ['set-clinic-timezone', 'set-clinic-currency-code', 'set-clinic-currency'],
+      ['set-crm-timezone', 'set-crm-currency-code', 'set-crm-currency']
+    ].forEach(function (ids) {
+      const tzEl = document.getElementById(ids[0]);
+      if (tzEl) window.KinetixGlobalIntl.populateTimezoneSelect(tzEl);
+      const curSel = document.getElementById(ids[1]);
+      const curSym = document.getElementById(ids[2]);
+      if (curSel) window.KinetixGlobalIntl.populateCurrencySelect(curSel, curSym);
+    });
+  }
+
   function initGuard() {
     hookAuthFunctions();
     injectCloudSecurityBadge();
     injectSettingsLanguageSelector();
+    initGlobalCatalogSelectors();
     translateDOMTree(document.body);
 
     try {

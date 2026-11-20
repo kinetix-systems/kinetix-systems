@@ -549,6 +549,12 @@
                 <input id="set-crm-name" type="text" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-white">
               </div>
               <div>
+                <label class="text-slate-300 font-bold block mb-1">Moneda del Sistema (Global — USD Predeterminado)</label>
+                <select id="set-crm-currency-code" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-white font-bold">
+                  <option value="USD">$ USD — Dólar Estadounidense (Predeterminado)</option>
+                </select>
+              </div>
+              <div>
                 <label class="text-slate-300 font-bold block mb-1">Símbolo de Moneda</label>
                 <input id="set-crm-currency" type="text" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-white mono">
               </div>
@@ -895,6 +901,7 @@
         country: 'Nicaragua',
         city: 'Managua',
         timezone: 'America/Managua',
+        currencyCode: 'USD',
         currency: '$',
         phone: '+505 8888-9999',
         bankInfo: 'Cuenta Corporativa BAC #360912834 · PayPal Disponible',
@@ -1809,6 +1816,8 @@
     function loadSettingsForm() {
       const s = state.settings;
       document.getElementById('set-crm-name').value = s.companyName || '';
+      const curCodeEl = document.getElementById('set-crm-currency-code');
+      if (curCodeEl) curCodeEl.value = s.currencyCode || 'USD';
       document.getElementById('set-crm-currency').value = s.currency || '$';
       document.getElementById('set-crm-country').value = s.country || 'Nicaragua';
       document.getElementById('set-crm-city').value = s.city || 'Managua';
@@ -1854,6 +1863,8 @@
 
     function saveCRMSettings() {
       state.settings.companyName = document.getElementById('set-crm-name').value.trim() || 'Mi Empresa';
+      const curCodeEl = document.getElementById('set-crm-currency-code');
+      if (curCodeEl) state.settings.currencyCode = curCodeEl.value || 'USD';
       state.settings.currency = document.getElementById('set-crm-currency').value.trim() || '$';
       state.settings.country = document.getElementById('set-crm-country').value;
       state.settings.city = document.getElementById('set-crm-city').value.trim() || 'Managua';
